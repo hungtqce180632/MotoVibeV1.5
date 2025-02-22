@@ -14,7 +14,7 @@ import java.sql.SQLException;
  */
 public class DBContext {
 
-    private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=QuanLyXe;encrypt=false";
+    private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=MotoVibeDB;encrypt=false";
     private static final String USER = "sa";
     private static final String PASSWORD = "123";
 
