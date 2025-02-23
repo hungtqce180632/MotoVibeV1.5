@@ -42,7 +42,7 @@
             <c:forEach var="i" begin="1" end="6"> <%-- Example: Display 6 featured motorbikes (can be dynamic later) --%>
                 <div class="col">
                     <div class="card h-100 motorbike-card">
-                        <img src="images/motor_pictures/featured_motorbike_${i}.jpg" class="card-img-top" alt="Featured Motorbike ${i}" onerror="this.src='images/placeholder.png'"> <%-- Placeholder if image not found --%>
+                 <%--     <img src="images/motor_pictures/featured_motorbike_${i}.jpg" class="card-img-top" alt="Featured Motorbike ${i}" onerror="this.src='images/placeholder.png'">  --%>
                         <div class="card-body">
                             <h5 class="card-title">Motorbike Model ${i}</h5> <%-- Replace with actual motorbike name --%>
                             <p class="card-text">Short description of Motorbike Model ${i}.</p> <%-- Replace with actual description --%>

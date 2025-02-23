@@ -24,7 +24,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Services</a>  </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Events</a>
+                        <a class="nav-link" href="listevents">Events</a>
                     </li>
                     <c:if test="${sessionScope.user.role == 'admin'}">
                         <li class="nav-item">
