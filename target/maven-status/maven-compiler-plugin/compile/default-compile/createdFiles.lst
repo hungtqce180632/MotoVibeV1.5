@@ -1,5 +1,7 @@
+dao\EventDAO.class
 dao\ModelDAO.class
 controllers\CreateReviewServlet.class
+controllers\ListEventsServlet.class
 dao\OrderDAO.class
 controllers\CreateOrderServlet.class
 utils\DBContext.class
@@ -13,6 +15,7 @@ controllers\ListReviewsServlet.class
 dao\UserAccountDAO.class
 models\Fuel.class
 controllers\ViewOrderWarrantyServlet.class
+models\Event.class
 models\UserAccount.class
 controllers\EditMotorServlet.class
 controllers\MotorManagementServlet.class
