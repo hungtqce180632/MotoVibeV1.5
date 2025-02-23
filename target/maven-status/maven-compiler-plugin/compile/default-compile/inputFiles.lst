@@ -1,3 +1,4 @@
+C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\controllers\ImageServlet.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\controllers\ListReviewsServlet.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\utils\DBContext.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\controllers\MotorDetailServlet.java
@@ -39,6 +40,7 @@ C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\controllers\MotorSe
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\dao\InventoryLogDAO.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\controllers\ListAppointmentServlet.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\controllers\LoginServlet.java
+C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\controllers\OrderMotorServlet.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\models\Order.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\models\Warranty.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\dao\UserAccountDAO.java
