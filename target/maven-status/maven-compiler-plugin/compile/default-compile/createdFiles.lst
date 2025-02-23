@@ -4,6 +4,7 @@ dao\ModelDAO.class
 controllers\CreateReviewServlet.class
 dao\OrderDAO.class
 controllers\CreateOrderServlet.class
+dao\CustomerDAO.class
 dao\MotorDAO.class
 models\InventoryLog.class
 dao\UserAccountDAO.class
@@ -45,4 +46,6 @@ controllers\ChangeQuantityServlet.class
 models\Model.class
 dao\AppointmentDAO.class
 controllers\LogoutServlet.class
+controllers\ConfirmOrderServlet.class
+models\Customer.class
 models\Warranty.class

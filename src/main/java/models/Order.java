@@ -19,9 +19,9 @@ public class Order {
     private int motorId;
     private Timestamp createDate; // Use Timestamp for createDate
     private String paymentMethod;
-    private double totalAmount;
+    private Double totalAmount; // Changed to Double
     private boolean depositStatus;
-    private boolean orderStatus;
+    private String orderStatus; // **CHANGED to String**
     private Date dateStart;
     private Date dateEnd;
     private boolean hasWarranty;
@@ -29,10 +29,9 @@ public class Order {
     private Warranty warranty;
 
     public Order() {
-        // Default constructor
     }
-    
-    public Order(int orderId, int customerId, Integer employeeId, int motorId, Timestamp createDate, String paymentMethod, double totalAmount, boolean depositStatus, boolean orderStatus, Date dateStart, Date dateEnd, boolean hasWarranty, Integer warrantyId, Warranty warranty) {
+
+    public Order(int orderId, int customerId, Integer employeeId, int motorId, Timestamp createDate, String paymentMethod, Double totalAmount, boolean depositStatus, String orderStatus, Date dateStart, Date dateEnd, boolean hasWarranty, Integer warrantyId, Warranty warranty) {
         this.orderId = orderId;
         this.customerId = customerId;
         this.employeeId = employeeId;
@@ -48,8 +47,7 @@ public class Order {
         this.warrantyId = warrantyId;
         this.warranty = warranty;
     }
-    
-    // Getters and Setters
+
     public int getOrderId() {
         return orderId;
     }
@@ -82,11 +80,11 @@ public class Order {
         this.motorId = motorId;
     }
 
-    public Timestamp getCreateDate() { // Return Timestamp
+    public Timestamp getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Timestamp createDate) { // Set Timestamp
+    public void setCreateDate(Timestamp createDate) {
         this.createDate = createDate;
     }
 
@@ -98,11 +96,11 @@ public class Order {
         this.paymentMethod = paymentMethod;
     }
 
-    public double getTotalAmount() {
+    public Double getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(double totalAmount) {
+    public void setTotalAmount(Double totalAmount) {
         this.totalAmount = totalAmount;
     }
 
@@ -114,11 +112,11 @@ public class Order {
         this.depositStatus = depositStatus;
     }
 
-    public boolean isOrderStatus() {
+    public String getOrderStatus() {
         return orderStatus;
     }
 
-    public void setOrderStatus(boolean orderStatus) {
+    public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
     }
 
@@ -161,4 +159,5 @@ public class Order {
     public void setWarranty(Warranty warranty) {
         this.warranty = warranty;
     }
+
 }

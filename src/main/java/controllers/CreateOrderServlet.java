@@ -48,7 +48,7 @@ public class CreateOrderServlet extends HttpServlet {
         order.setPaymentMethod(paymentMethod);
         order.setTotalAmount(totalAmount);
         order.setDepositStatus(depositStatus);
-        order.setOrderStatus(true); // Assuming order starts as "active"
+        order.setOrderStatus("Pending"); // Assuming order starts as "active"
         order.setDateStart(Date.valueOf(startDate)); // Convert LocalDate to java.sql.Date
         order.setDateEnd(Date.valueOf(endDate));
         order.setHasWarranty(hasWarranty);
