@@ -33,21 +33,15 @@ public class ChangeQuantityServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try {
-            int motorId = Integer.parseInt(request.getParameter("id"));
-            MotorDAO motorDAO = new MotorDAO();
-
-            Motor motor = motorDAO.getMotorById(motorId);
-            if (motor == null) {
-                response.sendRedirect("motorManagement");
-                return;
-            }
-            request.setAttribute("motor", motor);
-            request.getRequestDispatcher("change_quantity.jsp").forward(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(ChangeQuantityServlet.class.getName()).log(Level.SEVERE, null, ex);
+        int motorId = Integer.parseInt(request.getParameter("id"));
+        MotorDAO motorDAO = new MotorDAO();
+        Motor motor = motorDAO.getMotorById(motorId);
+        if (motor == null) {
             response.sendRedirect("motorManagement");
+            return;
         }
+        request.setAttribute("motor", motor);
+        request.getRequestDispatcher("change_quantity.jsp").forward(request, response);
     }
 
     @Override

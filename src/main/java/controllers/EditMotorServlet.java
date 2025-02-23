@@ -19,6 +19,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
 import java.nio.file.Paths;
+import java.sql.Date;
 import java.sql.SQLException;
 import models.Motor;
 import models.UserAccount;
@@ -82,7 +83,7 @@ public class EditMotorServlet extends HttpServlet {
 
             MotorDAO motorDAO = new MotorDAO();
             Motor existingMotor = motorDAO.getMotorById(motorId);
-            String dateStart = existingMotor.getDateStart(); // Lấy ngày từ đối tượng hiện tại
+            Date dateStart = existingMotor.getDateStart(); // Get Date object directly
             int quantity = existingMotor.getQuantity();
 
             // Handle file upload
@@ -109,7 +110,7 @@ public class EditMotorServlet extends HttpServlet {
             // Nếu người dùng không upload ảnh mới, giữ nguyên ảnh cũ
             String picture = fileName.isEmpty() ? request.getParameter("existingPicture") : newFileName;
 
-            Motor motor = new Motor(motorId, brandId, modelId, motorName, dateStart, color, price, fuelId, true, description, quantity, picture);
+            Motor motor = new Motor(motorId, brandId, modelId, motorName, dateStart, color, price, fuelId, true, description, quantity, picture); // Use java.sql.Date
             motorDAO.updateMotor(motor);
 
             response.sendRedirect("motorDetail?id=" + motorId);

@@ -4,6 +4,8 @@
  */
 package models;
 
+import java.sql.Date;
+
 /**
  *
  * @author tiend
@@ -14,7 +16,6 @@ public class Motor {
     private int brandId;
     private int modelId;
     private String motorName;
-    private String dateStart;
     private String color;
     private double price;
     private int fuelId;
@@ -22,11 +23,45 @@ public class Motor {
     private String description;
     private int quantity;
     private String picture;
+    private Date dateStart;
+    private Brand brand; 
+    private Model model; 
+    private Fuel fuel;
+    private boolean featured; //field for "featured"
 
     public Motor() {
     }
 
-    public Motor(int motorId, int brandId, int modelId, String motorName, String dateStart, String color, double price, int fuelId, boolean present, String description, int quantity, String picture) {
+    public Motor(int motorId, int brandId, int modelId, String motorName, String color, double price, int fuelId, boolean present, String description, int quantity, String picture, Date dateStart, Brand brand, Model model, Fuel fuel, boolean featured) {
+        this.motorId = motorId;
+        this.brandId = brandId;
+        this.modelId = modelId;
+        this.motorName = motorName;
+        this.color = color;
+        this.price = price;
+        this.fuelId = fuelId;
+        this.present = present;
+        this.description = description;
+        this.quantity = quantity;
+        this.picture = picture;
+        this.dateStart = dateStart;
+        this.brand = brand;
+        this.model = model;
+        this.fuel = fuel;
+        this.featured = featured;
+    }
+
+    public boolean isFeatured() {
+        return featured;
+    }
+
+    public void setFeatured(boolean featured) {
+        this.featured = featured;
+    }
+    
+    
+    
+    public Motor(int motorId, int brandId, int modelId, String motorName, Date dateStart, String color, double price, int fuelId, boolean present, String description, int quantity, String picture) {
         this.motorId = motorId;
         this.brandId = brandId;
         this.modelId = modelId;
@@ -39,6 +74,24 @@ public class Motor {
         this.description = description;
         this.quantity = quantity;
         this.picture = picture;
+    }
+
+    public Motor(int motorId, int brandId, int modelId, String motorName, String color, double price, int fuelId, boolean present, String description, int quantity, String picture, Date dateStart, Brand brand, Model model, Fuel fuel) {
+        this.motorId = motorId;
+        this.brandId = brandId;
+        this.modelId = modelId;
+        this.motorName = motorName;
+        this.color = color;
+        this.price = price;
+        this.fuelId = fuelId;
+        this.present = present;
+        this.description = description;
+        this.quantity = quantity;
+        this.picture = picture;
+        this.dateStart = dateStart;
+        this.brand = brand;
+        this.model = model;
+        this.fuel = fuel;
     }
 
     public int getMotorId() {
@@ -71,14 +124,6 @@ public class Motor {
 
     public void setMotorName(String motorName) {
         this.motorName = motorName;
-    }
-
-    public String getDateStart() {
-        return dateStart;
-    }
-
-    public void setDateStart(String dateStart) {
-        this.dateStart = dateStart;
     }
 
     public String getColor() {
@@ -137,4 +182,37 @@ public class Motor {
         this.picture = picture;
     }
 
+    public Date getDateStart() {
+        return dateStart;
+    }
+
+    public void setDateStart(Date dateStart) {
+        this.dateStart = dateStart;
+    }
+
+    public Brand getBrand() {
+        return brand;
+    }
+
+    public void setBrand(Brand brand) {
+        this.brand = brand;
+    }
+
+    public Model getModel() {
+        return model;
+    }
+
+    public void setModel(Model model) {
+        this.model = model;
+    }
+
+    public Fuel getFuel() {
+        return fuel;
+    }
+
+    public void setFuel(Fuel fuel) {
+        this.fuel = fuel;
+    }
+
+    
 }

@@ -18,15 +18,20 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import models.Motor;
 import models.UserAccount;
+import java.sql.Date;
+import java.util.UUID;
 
 /**
  *
- * @author tiend
+ * @author tiend - upgrade hưng
  */
 @WebServlet(name = "AddMotorServlet", urlPatterns = {"/addMotor"})
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
@@ -65,7 +70,8 @@ public class AddMotorServlet extends HttpServlet {
             String color = request.getParameter("color");
             double price = Double.parseDouble(request.getParameter("price"));
             String description = request.getParameter("description");
-            LocalDate dateStart = LocalDate.now();
+            LocalDate localDateStart = LocalDate.now();
+            Date dateStart = Date.valueOf(localDateStart); // Convert LocalDate to java.sql.Date
 
             // Handle file upload
             Part filePart = request.getPart("picture");
@@ -86,7 +92,7 @@ public class AddMotorServlet extends HttpServlet {
                 filePart.write(uploadPath + File.separator + newFileName);
             }
 
-            Motor motor = new Motor(0, brandId, modelId, motorName, dateStart.toString(), color, price, fuelId, true, description, 0, newFileName);
+            Motor motor = new Motor(0, brandId, modelId, motorName, dateStart, color, price, fuelId, true, description, 0, newFileName); // Use java.sql.Date
             new MotorDAO().addMotor(motor);
 
             response.sendRedirect("motorManagement");
