@@ -16,6 +16,12 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">       
 
         <style>
+            .degignmagin{
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+            
+            
             .flex-container {
                 display: flex;
                 align-items: stretch;
@@ -28,6 +34,12 @@
                 font-size: 20px;
             }
 
+            .card img {
+                width: 100%; /* Ảnh chiếm toàn bộ chiều rộng của card */
+                height: 250px; /* Đặt chiều cao cố định */
+                object-fit: cover; /* Cắt ảnh để giữ tỉ lệ mà không bị méo */
+                border-radius: 10px; /* Bo góc nhẹ để đẹp hơn */
+            }
         </style>
     </head>
     <body class="d-flex flex-column min-vh-100">
@@ -45,11 +57,10 @@
                             <div class="col-md-6 mb-4">
                                 <div class="card">
 
-                                    <h5 class="card-title">${event.event_name}</h5>
-                                    <hr>
-                                    <p ><strong>Details:</strong> ${event.event_details}</p>
-
-                                    <div class="flex-container">
+                                    <h5 class="card-title align-items-center align-self-center degignmagin">${event.event_name}</h5>
+                                    
+                                    <img src="${pageContext.request.contextPath}/images/new-motorcycle-launch.jpg" alt="${event.event_name}" class="img-fluid"/>
+                                    <div class="flex-container degignmagin">
                                         <div>
                                             <p class="mb-0"><small class="text-muted">Start: ${event.date_start}</small></p>
                                             <p class="mb-0"><small class="text-muted">End: ${event.date_end}</small></p>
@@ -58,7 +69,7 @@
 
                                         <div>
                                             <!-- 🛠 Button "View Detail" -->
-                                            <form action="#" method="get">
+                                            <form action="listevents" method="post">
                                                 <input type="hidden" name="event_id" value="${event.event_id}">
                                                 <button type="submit" class="btn btn-primary">View Detail</button>
                                             </form>

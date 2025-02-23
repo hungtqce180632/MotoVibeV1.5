@@ -108,27 +108,27 @@ public class EventDAO {
 //        return events;
 //    }
 //
-//    public EventModels getEventById(int eventId) throws SQLException {
-//        String sql = "SELECT * FROM events WHERE event_id = ?";
-//        EventModels event = new EventModels();
-//
-//        try (Connection conn = DBContext.getConnection();
-//             PreparedStatement stmt = conn.prepareStatement(sql)) {
-//            stmt.setInt(1, eventId);
-//            try (ResultSet rs = stmt.executeQuery()) {
-//                while (rs.next()) {
-//                    event.setEvent_id(rs.getInt("event_id"));
-//                    event.setEvent_name(rs.getString("event_name"));
-//                    event.setEvent_details(rs.getString("event_details"));
-//                    event.setImage(null);
-//                    event.setDate_start(rs.getString("date_start"));
-//                    event.setDate_end(rs.getString("date_end"));
-//                    event.setEvent_status(rs.getBoolean("event_status"));
-//                }
-//            }
-//        }
-//        return event;
-//    }
+    public Event getEventById(int eventId) throws SQLException {
+        String sql = "SELECT * FROM events WHERE event_id = ?";
+        Event event = new Event();
+
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, eventId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    event.setEvent_id(rs.getInt("event_id"));
+                    event.setEvent_name(rs.getString("event_name"));
+                    event.setEvent_details(rs.getString("event_details"));
+                    event.setImage(rs.getBinaryStream("image"));
+                    event.setDate_start(rs.getString("date_start"));
+                    event.setDate_end(rs.getString("date_end"));
+                    event.setEvent_status(rs.getBoolean("event_status"));
+                }
+            }
+        }
+        return event;
+    }
 //
 //    public boolean changeStatus(String id) throws SQLException {
 //        int eventId = Integer.parseInt(id);

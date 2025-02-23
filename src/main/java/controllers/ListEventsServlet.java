@@ -70,6 +70,7 @@ public class ListEventsServlet extends HttpServlet {
             List<Event> events = eventDAO.getAllEventsAvailable();
 
             request.setAttribute("events", events);
+
             request.getRequestDispatcher("list_event.jsp").forward(request, response);
 
         } catch (SQLException e) {
@@ -88,7 +89,34 @@ public class ListEventsServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doGet(request, response); // Gọi doGet để xử lý tương tự cho POST request.
+        
+        // Lấy giá trị event_id từ request
+        String eventIdParam = request.getParameter("event_id");
+
+        if (eventIdParam == null || eventIdParam.isEmpty()) {
+            response.sendRedirect("listevents"); // Nếu không có event_id, quay lại danh sách
+            return;
+        }
+
+        int eventId = Integer.parseInt(eventIdParam); // Chuyển đổi thành số nguyên
+        EventDAO eventDAO = new EventDAO();
+
+        try {
+            Event event = eventDAO.getEventById(eventId); // Lấy thông tin sự kiện từ database
+
+            if (event == null) {
+                request.setAttribute("error", "Event not found!");
+            } else {
+                request.setAttribute("event", event);
+            }
+
+            // Chuyển tiếp dữ liệu đến trang event_detail.jsp
+            request.getRequestDispatcher("event_detail.jsp").forward(request, response);
+
+        } catch (SQLException e) {
+            throw new ServletException("Error retrieving event details", e);
+        }
+        
     }
 
     /**
