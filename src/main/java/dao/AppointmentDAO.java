@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * khi Decline thÌ admin phải accept mới đc Decline
  *
  * @author truon
  */
@@ -33,8 +34,7 @@ public class AppointmentDAO {
     public List<Appointment> getAppointmentsByCustomerId(int customerId) {
         List<Appointment> appointments = new ArrayList<>();
         String sql = "SELECT * FROM Appointments WHERE customer_id = ?";
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, customerId);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -49,8 +49,7 @@ public class AppointmentDAO {
     public List<Appointment> getAllAppointments() {
         List<Appointment> appointments = new ArrayList<>();
         String sql = "SELECT * FROM Appointments";
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 appointments.add(mapAppointment(resultSet));
@@ -60,17 +59,15 @@ public class AppointmentDAO {
         }
         return appointments;
     }
-    
+
     public boolean createAppointment(Appointment appointment) {
         String sql = "INSERT INTO Appointments (customer_id, date_start, date_end, note, appointment_status) VALUES (?, ?, ?, ?, ?)";
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+        try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setInt(1, appointment.getCustomerId());
             preparedStatement.setTimestamp(2, appointment.getDateStart());
             preparedStatement.setTimestamp(3, appointment.getDateEnd());
             preparedStatement.setString(4, appointment.getNote());
             preparedStatement.setBoolean(5, appointment.isAppointmentStatus());
-
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows > 0) {
@@ -87,7 +84,6 @@ public class AppointmentDAO {
         }
     }
 
-
     private Appointment mapAppointment(ResultSet resultSet) throws SQLException {
         Appointment appointment = new Appointment();
         appointment.setAppointmentId(resultSet.getInt("appointment_id"));
@@ -98,11 +94,10 @@ public class AppointmentDAO {
         appointment.setAppointmentStatus(resultSet.getBoolean("appointment_status"));
         return appointment;
     }
-    
+
     public Appointment getAppointmentById(int appointmentId) {
         String sql = "SELECT * FROM Appointments WHERE appointment_id = ?";
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, appointmentId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
