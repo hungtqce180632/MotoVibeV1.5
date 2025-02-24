@@ -111,7 +111,7 @@
                 <h2>Ready to Ride?</h2>
                 <p class="lead">Find your dream motorbike today and experience the freedom of the open road with MotoVibe.</p>
                 <c:if test="${empty sessionScope.user}">
-                    <p> <a href="login.jsp">Login</a> or <a href="register.jsp">Register</a> to get started!</p>
+                    <p> <a href="login.jsp">Login</a> or <a href="signup.jsp">Register</a> to get started!</p>
                 </c:if>
                 <c:if test="${not empty sessionScope.user}">
                     <p>Welcome back, <c:out value="${sessionScope.user.email}"/>! <a href="listAppointments">View Appointments</a> or <a href="motorList">Browse Motorbikes</a>.</p>
