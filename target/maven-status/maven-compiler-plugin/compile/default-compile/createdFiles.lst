@@ -28,6 +28,7 @@ controllers\EditReviewServlet.class
 models\Motor.class
 dao\BrandDAO.class
 controllers\AppointmentServlet.class
+controllers\ChatServlet.class
 OTP\SendOtpServlet.class
 controllers\FilterMotorServlet.class
 models\Brand.class
