@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <header>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="..." crossorigin="anonymous" referrerpolicy="no-referrer" />
     <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm"> <!- Added shadow for subtle depth -->
         <div class="container-fluid">
             <a class="navbar-brand fw-bold" href="index.jsp" style="font-size: 1.5rem;">MotoVibe</a> <!-  Bigger, bolder brand -->
@@ -22,18 +23,12 @@
                         <a class="nav-link" href="motorList"><i class="fas fa-motorcycle me-1"></i> Motorbikes</a> <!- Motorbike icon -->
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-wrench me-1"></i> Services</a> <!- Service icon -->
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="listevents"><i class="fas fa-calendar-alt me-1"></i> Events</a> <!- Event icon -->
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="listAppointments"><i class="fas fa-calendar-check me-1"></i> Appointments</a> <!- Appointment icon -->
                     </li>
                     <c:if test="${sessionScope.user.role == 'admin'}">
-                        <li class="nav-item">
-                            <a class="nav-link" href="motorManagement"><i class="fas fa-tools me-1"></i> Manage Motors</a> <!- Admin icon -->
-                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="inventoryLog"><i class="fas fa-clipboard-list me-1"></i> Inventory Log</a> <!- Inventory icon -->
                         </li>
