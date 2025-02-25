@@ -120,7 +120,7 @@ public class EventDAO {
                     event.setEvent_id(rs.getInt("event_id"));
                     event.setEvent_name(rs.getString("event_name"));
                     event.setEvent_details(rs.getString("event_details"));
-                    event.setImage(rs.getBinaryStream("image"));
+                    event.setImage(rs.getString("image"));
                     event.setDate_start(rs.getString("date_start"));
                     event.setDate_end(rs.getString("date_end"));
                     event.setEvent_status(rs.getBoolean("event_status"));
@@ -157,7 +157,7 @@ public class EventDAO {
                 event.setEvent_id(rs.getInt("event_id"));
                 event.setEvent_name(rs.getString("event_name"));
                 event.setEvent_details(rs.getString("event_details"));
-                event.setImage(null);
+                event.setImage(rs.getString("image"));
                 event.setDate_start(rs.getString("date_start"));
                 event.setDate_end(rs.getString("date_end"));
                 event.setEvent_status(rs.getBoolean("event_status"));
@@ -168,4 +168,6 @@ public class EventDAO {
         }
         return events;
     }
+    
+    
 }

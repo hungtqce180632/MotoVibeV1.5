@@ -27,7 +27,7 @@
                     <hr>
                     <c:choose>
                         <c:when test="${not empty event.image}">
-                            <img src="${pageContext.request.contextPath}/image/b/${event.event_id}" 
+                            <img src="${pageContext.request.contextPath}/images/${event.image}.jpg"
                                  alt="${event.image}" class="img-fluid rounded shadow" 
                                  style="max-height: 300px; object-fit: cover;">
                         </c:when>

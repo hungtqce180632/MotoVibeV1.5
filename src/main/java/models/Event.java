@@ -15,7 +15,7 @@ public class Event {
     private int event_id;
     private String event_name;
     private String event_details;
-    private InputStream image;
+    private String image;
     private String date_start;
     private String date_end;
     private boolean event_status;
@@ -23,7 +23,7 @@ public class Event {
     public Event() {
     }
 
-    public Event(String event_name, String event_details, InputStream image, String date_start, String date_end) {
+    public Event(String event_name, String event_details, String image, String date_start, String date_end) {
         this.event_name = event_name;
         this.event_details = event_details;
         this.image = image;
@@ -31,7 +31,7 @@ public class Event {
         this.date_end = date_end;
     }
 
-    public Event(String event_name, String event_details, InputStream image, String date_start, String date_end, boolean event_status) {
+    public Event(String event_name, String event_details, String image, String date_start, String date_end, boolean event_status) {
         this.event_name = event_name;
         this.event_details = event_details;
         this.image = image;
@@ -71,11 +71,11 @@ public class Event {
         this.event_details = event_details;
     }
 
-    public InputStream getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(InputStream image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
