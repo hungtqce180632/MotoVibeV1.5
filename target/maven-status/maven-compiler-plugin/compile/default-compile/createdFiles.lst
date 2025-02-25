@@ -1,3 +1,4 @@
+controllers\ForgotPasswordServlet.class
 controllers\OrderMotorServlet.class
 dao\EventDAO.class
 dao\ModelDAO.class
@@ -5,8 +6,10 @@ controllers\CreateReviewServlet.class
 dao\OrderDAO.class
 controllers\CreateOrderServlet.class
 dao\CustomerDAO.class
+OTP\VerifyOtpServlet.class
 dao\MotorDAO.class
 models\InventoryLog.class
+models\Wishlist.class
 dao\UserAccountDAO.class
 models\Fuel.class
 controllers\ViewOrderWarrantyServlet.class
@@ -18,12 +21,14 @@ controllers\ToggleMotorStatusServlet.class
 controllers\LoginServlet.class
 dao\FuelDAO.class
 controllers\DeleteReviewServlet.class
+OTP\SendOtpServlet$1.class
 dao\WarrantyDAO.class
 controllers\CreateWarrantyServlet.class
 controllers\EditReviewServlet.class
 models\Motor.class
 dao\BrandDAO.class
 controllers\AppointmentServlet.class
+OTP\SendOtpServlet.class
 controllers\FilterMotorServlet.class
 models\Brand.class
 models\Review.class

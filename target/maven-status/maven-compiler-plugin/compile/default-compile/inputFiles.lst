@@ -15,6 +15,7 @@ C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\controllers\Confirm
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\controllers\MotorServlet.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\dao\InventoryLogDAO.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\controllers\LoginServlet.java
+C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\OTP\VerifyOtpServlet.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\dao\WarrantyDAO.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\models\Brand.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\controllers\ImageServlet.java
@@ -32,6 +33,7 @@ C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\dao\ModelDAO.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\controllers\AddMotorServlet.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\controllers\ListEventsServlet.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\models\Model.java
+C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\controllers\ForgotPasswordServlet.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\models\Fuel.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\controllers\EditReviewServlet.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\controllers\InventoryLogServlet.java
@@ -39,11 +41,13 @@ C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\dao\BrandDAO.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\dao\EventDAO.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\dao\MotorDAO.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\controllers\ViewOrderWarrantyServlet.java
+C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\models\Wishlist.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\models\InventoryLog.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\dao\CustomerDAO.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\dao\FuelDAO.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\controllers\CreateOrderServlet.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\dao\AppointmentDAO.java
+C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\OTP\SendOtpServlet.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\controllers\ListAppointmentServlet.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\controllers\OrderMotorServlet.java
 C:\Users\truon\Desktop\new_things\MotoVibeV1.5\src\main\java\models\Order.java

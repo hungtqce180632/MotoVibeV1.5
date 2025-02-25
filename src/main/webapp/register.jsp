@@ -1,18 +1,21 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%-- 
+    Document   : register
+    Created on : Feb 25, 2025, 1:44:14 PM
+    Author     : truon
+--%>
 
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Forgot Password</title>
+        <title>Register</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
         <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,300" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Oswald:500,400" rel="stylesheet" type="text/css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.4/dist/sweetalert2.min.css">
         <style>
-            /* colors */
+            /* colors and layout from login.jsp (no changes needed for register.jsp) */
             html {
                 width: 100%;
                 height: 100%;
@@ -41,7 +44,7 @@
                 font-family: 'Source Sans Pro', sans-serif;
                 top: 0;
                 left: 0;
-                transform: none;
+                transform: none; /* Override centering transform for register page */
             }
             form .svgContainer {
                 position: relative;
@@ -153,8 +156,7 @@
                 opacity: 1;
             }
 
-
-            /* boostrap layout */
+            /* boostrap layout  (no changes needed for register.jsp) */
             .logo {
                 font-family: "Oswald", sans-serif;
                 font-weight: 500;
@@ -189,14 +191,18 @@
         </style>
     </head>
     <body>
-        <div class="container-fluid">
+        <div class="container-fluid vh-100">
             <div class="row h-100">
                 <div class="col-lg-6 d-flex justify-content-center align-items-center">
                     <div class="w-100" style="max-width: 400px;">
                         <a class="logo text-decoration-none" href="/"><h1 class="mb-5">MotoVibe</h1></a>
-                        <h2 class="fw-bold mb-3">Forgot Password</h2>
+                        <h2 class="fw-bold">Create Account</h2> <%-- Changed heading to "Create Account" --%>
+                        <%-- Display error if any --%>
+                        <c:if test="${not empty error}">
+                            <div class="alert alert-danger">${error}</div>
+                        </c:if>
 
-                        <form action="sendOtp" method="POST">
+                        <form action="register" method="post"> <%-- Changed form action to "register" --%>
                             <div class="svgContainer">
                                 <div>
                                     <svg class="mySVG" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 200">
@@ -278,7 +284,7 @@
                                     </g>
                                     <g class="armR">
                                     <path fill="#ddf1fa" stroke="#3a5e77" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2.5" d="M265.4 97.3l10.4-38.6-38.9-10.5-20 36.1z"/>
-                                    <path fill="#ddf1fa" stroke="#3a5e77" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2.5" d="M252.4 52.4L233 47.2c-2.7-.7-5.4.9-6.1 3.5-.7 2.7.9 5.4 3.5 6.1l10.3 2.8M226 76.4l-19.4-5.2c-2.7-.7-5.4.9-6.1 3.5-.7 2.7.9 5.4 3.5 6.1l18.3 4.9M228.4 66.7l-23.1-6.2c-2.7-.7-5.4.9-6.1 3.5-.7 2.7.9 5.4 3.5 6.1l23.1 6.2M235.8 58.3l-26-7c-2.7-.7-5.4.9-6.1 3.5.7 2.7-.9 5.4-3.5 6.1l21.3 5.7"/>
+                                    <path fill="#ddf1fa" stroke="#3a5e77" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2.5" d="M252.4 52.4L233 47.2c-2.7-.7-5.4.9-6.1 3.5-.7 2.7.9 5.4 3.5 6.1l10.3 2.8M226 76.4l-19.4-5.2c-2.7-.7-5.4.9-6.1 3.5-.7 2.7.9 5.4 3.5 6.1l18.3 4.9M228.4 66.7l-23.1-6.2c-2.7-.7-5.4.9-6.1 3.5-.7 2.7.9 5.4 3.5 6.1l23.1 6.2M235.8 58.3l-26-7c-2.7-.7-5.4.9-6.1 3.5-.7 2.7.9 5.4 3.5 6.1l21.3 5.7"/>
                                     <path fill="#a9ddf3" d="M207.9 74.7l-2.2-.6c-1.1-.3-2.2.3-2.4 1.4-.3 1.1.3 2.2 1.4 2.4l2.2.6 1-3.8zM206.7 64l-2.2-.6c-1.1-.3-2.2.3-2.4 1.4-.3 1.1.3 2.2-1.4 2.4l-2.2.6 1-3.8zM211.2 54.8l-2.2-.6c-1.1-.3-2.2.3-2.4 1.4-.3 1.1.3 2.2-1.4 2.4l-2.2.6 1-3.8zM234.6 49.4l-2.2-.6c-1.1-.3-2.2.3-2.4 1.4-.3 1.1.3 2.2-1.4 2.4l2.2.6 1-3.8z"/>
                                     <path fill="#fff" stroke="#3a5e77" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M263.3 96.7c41.4 14.9 84.1 30.7 108.2 35.5l14-52.3C352 70 313.6 63.5 273.6 58.1"/>
                                     <path fill="#fff" stroke="#3a5e77" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M278.2 59.3l-18.6-10 2.5 11.9-10.7 6.5 9.9 8.7-13.9 6.4 9.1 5.9-13.2 9.2 23.1-.9M284.5 100.1c-.4 4 1.8 8.9 6.7 14.8 3.5-1.8 6.7-3.6 9.7-5.5 1.8 4.2 5.1 8.9 10.1 14.1 2.7-2.1 5.1-4.4 7.1-6.8 4.1 3.4 9 7 14.7 11 1.2-3.4 1.8-7 1.7-10.9M314 66.7s5.4-5.7 12.6-7.4c1.7 2.9 3.3 5.7 4.9 8.6 3.8-2.5 9.8-4.4 18.2-5.7.1 3.1.1 6.1 0 9.2 5.5-1 12.5-1.6 20.8-1.9-1.4 3.9-2.5 8.4-2.5 8.4"/>
@@ -289,264 +295,233 @@
                             </div>
 
                             <div class="inputGroup inputGroup1">
-                                <label for="email" class="form-label">Email address</label>
-                                <input name="email" required type="email" class="email form-control" id="email" placeholder="Enter your email">
+                                <label class="form-label" for="email">Email</label> <%-- Changed label --%>
+                                <input type="email" id="email" class="email form-control" maxlength="256" name="email" required>
                                 <p class="helper helper1">email@domain.com</p>
-                                <span id="emailError" class="text-danger"></span> </div>
-
-                            <div class="form-check mb-3">
-                                <input required type="checkbox" class="form-check-input" id="agree" name="agreeBox">
-                                <label class="form-check-label" for="agree">I agree to the <a href="/MotoVibe/Term" target="_blank">terms & policy</a></label>
+                                <span class="indicator"></span>
                             </div>
-
+                            <div class="inputGroup inputGroup2">
+                                <label class="form-label" for="password">Password</label> <%-- Changed label --%>
+                                <input type="password" id="password" class="password form-control" name="password" required/>
+                            </div>
+                            <div class="inputGroup inputGroup2"> <%-- Added Confirm Password field --%>
+                                <label class="form-label" for="confirmPassword">Confirm Password</label>
+                                <input type="password" id="confirmPassword" class="password form-control" name="confirmPassword" required/>
+                            </div>
                             <div class="inputGroup inputGroup3">
-                                <button type="submit" class="btn btn-primary w-100 mb-3" name="submit">Send OTP</button>
+                                <button id="login" type="submit" class="btn btn-primary w-100">Register</button> <%-- Changed button text to "Register" --%>
                             </div>
-
                             <div class="text-center mt-3">
-                                <a href="/MotoVibe/login.jsp">Remember your password? Login</a>
+                                <a href="/MotoVibe/login.jsp">Already have an account? Log in</a> <%-- Changed link to "Already have an account? Log in" --%>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://kit.fontawesome.com/a611f8fd5b.js" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.4/dist/sweetalert2.all.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/plugins/MorphSVGPlugin.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
-            // Javascript code from login.jsp (no changes needed for forgotPassword.jsp)
+            // Javascript code from login.jsp (no changes needed for register.jsp)
             var email = document.querySelector('#email'), password = document.querySelector('#password'), mySVG = document.querySelector('.svgContainer'), armL = document.querySelector('.armL'), armR = document.querySelector('.armR'), eyeL = document.querySelector('.eyeL'), eyeR = document.querySelector('.eyeR'), nose = document.querySelector('.nose'), mouth = document.querySelector('.mouth'), mouthBG = document.querySelector('.mouthBG'), mouthSmallBG = document.querySelector('.mouthSmallBG'), mouthMediumBG = document.querySelector('.mouthMediumBG'), mouthLargeBG = document.querySelector('.mouthLargeBG'), mouthMaskPath = document.querySelector('#mouthMaskPath'), mouthOutline = document.querySelector('.mouthOutline'), tooth = document.querySelector('.tooth'), tongue = document.querySelector('.tongue'), chin = document.querySelector('.chin'), face = document.querySelector('.face'), eyebrow = document.querySelector('.eyebrow'), outerEarL = document.querySelector('.earL .outerEar'), outerEarR = document.querySelector('.earR .outerEar'), earHairL = document.querySelector('.earL .earHair'), earHairR = document.querySelector('.earR .earHair'), hair = document.querySelector('.hair');
             var caretPos, curEmailIndex, screenCenter, svgCoords, eyeMaxHorizD = 20, eyeMaxVertD = 10, noseMaxHorizD = 23, noseMaxVertD = 10, dFromC, eyeDistH, eyeLDistV, eyeRDistV, eyeDistR, mouthStatus = "small";
-
             function getCoord(e) {
-                var carPos = email.selectionEnd,
-                        div = document.createElement('div'),
-                        span = document.createElement('span'),
-                        copyStyle = getComputedStyle(email),
-                        emailCoords = {}, caretCoords = {}, centerCoords = {}
-                ;
-                [].forEach.call(copyStyle, function (prop) {
-                    div.style[prop] = copyStyle[prop];
-                });
-                div.style.position = 'absolute';
-                document.body.appendChild(div);
-                div.textContent = email.value.substr(0, carPos);
-                span.textContent = email.value.substr(carPos) || '.';
-                div.appendChild(span);
+            var carPos = email.selectionEnd,
+                    div = document.createElement('div'),
+                    span = document.createElement('span'),
+                    copyStyle = getComputedStyle(email),
+                    emailCoords = {}, caretCoords = {}, centerCoords = {}
+            ;
+            [].forEach.call(copyStyle, function (prop) {
+            div.style[prop] = copyStyle[prop];
+            });
+            div.style.position = 'absolute';
+            document.body.appendChild(div);
+            div.textContent = email.value.substr(0, carPos);
+            span.textContent = email.value.substr(carPos) || '.';
+            div.appendChild(span);
+            emailCoords = getPosition(email); //console.log("emailCoords.x: " + emailCoords.x + ", emailCoords.y: " + emailCoords.y);
+            caretCoords = getPosition(span); //console.log("caretCoords.x " + caretCoords.x + ", caretCoords.y: " + caretCoords.y);
+            centerCoords = getPosition(mySVG); //console.log("centerCoords.x: " + centerCoords.x);
+            svgCoords = getPosition(mySVG);
+            screenCenter = centerCoords.x + (mySVG.offsetWidth / 2); //console.log("screenCenter: " + screenCenter);
+            caretPos = caretCoords.x + emailCoords.x; //console.log("caretPos: " + caretPos);
 
-                emailCoords = getPosition(email);							//console.log("emailCoords.x: " + emailCoords.x + ", emailCoords.y: " + emailCoords.y);
-                caretCoords = getPosition(span);							//console.log("caretCoords.x " + caretCoords.x + ", caretCoords.y: " + caretCoords.y);
-                centerCoords = getPosition(mySVG);							//console.log("centerCoords.x: " + centerCoords.x);
-                svgCoords = getPosition(mySVG);
-                screenCenter = centerCoords.x + (mySVG.offsetWidth / 2);		//console.log("screenCenter: " + screenCenter);
-                caretPos = caretCoords.x + emailCoords.x;					//console.log("caretPos: " + caretPos);
+            dFromC = screenCenter - caretPos; //console.log("dFromC: " + dFromC);
+            var pFromC = Math.round((caretPos / screenCenter) * 100) / 100;
+            if (pFromC < 1) {
 
-                dFromC = screenCenter - caretPos; 							//console.log("dFromC: " + dFromC);
-                var pFromC = Math.round((caretPos / screenCenter) * 100) / 100;
-                if (pFromC < 1) {
+            } else if (pFromC > 1) {
+            pFromC -= 2;
+            pFromC = Math.abs(pFromC);
+            }
 
-                } else if (pFromC > 1) {
-                    pFromC -= 2;
-                    pFromC = Math.abs(pFromC);
-                }
+            eyeDistH = - dFromC * .05;
+            if (eyeDistH > eyeMaxHorizD) {
+            eyeDistH = eyeMaxHorizD;
+            } else if (eyeDistH < - eyeMaxHorizD) {
+            eyeDistH = - eyeMaxHorizD;
+            }
 
-                eyeDistH = -dFromC * .05;
-                if (eyeDistH > eyeMaxHorizD) {
-                    eyeDistH = eyeMaxHorizD;
-                } else if (eyeDistH < -eyeMaxHorizD) {
-                    eyeDistH = -eyeMaxHorizD;
-                }
-
-                var eyeLCoords = {x: svgCoords.x + 84, y: svgCoords.y + 76};
-                var eyeRCoords = {x: svgCoords.x + 113, y: svgCoords.y + 76};
-                var noseCoords = {x: svgCoords.x + 97, y: svgCoords.y + 81};
-                var mouthCoords = {x: svgCoords.x + 100, y: svgCoords.y + 100};
-                var eyeLAngle = getAngle(eyeLCoords.x, eyeLCoords.y, emailCoords.x + caretCoords.x, emailCoords.y + 25);
-                var eyeLX = Math.cos(eyeLAngle) * eyeMaxHorizD;
-                var eyeLY = Math.sin(eyeLAngle) * eyeMaxVertD;
-                var eyeRAngle = getAngle(eyeRCoords.x, eyeRCoords.y, emailCoords.x + caretCoords.x, emailCoords.y + 25);
-                var eyeRX = Math.cos(eyeRAngle) * eyeMaxHorizD;
-                var eyeRY = Math.sin(eyeRAngle) * eyeMaxVertD;
-                var noseAngle = getAngle(noseCoords.x, noseCoords.y, emailCoords.x + caretCoords.x, emailCoords.y + 25);
-                var noseX = Math.cos(noseAngle) * noseMaxHorizD;
-                var noseY = Math.sin(noseAngle) * noseMaxVertD;
-                var mouthAngle = getAngle(mouthCoords.x, mouthCoords.y, emailCoords.x + caretCoords.x, emailCoords.y + 25);
-                var mouthX = Math.cos(mouthAngle) * noseMaxHorizD;
-                var mouthY = Math.sin(mouthAngle) * noseMaxVertD;
-                var mouthR = Math.cos(mouthAngle) * 6;
-                var chinX = mouthX * .8;
-                var chinY = mouthY * .5;
-                var chinS = 1 - ((dFromC * .15) / 100);
-                if (chinS > 1) {
-                    chinS = 1 - (chinS - 1);
-                }
-                var faceX = mouthX * .3;
-                var faceY = mouthY * .4;
-                var faceSkew = Math.cos(mouthAngle) * 5;
-                var eyebrowSkew = Math.cos(mouthAngle) * 25;
-                var outerEarX = Math.cos(mouthAngle) * 4;
-                var outerEarY = Math.cos(mouthAngle) * 5;
-                var hairX = Math.cos(mouthAngle) * 6;
-                var hairS = 1.2;
-
-                TweenMax.to(eyeL, 1, {x: -eyeLX, y: -eyeLY, ease: Expo.easeOut});
-                TweenMax.to(eyeR, 1, {x: -eyeRX, y: -eyeRY, ease: Expo.easeOut});
-                TweenMax.to(nose, 1, {x: -noseX, y: -noseY, rotation: mouthR, transformOrigin: "center center", ease: Expo.easeOut});
-                TweenMax.to(mouth, 1, {x: -mouthX, y: -mouthY, rotation: mouthR, transformOrigin: "center center", ease: Expo.easeOut});
-                TweenMax.to(chin, 1, {x: -chinX, y: -chinY, scaleY: chinS, ease: Expo.easeOut});
-                TweenMax.to(face, 1, {x: -faceX, y: -faceY, skewX: -faceSkew, transformOrigin: "center top", ease: Expo.easeOut});
-                TweenMax.to(eyebrow, 1, {x: -faceX, y: -faceY, skewX: -eyebrowSkew, transformOrigin: "center top", ease: Expo.easeOut});
-                TweenMax.to(outerEarL, 1, {x: outerEarX, y: -outerEarY, ease: Expo.easeOut});
-                TweenMax.to(outerEarR, 1, {x: outerEarX, y: outerEarY, ease: Expo.easeOut});
-                TweenMax.to(earHairL, 1, {x: -outerEarX, y: -outerEarY, ease: Expo.easeOut});
-                TweenMax.to(earHairR, 1, {x: -outerEarX, y: outerEarY, ease: Expo.easeOut});
-                TweenMax.to(hair, 1, {x: hairX, scaleY: hairS, transformOrigin: "center bottom", ease: Expo.easeOut});
-
-                document.body.removeChild(div);
+            var eyeLCoords = {x: svgCoords.x + 84, y: svgCoords.y + 76};
+            var eyeRCoords = {x: svgCoords.x + 113, y: svgCoords.y + 76};
+            var noseCoords = {x: svgCoords.x + 97, y: svgCoords.y + 81};
+            var mouthCoords = {x: svgCoords.x + 100, y: svgCoords.y + 100};
+            var eyeLAngle = getAngle(eyeLCoords.x, eyeLCoords.y, emailCoords.x + caretCoords.x, emailCoords.y + 25);
+            var eyeLX = Math.cos(eyeLAngle) * eyeMaxHorizD;
+            var eyeLY = Math.sin(eyeLAngle) * eyeMaxVertD;
+            var eyeRAngle = getAngle(eyeRCoords.x, eyeRCoords.y, emailCoords.x + caretCoords.x, emailCoords.y + 25);
+            var eyeRX = Math.cos(eyeRAngle) * eyeMaxHorizD;
+            var eyeRY = Math.sin(eyeRAngle) * eyeMaxVertD;
+            var noseAngle = getAngle(noseCoords.x, noseCoords.y, emailCoords.x + caretCoords.x, emailCoords.y + 25);
+            var noseX = Math.cos(noseAngle) * noseMaxHorizD;
+            var noseY = Math.sin(noseAngle) * noseMaxVertD;
+            var mouthAngle = getAngle(mouthCoords.x, mouthCoords.y, emailCoords.x + caretCoords.x, emailCoords.y + 25);
+            var mouthX = Math.cos(mouthAngle) * noseMaxHorizD;
+            var mouthY = Math.sin(mouthAngle) * noseMaxVertD;
+            var mouthR = Math.cos(mouthAngle) * 6;
+            var chinX = mouthX * .8;
+            var chinY = mouthY * .5;
+            var chinS = 1 - ((dFromC * .15) / 100);
+            if (chinS > 1) {
+            chinS = 1 - (chinS - 1);
+            }
+            var faceX = mouthX * .3;
+            var faceY = mouthY * .4;
+            var faceSkew = Math.cos(mouthAngle) * 5;
+            var eyebrowSkew = Math.cos(mouthAngle) * 25;
+            var outerEarX = Math.cos(mouthAngle) * 4;
+            var outerEarY = Math.cos(mouthAngle) * 5;
+            var hairX = Math.cos(mouthAngle) * 6;
+            var hairS = 1.2;
+            TweenMax.to(eyeL, 1, {x: - eyeLX, y: - eyeLY, ease: Expo.easeOut});
+            TweenMax.to(eyeR, 1, {x: - eyeRX, y: - eyeRY, ease: Expo.easeOut});
+            TweenMax.to(nose, 1, {x: - noseX, y: - noseY, rotation: mouthR, transformOrigin: "center center", ease: Expo.easeOut});
+            TweenMax.to(mouth, 1, {x: - mouthX, y: - mouthY, rotation: mouthR, transformOrigin: "center center", ease: Expo.easeOut});
+            TweenMax.to(chin, 1, {x: - chinX, y: - chinY, scaleY: chinS, ease: Expo.easeOut});
+            TweenMax.to(face, 1, {x: - faceX, y: - faceY, skewX: - faceSkew, transformOrigin: "center top", ease: Expo.easeOut});
+            TweenMax.to(eyebrow, 1, {x: - faceX, y: - faceY, skewX: - eyebrowSkew, transformOrigin: "center top", ease: Expo.easeOut});
+            TweenMax.to(outerEarL, 1, {x: outerEarX, y: - outerEarY, ease: Expo.easeOut});
+            TweenMax.to(outerEarR, 1, {x: outerEarX, y: outerEarY, ease: Expo.easeOut});
+            TweenMax.to(earHairL, 1, {x: - outerEarX, y: - outerEarY, ease: Expo.easeOut});
+            TweenMax.to(earHairR, 1, {x: - outerEarX, y: outerEarY, ease: Expo.easeOut});
+            TweenMax.to(hair, 1, {x: hairX, scaleY: hairS, transformOrigin: "center bottom", ease: Expo.easeOut});
+            document.body.removeChild(div);
             }
             ;
-
             function onEmailInput(e) {
-                getCoord(e);
-                var value = e.target.value;
-                curEmailIndex = value.length;
-
-                // very crude email validation for now to trigger effects
-                if (curEmailIndex > 0) {
-                    if (mouthStatus == "small") {
-                        mouthStatus = "medium";
-                        TweenMax.to([mouthBG, mouthOutline, mouthMaskPath], 1, {morphSVG: mouthMediumBG, shapeIndex: 8, ease: Expo.easeOut});
-                        TweenMax.to(tooth, 1, {x: 0, y: 0, ease: Expo.easeOut});
-                        TweenMax.to(tongue, 1, {x: 0, y: 1, ease: Expo.easeOut});
-                        TweenMax.to([eyeL, eyeR], 1, {scaleX: .85, scaleY: .85, ease: Expo.easeOut});
-                    }
-                    if (value.includes("@")) {
-                        mouthStatus = "large";
-                        TweenMax.to([mouthBG, mouthOutline, mouthMaskPath], 1, {morphSVG: mouthLargeBG, ease: Expo.easeOut});
-                        TweenMax.to(tooth, 1, {x: 3, y: -2, ease: Expo.easeOut});
-                        TweenMax.to(tongue, 1, {y: 2, ease: Expo.easeOut});
-                        TweenMax.to([eyeL, eyeR], 1, {scaleX: .65, scaleY: .65, ease: Expo.easeOut, transformOrigin: "center center"});
-                    } else {
-                        mouthStatus = "medium";
-                        TweenMax.to([mouthBG, mouthOutline, mouthMaskPath], 1, {morphSVG: mouthMediumBG, ease: Expo.easeOut});
-                        TweenMax.to(tooth, 1, {x: 0, y: 0, ease: Expo.easeOut});
-                        TweenMax.to(tongue, 1, {x: 0, y: 1, ease: Expo.easeOut});
-                        TweenMax.to([eyeL, eyeR], 1, {scaleX: .85, scaleY: .85, ease: Expo.easeOut});
-                    }
-                } else {
-                    mouthStatus = "small";
-                    TweenMax.to([mouthBG, mouthOutline, mouthMaskPath], 1, {morphSVG: mouthSmallBG, shapeIndex: 9, ease: Expo.easeOut});
-                    TweenMax.to(tooth, 1, {x: 0, y: 0, ease: Expo.easeOut});
-                    TweenMax.to(tongue, 1, {y: 0, ease: Expo.easeOut});
-                    TweenMax.to([eyeL, eyeR], 1, {scaleX: 1, scaleY: 1, ease: Expo.easeOut});
-                }
+            getCoord(e);
+            var value = e.target.value;
+            curEmailIndex = value.length;
+            // very crude email validation for now to trigger effects
+            if (curEmailIndex > 0) {
+            if (mouthStatus == "small") {
+            mouthStatus = "medium";
+            TweenMax.to([mouthBG, mouthOutline, mouthMaskPath], 1, {morphSVG: mouthMediumBG, shapeIndex: 8, ease: Expo.easeOut});
+            TweenMax.to(tooth, 1, {x: 0, y: 0, ease: Expo.easeOut});
+            TweenMax.to(tongue, 1, {x: 0, y: 1, ease: Expo.easeOut});
+            TweenMax.to([eyeL, eyeR], 1, {scaleX: .85, scaleY: .85, ease: Expo.easeOut});
+            }
+            if (value.includes("@")) {
+            mouthStatus = "large";
+            TweenMax.to([mouthBG, mouthOutline, mouthMaskPath], 1, {morphSVG: mouthLargeBG, ease: Expo.easeOut});
+            TweenMax.to(tooth, 1, {x: 3, y: - 2, ease: Expo.easeOut});
+            TweenMax.to(tongue, 1, {y: 2, ease: Expo.easeOut});
+            TweenMax.to([eyeL, eyeR], 1, {scaleX: .65, scaleY: .65, ease: Expo.easeOut, transformOrigin: "center center"});
+            } else {
+            mouthStatus = "medium";
+            TweenMax.to([mouthBG, mouthOutline, mouthMaskPath], 1, {morphSVG: mouthMediumBG, ease: Expo.easeOut});
+            TweenMax.to(tooth, 1, {x: 0, y: 0, ease: Expo.easeOut});
+            TweenMax.to(tongue, 1, {x: 0, y: 1, ease: Expo.easeOut});
+            TweenMax.to([eyeL, eyeR], 1, {scaleX: .85, scaleY: .85, ease: Expo.easeOut});
+            }
+            } else {
+            mouthStatus = "small";
+            TweenMax.to([mouthBG, mouthOutline, mouthMaskPath], 1, {morphSVG: mouthSmallBG, shapeIndex: 9, ease: Expo.easeOut});
+            TweenMax.to(tooth, 1, {x: 0, y: 0, ease: Expo.easeOut});
+            TweenMax.to(tongue, 1, {y: 0, ease: Expo.easeOut});
+            TweenMax.to([eyeL, eyeR], 1, {scaleX: 1, scaleY: 1, ease: Expo.easeOut});
+            }
             }
 
             function onEmailFocus(e) {
-                e.target.parentElement.classList.add("focusWithText");
-                getCoord();
+            e.target.parentElement.classList.add("focusWithText");
+            getCoord();
             }
 
             function onEmailBlur(e) {
-                if (e.target.value == "") {
-                    e.target.parentElement.classList.remove("focusWithText");
-                }
-                resetFace();
+            if (e.target.value == "") {
+            e.target.parentElement.classList.remove("focusWithText");
+            }
+            resetFace();
             }
 
             function onPasswordFocus(e) {
-                coverEyes();
+            coverEyes();
             }
 
             function onPasswordBlur(e) {
-                uncoverEyes();
+            uncoverEyes();
             }
 
             function coverEyes() {
-                TweenMax.to(armL, .45, {x: -93, y: 2, rotation: 0, ease: Quad.easeOut});
-                TweenMax.to(armR, .45, {x: -93, y: 2, rotation: 0, ease: Quad.easeOut, delay: .1});
+            TweenMax.to(armL, .45, {x: - 93, y: 2, rotation: 0, ease: Quad.easeOut});
+            TweenMax.to(armR, .45, {x: - 93, y: 2, rotation: 0, ease: Quad.easeOut, delay: .1});
             }
 
             function uncoverEyes() {
-                TweenMax.to(armL, 1.35, {y: 220, ease: Quad.easeOut});
-                TweenMax.to(armL, 1.35, {rotation: 105, ease: Quad.easeOut, delay: .1});
-                TweenMax.to(armR, 1.35, {y: 220, ease: Quad.easeOut});
-                TweenMax.to(armR, 1.35, {rotation: -105, ease: Quad.easeOut, delay: .1});
+            TweenMax.to(armL, 1.35, {y: 220, ease: Quad.easeOut});
+            TweenMax.to(armL, 1.35, {rotation: 105, ease: Quad.easeOut, delay: .1});
+            TweenMax.to(armR, 1.35, {y: 220, ease: Quad.easeOut});
+            TweenMax.to(armR, 1.35, {rotation: - 105, ease: Quad.easeOut, delay: .1});
             }
 
             function resetFace() {
-                TweenMax.to([eyeL, eyeR], 1, {x: 0, y: 0, ease: Expo.easeOut});
-                TweenMax.to(nose, 1, {x: 0, y: 0, scaleX: 1, scaleY: 1, ease: Expo.easeOut});
-                TweenMax.to(mouth, 1, {x: 0, y: 0, rotation: 0, ease: Expo.easeOut});
-                TweenMax.to(chin, 1, {x: 0, y: 0, scaleY: 1, ease: Expo.easeOut});
-                TweenMax.to([face, eyebrow], 1, {x: 0, y: 0, skewX: 0, ease: Expo.easeOut});
-                TweenMax.to([outerEarL, outerEarR, earHairL, earHairR, hair], 1, {x: 0, y: 0, scaleY: 1, ease: Expo.easeOut});
+            TweenMax.to([eyeL, eyeR], 1, {x: 0, y: 0, ease: Expo.easeOut});
+            TweenMax.to(nose, 1, {x: 0, y: 0, scaleX: 1, scaleY: 1, ease: Expo.easeOut});
+            TweenMax.to(mouth, 1, {x: 0, y: 0, rotation: 0, ease: Expo.easeOut});
+            TweenMax.to(chin, 1, {x: 0, y: 0, scaleY: 1, ease: Expo.easeOut});
+            TweenMax.to([face, eyebrow], 1, {x: 0, y: 0, skewX: 0, ease: Expo.easeOut});
+            TweenMax.to([outerEarL, outerEarR, earHairL, earHairR, hair], 1, {x: 0, y: 0, scaleY: 1, ease: Expo.easeOut});
             }
 
             function getAngle(x1, y1, x2, y2) {
-                var angle = Math.atan2(y1 - y2, x1 - x2);
-                return angle;
+            var angle = Math.atan2(y1 - y2, x1 - x2);
+            return angle;
             }
 
             function getPosition(el) {
-                var xPos = 0;
-                var yPos = 0;
+            var xPos = 0;
+            var yPos = 0;
+            while (el) {
+            if (el.tagName == "BODY") {
+            // deal with browser quirks with body/window/document and page scroll
+            var xScroll = el.scrollLeft || document.documentElement.scrollLeft;
+            var yScroll = el.scrollTop || document.documentElement.scrollTop;
+            xPos += (el.offsetLeft - xScroll + el.clientLeft);
+            yPos += (el.offsetTop - yScroll + el.clientTop);
+            } else {
+            // for all other non-BODY elements
+            xPos += (el.offsetLeft - el.scrollLeft + el.clientLeft);
+            yPos += (el.offsetTop - el.scrollTop + el.clientTop);
+            }
 
-                while (el) {
-                    if (el.tagName == "BODY") {
-                        // deal with browser quirks with body/window/document and page scroll
-                        var xScroll = el.scrollLeft || document.documentElement.scrollLeft;
-                        var yScroll = el.scrollTop || document.documentElement.scrollTop;
-
-                        xPos += (el.offsetLeft - xScroll + el.clientLeft);
-                        yPos += (el.offsetTop - yScroll + el.clientTop);
-                    } else {
-                        // for all other non-BODY elements
-                        xPos += (el.offsetLeft - el.scrollLeft + el.clientLeft);
-                        yPos += (el.offsetTop - el.scrollTop + el.clientTop);
-                    }
-
-                    el = el.offsetParent;
-                }
-                return {
-                    x: xPos,
+            el = el.offsetParent;
+            }
+            return {
+            x: xPos,
                     y: yPos
-                };
+            };
             }
 
             email.addEventListener('focus', onEmailFocus);
             email.addEventListener('blur', onEmailBlur);
             email.addEventListener('input', onEmailInput);
-            // password field is not present in forgotPassword.jsp, no event listeners needed for password
-            TweenMax.set(armL, {x: -93, y: 220, rotation: 105, transformOrigin: "top left"});
-            TweenMax.set(armR, {x: -93, y: 220, rotation: -105, transformOrigin: "top right"});
-        </script>
-
-        <script>
-            function validateForm() {
-                var email = document.getElementById("email").value;
-                var emailError = document.getElementById("emailError");
-                emailError.textContent = "";
-
-                // Regular expression to check email format
-                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(email)) {
-                    emailError.textContent = "Invalid email format.";
-                    return false; // Prevent form submission
-                }
-                return true;
-            }
-
-            // Form submission prevention and validation
-            document.querySelector("form").addEventListener("submit", function (event) {
-                if (!validateForm()) {
-                    event.preventDefault();
-                }
-            });
+            password.addEventListener('focus', onPasswordFocus);
+            password.addEventListener('blur', onPasswordBlur);
+            TweenMax.set(armL, {x: - 93, y: 220, rotation: 105, transformOrigin: "top left"});
+            TweenMax.set(armR, {x: - 93, y: 220, rotation: - 105, transformOrigin: "top right"});
         </script>
     </body>
 </html>
