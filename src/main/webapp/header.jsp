@@ -147,7 +147,7 @@
                                 </c:when>
                                 <c:otherwise>
                                     <li class="nav-item">
-                                        <span class="nav-link"><i class="fas fa-user me-1"></i> Welcome, <c:out value="${sessionScope.user.email}"/></span>
+                                        <a class="nav-link" href="profile"><i class="fas fa-user me-1"></i> Welcome, <c:out value="${sessionScope.user.email}"/></a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="logout"><i class="fas fa-sign-out-alt me-1"></i> Logout</a>

@@ -12,7 +12,9 @@
     <head>
         <title>User Profile</title>
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="css/luxury-theme.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         <style>
             body {
                 background: var(--rich-black);
@@ -29,13 +31,42 @@
                 box-shadow: 0 0 20px rgba(218, 165, 32, 0.2);
             }
 
-            input[type="text"] {
+            .form-label {
+                color: var(--primary-gold);
+                font-weight: 600;
+                font-size: 1.1rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .form-control {
                 background: var(--rich-black);
                 border: 1px solid var(--secondary-gold);
                 color: var(--text-gold);
-                padding: 8px;
-                border-radius: 4px;
-                margin: 5px 0;
+                margin-bottom: 1rem;
+                padding: 0.75rem 1rem;
+            }
+
+            .form-control:focus {
+                background: var(--rich-black);
+                border-color: var(--primary-gold);
+                color: var(--text-gold);
+                box-shadow: 0 0 0 0.25rem rgba(218, 165, 32, 0.25);
+            }
+
+            .form-control::placeholder {
+                color: rgba(245, 230, 204, 0.5);
+            }
+
+            .btn-primary {
+                background: var(--primary-gold);
+                border-color: var(--secondary-gold);
+                color: var(--rich-black);
+            }
+
+            .btn-primary:hover {
+                background: var(--secondary-gold);
+                border-color: var(--primary-gold);
+                color: var(--rich-black);
             }
 
             .profile-heading {
@@ -44,86 +75,230 @@
                 padding-bottom: 10px;
                 margin-bottom: 20px;
             }
+
+            .action-buttons {
+                margin-top: 2rem;
+                padding-top: 2rem;
+                border-top: 1px solid var(--secondary-gold);
+            }
+
+            .btn-outline-gold {
+                color: var(--primary-gold);
+                border: 2px solid var(--primary-gold);
+                background: transparent;
+                transition: all 0.3s ease;
+                margin: 0 0.5rem;
+                font-weight: 600;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+                font-size: 0.9rem;
+            }
+
+            .btn-outline-gold:hover {
+                background: var(--primary-gold);
+                color: var(--rich-black);
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+            }
+
+            .profile-navigation {
+                display: flex;
+                justify-content: center;
+                gap: 1.5rem;
+                margin: 2rem 0;
+            }
+
+            .profile-navigation .btn {
+                min-width: 220px;
+                padding: 1rem 1.5rem;
+            }
+
+            .btn i {
+                margin-right: 0.5rem;
+                font-size: 1.1rem;
+            }
+
+            .profile-info {
+                color: var(--text-gold);
+                background: var(--rich-black);
+                padding: 1.5rem;
+                border-radius: 8px;
+                border: 1px solid var(--secondary-gold);
+                margin-bottom: 2rem;
+            }
+
+            .profile-info p {
+                margin-bottom: 0.75rem;
+                font-size: 1.1rem;
+            }
+
+            .profile-info strong {
+                color: var(--primary-gold);
+                margin-right: 0.5rem;
+            }
+
+            .badge {
+                font-size: 0.9rem;
+                padding: 0.5em 1em;
+            }
+
+            .badge.bg-success {
+                background-color: #2d8659 !important;
+            }
+
+            .badge.bg-danger {
+                background-color: #8b2e2e !important;
+            }
         </style>
     </head>
     <body>
+        <!-- Include Header -->
+        <jsp:include page="header.jsp"/>
+        
+        <!-- Main Content with top margin to account for fixed header -->
+        <div class="container mt-5" style="margin-top: 100px !important;">
+            <div class="profile-container">
+                <%
+                    Boolean isCustomer = (Boolean) request.getAttribute("isCustomer");
+                    Boolean isEmployee = (Boolean) request.getAttribute("isEmployee");
+                    Boolean isAdmin = (Boolean) request.getAttribute("isAdmin");
+                    Boolean customerNotFound = (Boolean) request.getAttribute("customerNotFound");
+                    Boolean employeeNotFound = (Boolean) request.getAttribute("employeeNotFound");
 
-        <%
-            Boolean isCustomer = (Boolean) request.getAttribute("isCustomer");
-            Boolean isEmployee = (Boolean) request.getAttribute("isEmployee");
-            Boolean isAdmin = (Boolean) request.getAttribute("isAdmin");
-            Boolean customerNotFound = (Boolean) request.getAttribute("customerNotFound");
-            Boolean employeeNotFound = (Boolean) request.getAttribute("employeeNotFound");
+                    if (isCustomer == null) isCustomer = false;
+                    if (isEmployee == null) isEmployee = false;
+                    if (isAdmin == null) isAdmin = false;
+                    if (customerNotFound == null) customerNotFound = false;
+                    if (employeeNotFound == null) employeeNotFound = false;
+                %>
 
-            if (isCustomer == null) isCustomer = false;
-            if (isEmployee == null) isEmployee = false;
-            if (isAdmin == null) isAdmin = false;
-            if (customerNotFound == null) customerNotFound = false;
-            if (employeeNotFound == null) employeeNotFound = false;
-        %>
+                <h1 class="profile-heading text-center mb-4">User Profile</h1>
 
-        <h1>User Profile</h1>
+                <% if (customerNotFound || employeeNotFound) { %>
+                <div class="alert alert-danger">
+                    <%= customerNotFound ? "Customer profile not found in database." : "Employee profile not found in database." %>
+                </div>
+                <% } %>
 
-        <% if (customerNotFound) { %>
-        <p style="color:red;">Customer profile not found in database.</p>
-        <% } else if (employeeNotFound) { %>
-        <p style="color:red;">Employee profile not found in database.</p>
-        <% } %>
+                <% if (isCustomer) {
+                    Customer customer = (Customer) request.getAttribute("customerProfile");
+                    if (customer != null) {
+                %>
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <h3 class="profile-heading">Customer Profile</h3>
+                        <div class="profile-info">
+                            <p><strong>Email:</strong> <span><%= customer.getEmail() %></span></p>
+                            <p><strong>Role:</strong> <span><%= customer.getRole() %></span></p>
+                            <p><strong>Status:</strong> 
+                                <span class="badge <%= customer.isStatus() ? "bg-success" : "bg-danger" %>">
+                                    <%= customer.isStatus() ? "Active" : "Inactive" %>
+                                </span>
+                            </p>
+                        </div>
 
-        <% if (isCustomer) {
-            Customer customer = (Customer) request.getAttribute("customerProfile");
-            if (customer != null) {
-        %>
-        <h3>Customer Profile</h3>
-        <p><strong>Email:</strong> <%= customer.getEmail() %></p>
-        <p><strong>Role:</strong> <%= customer.getRole() %></p>
-        <p><strong>Status:</strong> <%= customer.isStatus() ? "Active" : "Inactive" %></p>
+                        <form action="profile" method="POST" class="needs-validation" novalidate>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Name</label>
+                                    <input type="text" class="form-control" name="name" value="<%= customer.getName() %>" required>
+                                </div>
 
-        <form action="profile" method="POST">
-            <label>Name:</label>
-            <input type="text" name="name" value="<%= customer.getName() %>"><br/>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Phone</label>
+                                    <input type="tel" class="form-control" name="phone" value="<%= customer.getPhoneNumber() %>" required>
+                                </div>
 
-            <label>Phone:</label>
-            <input type="text" name="phone" value="<%= customer.getPhoneNumber() %>"><br/>
+                                <div class="col-12 mb-3">
+                                    <label class="form-label">Address</label>
+                                    <input type="text" class="form-control" name="address" value="<%= customer.getAddress() %>" required>
+                                </div>
 
-            <label>Address:</label>
-            <input type="text" name="address" value="<%= customer.getAddress() %>"><br/>
+                                <div class="col-12 text-end">
+                                    <button type="submit" class="btn btn-outline-gold">
+                                        <i class="fas fa-save"></i> Update Profile
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <%
+                    } else {
+                %>
+                <p class="text-gold">No customer profile data to display.</p>
+                <%
+                    }
+                } else if (isEmployee) {
+                    Employee emp = (Employee) request.getAttribute("employeeProfile");
+                    if (emp != null) {
+                %>
+                <h3 class="profile-heading">Employee Profile</h3>
+                <div class="profile-info">
+                    <p><strong>Email:</strong> <span><%= emp.getEmail() %></span></p>
+                    <p><strong>Role:</strong> <span><%= emp.getRole() %></span></p>
+                    <p><strong>Status:</strong> 
+                        <span class="badge <%= emp.isStatus() ? "bg-success" : "bg-danger" %>">
+                            <%= emp.isStatus() ? "Active" : "Inactive" %>
+                        </span>
+                    </p>
+                    <p><strong>Name:</strong> <span><%= emp.getName() %></span></p>
+                    <p><strong>Phone:</strong> <span><%= emp.getPhoneNumber() %></span></p>
+                    <p><em class="text-muted">Employees cannot edit their own profile here.</em></p>
+                </div>
+                <%
+                    } else {
+                %>
+                <p class="text-gold">No employee profile data found.</p>
+                <%
+                    }
+                } else if (isAdmin) {
+                %>
+                <h3>Admin Profile</h3>
+                <p>Admins may not have a row in customers/employees. Customize as needed.</p>
+                <%
+                } else {
+                %>
+                <p>Unknown role or not logged in.</p>
+                <%
+                } %>
 
-            <input type="submit" value="Update Profile">
-        </form>
-        <%
-            } else {
-        %>
-        <p>No customer profile data to display.</p>
-        <%
-            }
-        } else if (isEmployee) {
-            Employee emp = (Employee) request.getAttribute("employeeProfile");
-            if (emp != null) {
-        %>
-        <h3>Employee Profile</h3>
-        <p><strong>Email:</strong> <%= emp.getEmail() %></p>
-        <p><strong>Role:</strong> <%= emp.getRole() %></p>
-        <p><strong>Status:</strong> <%= emp.isStatus() ? "Active" : "Inactive" %></p>
-        <p><strong>Name:</strong> <%= emp.getName() %></p>
-        <p><strong>Phone:</strong> <%= emp.getPhoneNumber() %></p>
-        <p><em>Employees cannot edit their own profile here.</em></p>
-        <%
-            } else {
-        %>
-        <p>No employee profile data found.</p>
-        <%
-            }
-        } else if (isAdmin) {
-        %>
-        <h3>Admin Profile</h3>
-        <p>Admins may not have a row in customers/employees. Customize as needed.</p>
-        <%
-        } else {
-        %>
-        <p>Unknown role or not logged in.</p>
-        <%
-} %>
+                <!-- Add this after the existing profile content but before the closing profile-container div -->
+                <div class="action-buttons">
+                    <div class="profile-navigation">
+                        <a href="index.jsp" class="btn btn-outline-gold">
+                            <i class="fas fa-home"></i> Back to Home
+                        </a>
+                        <% if (isCustomer) { %>
+                            <a href="/viewOrderWarranty" class="btn btn-outline-gold">
+                                <i class="fas fa-file-contract"></i> View Orders & Warranty
+                            </a>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <!-- Include Footer -->
+        <jsp:include page="footer.jsp"/>
+
+        <!-- Scripts -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            // Form validation
+            (function () {
+                'use strict'
+                var forms = document.querySelectorAll('.needs-validation')
+                Array.prototype.slice.call(forms).forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+            })()
+        </script>
     </body>
 </html>
