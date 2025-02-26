@@ -8,95 +8,140 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
         <style>
-            /* css/style.css - Footer Styles (you can also put these in your style.css file) */
+            :root {
+                --primary-gold: #D4AF37;
+                --secondary-gold: #C5A028;
+                --dark-black: #111111;
+                --rich-black: #1A1A1A;
+                --text-gold: #F5E6CC;
+            }
+
             footer {
-                background-color: #222; /* Dark background for footer */
-                color: #eee; /* Light grey text for better contrast on dark background */
-                padding: 2rem 0; /* Increased vertical padding */
-                margin-top: 5rem; /* Increased margin top to separate from content */
+                background: linear-gradient(145deg, var(--dark-black), var(--rich-black));
+                border-top: 2px solid var(--primary-gold);
+                color: var(--text-gold);
+                padding: 3rem 0;
+                position: relative;
+                box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.2);
             }
 
-            footer p {
-                margin-bottom: 0.5rem; /* Spacing between footer paragraphs */
-                font-size: 0.9rem; /* Slightly smaller font size for footer text */
-            }
-
-            footer a {
-                color: #fff; /* White links in footer */
-                text-decoration: none; /* Remove underlines from links */
-                transition: color 0.2s ease-in-out; /* Smooth color transition on hover */
-            }
-
-            footer a:hover {
-                color: #bbb; /* Slightly darker grey on link hover */
-            }
-
-            .footer-section {
-                margin-bottom: 1.5rem; /* Spacing between footer sections */
+            footer::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 1px;
+                background: linear-gradient(90deg, transparent, var(--primary-gold), transparent);
             }
 
             .footer-heading {
-                font-size: 1.1rem;
-                font-weight: bold;
-                color: #fff; /* White heading text */
-                margin-bottom: 1rem;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Subtle bottom border for headings */
+                color: var(--primary-gold);
+                font-size: 1.3rem;
+                font-weight: 600;
+                margin-bottom: 1.5rem;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+                position: relative;
                 padding-bottom: 0.5rem;
             }
 
-            .footer-list {
-                list-style: none; /* Remove list bullets */
-                padding-left: 0;
-            }
-
-            .footer-list-item {
-                margin-bottom: 0.5rem;
+            .footer-heading::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 60px;
+                height: 2px;
+                background: var(--primary-gold);
+                box-shadow: 0 0 10px var(--primary-gold);
             }
 
             .footer-social-icons a {
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
-                width: 2.5rem;
-                height: 2.5rem;
-                border-radius: 50%; /* Circular social icons */
-                background-color: rgba(255, 255, 255, 0.1); /* Subtle background for icons */
-                color: #fff;
-                font-size: 1.1rem;
-                margin-right: 0.5rem;
-                transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+                width: 3rem;
+                height: 3rem;
+                border-radius: 50%;
+                background: linear-gradient(145deg, #1a1a1a, #222);
+                border: 1px solid var(--primary-gold);
+                color: var(--primary-gold);
+                margin: 0.5rem;
+                transition: all 0.3s ease;
+                box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3),
+                           -4px -4px 10px rgba(255, 255, 255, 0.02);
             }
 
             .footer-social-icons a:hover {
-                background-color: rgba(255, 255, 255, 0.3); /* Slightly brighter background on hover */
-                color: #ddd;
+                transform: translateY(-5px) scale(1.05);
+                background: var(--primary-gold);
+                color: var(--dark-black);
+                box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+            }
+
+            .footer-list-item {
+                margin-bottom: 1rem;
+                transition: all 0.3s ease;
+            }
+
+            .footer-list-item a {
+                color: var(--text-gold);
+                text-decoration: none;
+                transition: all 0.3s ease;
+                position: relative;
+                padding-left: 1.2rem;
+            }
+
+            .footer-list-item a::before {
+                content: '›';
+                position: absolute;
+                left: 0;
+                color: var(--primary-gold);
+                transition: all 0.3s ease;
+            }
+
+            .footer-list-item a:hover {
+                color: var(--primary-gold);
+                transform: translateX(5px);
+            }
+
+            .footer-list-item a:hover::before {
+                transform: translateX(3px);
             }
 
             .copyright-section {
-                border-top: 1px solid rgba(255, 255, 255, 0.2); /* Subtle top border for copyright */
-                padding-top: 1.5rem;
-                margin-top: 2rem;
-                text-align: center; /* Center align copyright text */
+                border-top: 1px solid rgba(212, 175, 55, 0.2);
+                padding-top: 2rem;
+                margin-top: 3rem;
+                text-align: center;
+                position: relative;
             }
 
-            /* Responsive adjustments - optional for a basic footer, but good practice */
+            .copyright-section::before {
+                content: '';
+                position: absolute;
+                top: -1px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 50%;
+                height: 1px;
+                background: linear-gradient(90deg, transparent, var(--primary-gold), transparent);
+            }
+
+            /* Update existing media query */
             @media (max-width: 768px) {
                 footer {
-                    padding: 1.5rem 0; /* Slightly reduced padding on smaller screens */
-                    margin-top: 3rem; /* Adjust margin top on smaller screens */
-                    text-align: center; /* Center align all text on smaller screens */
+                    padding: 2rem 0;
                 }
 
                 .footer-section {
-                    margin-bottom: 1rem; /* Reduced section spacing on smaller screens */
+                    text-align: center;
+                    margin-bottom: 2rem;
                 }
 
-                .footer-heading {
-                    font-size: 1rem; /* Slightly smaller headings on smaller screens */
-                }
-
-                .footer-social-icons {
-                    text-align: center; /* Center social icons on smaller screens */
+                .footer-heading::after {
+                    left: 50%;
+                    transform: translateX(-50%);
                 }
             }
         </style>

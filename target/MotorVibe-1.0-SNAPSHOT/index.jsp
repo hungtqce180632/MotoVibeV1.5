@@ -15,62 +15,223 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="css/style.css"> <!- Assuming you have a style.css for custom styles -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="css/luxury-theme.css">
         <style>
-            /* Custom styles for index page */
-            body {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font */
-                color: #333;
+            :root {
+                --primary-gold: #D4AF37;
+                --secondary-gold: #C5A028;
+                --dark-black: #111111;
+                --rich-black: #1A1A1A;
+                --text-gold: #F5E6CC;
             }
+
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                color: var(--text-gold);
+                background: var(--dark-black);
+            }
+
+            /* Hero Section Enhancement */
             .hero-section {
-                background: #f8f9fa; /* Light grey background for hero */
+                background: linear-gradient(135deg, var(--dark-black), var(--rich-black));
+                position: relative;
+                overflow: hidden;
+                padding: 180px 0 120px;
+                border-bottom: 1px solid var(--primary-gold);
+            }
+
+            .hero-section::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background:
+                    linear-gradient(45deg, transparent 45%, var(--primary-gold) 45%, var(--primary-gold) 55%, transparent 55%),
+                    radial-gradient(circle at 50% 50%, var(--primary-gold) 0%, transparent 20%);
+                opacity: 0.05;
+                animation: shine 8s infinite linear;
+            }
+
+            .hero-title {
+                color: var(--primary-gold);
+                font-size: 4rem;
+                font-weight: 800;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.5),
+                    0 0 20px rgba(212, 175, 55, 0.3);
+                margin-bottom: 1.5rem;
+            }
+
+            .hero-subtitle {
+                color: var(--text-gold);
+                font-size: 1.4rem;
+                text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+                margin-bottom: 2rem;
+            }
+
+            /* Featured Motorbikes Section */
+            .featured-motorbikes {
+                padding: 80px 0;
+                background: linear-gradient(145deg, var(--dark-black), var(--rich-black));
+                position: relative;
+            }
+
+            .featured-motorbikes h2 {
+                color: var(--primary-gold);
+                font-size: 2.5rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                margin-bottom: 3rem;
+                text-align: center;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+                position: relative;
+            }
+
+            .featured-motorbikes h2::after {
+                content: '';
+                position: absolute;
+                bottom: -15px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100px;
+                height: 3px;
+                background: var(--primary-gold);
+                box-shadow: 0 0 10px var(--primary-gold);
+            }
+
+            .motorbike-card {
+                background: linear-gradient(145deg, #1a1a1a, #222);
+                border: 1px solid var(--primary-gold);
+                border-radius: 15px;
+                overflow: hidden;
+                transition: all 0.4s ease;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.3),
+                    inset 0 0 10px rgba(212, 175, 55, 0.1);
+                transform-style: preserve-3d;
+                perspective: 1000px;
+            }
+
+            .motorbike-card:hover {
+                transform: translateY(-10px) rotateX(5deg);
+                box-shadow: 0 20px 40px rgba(212, 175, 55, 0.2),
+                    inset 0 0 20px rgba(212, 175, 55, 0.2);
+            }
+
+            .card-img-top {
+                height: 250px;
+                object-fit: cover;
+                border-bottom: 2px solid var(--primary-gold);
+                transition: all 0.4s ease;
+            }
+
+            .motorbike-card:hover .card-img-top {
+                transform: scale(1.05);
+            }
+
+            .card-body {
+                padding: 1.5rem;
+                background: linear-gradient(145deg, #1a1a1a, #222);
+            }
+
+            .card-title {
+                color: var(--primary-gold);
+                font-size: 1.4rem;
+                font-weight: 600;
+                margin-bottom: 1rem;
+                text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            }
+
+            .card-text {
+                color: var(--text-gold);
+                font-size: 1rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .btn-outline-primary {
+                color: var(--primary-gold);
+                border: 2px solid var(--primary-gold);
+                background: transparent;
+                padding: 0.5rem 1.5rem;
+                transition: all 0.3s ease;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                font-weight: 600;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .btn-outline-primary:hover {
+                background: var(--primary-gold);
+                color: var(--dark-black);
+                box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+                transform: translateY(-2px);
+            }
+
+            /* Ready to Ride Section */
+            .ready-to-ride {
+                background: linear-gradient(145deg, var(--dark-black), var(--rich-black));
                 padding: 80px 0;
                 text-align: center;
+                border-top: 1px solid var(--primary-gold);
+                position: relative;
             }
-            .hero-title {
+
+            .ready-to-ride h2 {
+                color: var(--primary-gold);
                 font-size: 2.5rem;
-                font-weight: bold;
-                color: #222; /* Darker title */
-                margin-bottom: 20px;
+                margin-bottom: 1.5rem;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             }
-            .hero-subtitle {
-                font-size: 1.1rem;
-                color: #555; /* Slightly muted subtitle */
-                margin-bottom: 30px;
+
+            .ready-to-ride .lead {
+                color: var(--text-gold);
+                font-size: 1.2rem;
+                margin-bottom: 2rem;
             }
-            .featured-motorbikes {
-                padding: 50px 0;
-                background-color: #fff; /* White background for featured section */
+
+            .ready-to-ride a {
+                color: var(--primary-gold);
+                text-decoration: none;
+                transition: all 0.3s ease;
+                position: relative;
             }
-            .motorbike-card {
-                border: none; /* Remove default card border */
-                box-shadow: 0 4px 8px rgba(0,0,0,0.05); /* Soft shadow for cards */
-                transition: transform 0.3s ease;
+
+            .ready-to-ride a:hover {
+                color: var(--secondary-gold);
+                text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
             }
-            .motorbike-card:hover {
-                transform: scale(1.03); /* Slight scale up on hover */
-                box-shadow: 0 8px 16px rgba(0,0,0,0.1); /* More pronounced shadow on hover */
-            }
-            .card-img-top {
-                border-radius: 0.5rem 0.5rem 0 0; /* Rounded top corners for images */
-                max-height: 200px; /* Limit image height for consistency */
-                object-fit: cover; /* Cover container, crop if necessary */
-            }
-            .card-title {
-                font-size: 1.25rem;
+
+            /* Chat Widget Enhancement */
+            #chat-button {
+                background: linear-gradient(145deg, var(--primary-gold), var(--secondary-gold));
+                border: none;
+                padding: 12px 20px;
+                border-radius: 10px;
+                color: var(--dark-black);
                 font-weight: 600;
-                color: #343a40; /* Dark card title */
+                box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+                transition: all 0.3s ease;
             }
-            .card-text {
-                color: #6c757d; /* Muted card text */
+
+            #chat-button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
             }
-            .btn-primary-moto { /* Custom primary button style */
-                background-color: #007bff;
-                border-color: #007bff;
-                color: white;
+
+            #chat-popup {
+                background: linear-gradient(145deg, #1a1a1a, #222);
+                border: 1px solid var(--primary-gold);
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             }
-            .btn-primary-moto:hover {
-                background-color: #0056b3;
-                border-color: #0056b3;
+
+            #chat-header {
+                background: linear-gradient(145deg, var(--primary-gold), var(--secondary-gold));
+                color: var(--dark-black);
+                border-radius: 14px 14px 0 0;
             }
 
             /* Chat Widget Styles - ADDED CSS FROM CHAT WIDGET */
@@ -197,41 +358,76 @@
 
             <div class="hero-section">
                 <div class="container">
-                    <h1 class="hero-title">Welcome to MotoVibe!</h1>
-                    <p class="hero-subtitle">Your premier online destination for motorbikes, services, and events.</p>
-                    <a class="btn btn-primary btn-lg btn-primary-moto" href="motorList" type="button"><i class="fas fa-motorcycle me-2"></i> Explore Motorbikes</a>
+                    <h1 class="hero-title">Welcome to MotoVibe</h1>
+                    <p class="hero-subtitle">Experience Luxury on Two Wheels</p>
+                    <a class="btn btn-outline-primary btn-lg" href="motorList">
+                        <i class="fas fa-motorcycle me-2"></i> Explore Our Collection
+                    </a>
                 </div>
             </div>
 
-            <div class="container featured-motorbikes">
-                <h2 class="text-center mb-5">Featured Motorbikes</h2>
-                <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
-                <c:forEach var="i" begin="1" end="6"> <%-- Example: Display 6 featured motorbikes (can be dynamic later) --%>
-                    <div class="col">
-                        <div class="card h-100 motorbike-card">
-                            <img src="images/motor_pictures/featured_motorbike_${i}.jpg" class="card-img-top" alt="Featured Motorbike ${i}" onerror="this.onerror=null;this.src='images/placeholder.png';" > <!- Placeholder image on error -->
-                            <div class="card-body">
-                                <h5 class="card-title">Motorbike Model ${i}</h5> <!- Replace with actual motorbike name -->
-                                <p class="card-text">Discover the thrill of riding with this amazing model. Perfect for city and adventure.</p> <!- Replace with actual description -->
-                                <a href="motorDetail?id=1" class="btn btn-outline-primary btn-sm">View Details</a> <!- Example link, replace with dynamic links -->
+            <div class="page-content">
+                <!-- Featured Motorbikes Section -->
+                <div class="featured-motorbikes-wrapper">
+                    <div class="container featured-motorbikes">
+                        <h2 class="text-center mb-5">Featured Motorbikes</h2>
+                        <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+                        <c:forEach var="i" begin="1" end="6"> <%-- Example: Display 6 featured motorbikes (can be dynamic later) --%>
+                            <div class="col">
+                                <div class="card h-100 motorbike-card">
+                                    <img src="images/motor_pictures/featured_motorbike_${i}.jpg" class="card-img-top" alt="Featured Motorbike ${i}" onerror="this.onerror=null;this.src='images/placeholder.png';" > <!- Placeholder image on error -->
+                                    <div class="card-body">
+                                        <h5 class="card-title">Motorbike Model ${i}</h5> <!- Replace with actual motorbike name -->
+                                        <p class="card-text">Discover the thrill of riding with this amazing model. Perfect for city and adventure.</p> <!- Replace with actual description -->
+                                        <a href="motorDetail?id=1" class="btn btn-outline-primary btn-sm">View Details</a> <!- Example link, replace with dynamic links -->
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ready to Ride Section with Videos -->
+            <div class="container-fluid p-0">
+                <div class="video-background-section">
+                    <div class="video-side">
+                        <video class="video-background" autoplay loop muted playsinline>
+                            <source src="images/motor_pictures/index_motor_1.mp4" type="video/mp4">
+                        </video>
+                    </div>
+
+                    <div class="content-side">
+                        <div class="ready-to-ride-content text-center">
+                            <h2 class="ready-to-ride-title">Ready to Ride?</h2>
+                            <p class="ready-to-ride-text">Find your dream motorbike today and experience the freedom of the open road with MotoVibe.</p>
+
+                            <div class="ready-to-ride-links">
+                                <c:if test="${empty sessionScope.user}">
+                                    <a href="login.jsp" class="btn-luxury">
+                                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                                    </a>
+                                    <a href="register.jsp" class="btn-luxury">
+                                        <i class="fas fa-user-plus me-2"></i>Register
+                                    </a>
+                                </c:if>
+                                <c:if test="${not empty sessionScope.user}">
+                                    <a href="listAppointments" class="btn-luxury">
+                                        <i class="fas fa-calendar-check me-2"></i>View Appointments
+                                    </a>
+                                    <a href="motorList" class="btn-luxury">
+                                        <i class="fas fa-motorcycle me-2"></i>Browse Motorbikes
+                                    </a>
+                                </c:if>
                             </div>
                         </div>
                     </div>
-                </c:forEach>
-            </div>
-        </div>
 
-        <div class="container mt-5 mb-5">
-            <div class="row justify-content-center">
-                <div class="col-md-8 text-center">
-                    <h2>Ready to Ride?</h2>
-                    <p class="lead">Find your dream motorbike today and experience the freedom of the open road with MotoVibe.</p>
-                    <c:if test="${empty sessionScope.user}">
-                        <p> <a href="login.jsp">Login</a> or <a href="signup.jsp">Register</a> to get started!</p>
-                    </c:if>
-                    <c:if test="${not empty sessionScope.user}">
-                        <p>Welcome back, <c:out value="${sessionScope.user.email}"/>! <a href="listAppointments">View Appointments</a> or <a href="motorList">Browse Motorbikes</a>.</p>
-                    </c:if>
+                    <div class="video-side">
+                        <video class="video-background" autoplay loop muted playsinline>
+                            <source src="images/motor_pictures/index_motor_2.mp4" type="video/mp4">
+                        </video>
+                    </div>
                 </div>
             </div>
         </div>

@@ -11,6 +11,40 @@
 <html>
     <head>
         <title>User Profile</title>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/luxury-theme.css">
+        <style>
+            body {
+                background: var(--rich-black);
+                color: var(--text-gold);
+            }
+
+            .profile-container {
+                background: var(--dark-black);
+                border: 1px solid var(--secondary-gold);
+                border-radius: 10px;
+                padding: 2rem;
+                margin: 2rem auto;
+                max-width: 800px;
+                box-shadow: 0 0 20px rgba(218, 165, 32, 0.2);
+            }
+
+            input[type="text"] {
+                background: var(--rich-black);
+                border: 1px solid var(--secondary-gold);
+                color: var(--text-gold);
+                padding: 8px;
+                border-radius: 4px;
+                margin: 5px 0;
+            }
+
+            .profile-heading {
+                color: var(--primary-gold);
+                border-bottom: 2px solid var(--secondary-gold);
+                padding-bottom: 10px;
+                margin-bottom: 20px;
+            }
+        </style>
     </head>
     <body>
 
