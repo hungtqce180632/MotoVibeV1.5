@@ -10,6 +10,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import utils.DBContext;
 
 /**
@@ -77,27 +79,31 @@ public class OrderDAO {
         return null;
     }
 
-    private Order mapOrder(ResultSet resultSet) throws SQLException {
+    private Order mapOrder(ResultSet rs) throws SQLException {
         Order order = new Order();
-        order.setOrderId(resultSet.getInt("order_id"));
-        order.setCustomerId(resultSet.getInt("customer_id"));
-        int employeeId = resultSet.getInt("employee_id");
-        if (!resultSet.wasNull()) {
-            order.setEmployeeId(employeeId);
+        order.setOrderId(rs.getInt("order_id"));
+        order.setCustomerId(rs.getInt("customer_id"));
+
+        int empId = rs.getInt("employee_id");
+        if (!rs.wasNull()) {
+            order.setEmployeeId(empId);
         }
-        order.setMotorId(resultSet.getInt("motor_id"));
-        order.setCreateDate(resultSet.getTimestamp("create_date"));
-        order.setPaymentMethod(resultSet.getString("payment_method"));
-        order.setTotalAmount(resultSet.getDouble("total_amount"));
-        order.setDepositStatus(resultSet.getBoolean("deposit_status"));
-        order.setOrderStatus(resultSet.getString("order_status"));
-        order.setDateStart(resultSet.getDate("date_start"));
-        order.setDateEnd(resultSet.getDate("date_end"));
-        order.setHasWarranty(resultSet.getBoolean("has_warranty"));
-        int warrantyId = resultSet.getInt("warranty_id");
-        if (!resultSet.wasNull()) {
+
+        order.setMotorId(rs.getInt("motor_id"));
+        order.setCreateDate(rs.getTimestamp("create_date"));
+        order.setPaymentMethod(rs.getString("payment_method"));
+        order.setTotalAmount(rs.getDouble("total_amount"));
+        order.setDepositStatus(rs.getBoolean("deposit_status"));
+        order.setOrderStatus(rs.getString("order_status"));
+        order.setDateStart(rs.getDate("date_start"));
+        order.setDateEnd(rs.getDate("date_end"));
+        order.setHasWarranty(rs.getBoolean("has_warranty"));
+
+        int warrantyId = rs.getInt("warranty_id");
+        if (!rs.wasNull()) {
             order.setWarrantyId(warrantyId);
         }
+
         return order;
     }
 
@@ -157,5 +163,41 @@ public class OrderDAO {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public List<Order> getAllOrders() {
+        List<Order> orders = new ArrayList<>();
+        String sql = "SELECT * FROM [dbo].[Orders]";
+
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement ps = conn.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Order order = mapOrder(rs);
+                orders.add(order);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orders;
+    }
+
+    public List<Order> getOrdersByCustomerId(int customerId) {
+        List<Order> orders = new ArrayList<>();
+        String sql = "SELECT * FROM [dbo].[Orders] WHERE customer_id = ?";
+
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, customerId);
+
+            try ( ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Order order = mapOrder(rs);
+                    orders.add(order);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orders;
     }
 }

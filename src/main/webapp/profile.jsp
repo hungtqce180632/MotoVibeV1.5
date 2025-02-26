@@ -83,7 +83,7 @@
             }
 
             .btn-outline-gold {
-                color: var(--primary-gold);
+                color: var(--primary-gold) !important;
                 border: 2px solid var(--primary-gold);
                 background: transparent;
                 transition: all 0.3s ease;
@@ -96,9 +96,17 @@
 
             .btn-outline-gold:hover {
                 background: var(--primary-gold);
-                color: var(--rich-black);
+                color: var(--rich-black) !important;
                 transform: translateY(-2px);
                 box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+            }
+
+            .btn-outline-gold i {
+                color: inherit;
+            }
+
+            .btn-outline-gold:hover i {
+                color: var(--rich-black);
             }
 
             .profile-navigation {
@@ -167,6 +175,23 @@
                 -webkit-box-shadow: 0 0 0 30px var(--rich-black) inset !important;
                 -webkit-text-fill-color: var(--text-gold) !important;
             }
+
+            /* Style for headings and text in the history section */
+            .mt-4 h4 {
+                color: var(--primary-gold);
+                margin-bottom: 1rem;
+            }
+
+            .mt-4 p {
+                color: var(--text-gold);
+                margin-bottom: 1.5rem;
+            }
+
+            /* Style for button text */
+            button.btn-outline-gold,
+            a.btn-outline-gold {
+                color: var(--primary-gold) !important;
+            }
         </style>
     </head>
     <body>
@@ -234,11 +259,21 @@
 
                                 <div class="col-12 text-end">
                                     <button type="submit" class="btn btn-outline-gold">
-                                        <i class="fas fa-save"></i> Update Profile
+                                        <i class="fas fa-save"></i> <span>Update Profile</span>
                                     </button>
                                 </div>
                             </div>
                         </form>
+                        
+                        <!-- "Buy Motor History" block -->
+                        <div class="mt-4">
+                            <h4>Buy Motor History</h4>
+                            <p>Track or view your previous orders and their warranty information.</p>
+                            <a href="listOrders" class="btn btn-outline-gold">
+                                <i class="fas fa-history"></i> <span>View My Orders</span>
+                            </a>
+                        </div>
+                        
                     </div>
                 </div>
                 <%
@@ -280,20 +315,6 @@
                 <p>Unknown role or not logged in.</p>
                 <%
                 } %>
-
-                <!-- Add this after the existing profile content but before the closing profile-container div -->
-                <div class="action-buttons">
-                    <div class="profile-navigation">
-                        <a href="index.jsp" class="btn btn-outline-gold">
-                            <i class="fas fa-home"></i> Back to Home
-                        </a>
-                        <% if (isCustomer) { %>
-                            <a href="/viewOrderWarranty" class="btn btn-outline-gold">
-                                <i class="fas fa-file-contract"></i> View Orders & Warranty
-                            </a>
-                        <% } %>
-                    </div>
-                </div>
             </div>
         </div>
 

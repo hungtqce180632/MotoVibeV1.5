@@ -51,6 +51,7 @@ models\Order.class
 dao\ReviewDAO.class
 controllers\ListAppointmentServlet.class
 dao\InventoryLogDAO.class
+controllers\ListOrdersServlet.class
 controllers\ChangeQuantityServlet.class
 models\Model.class
 dao\AppointmentDAO.class
