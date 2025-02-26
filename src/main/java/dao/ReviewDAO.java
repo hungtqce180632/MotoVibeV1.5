@@ -19,7 +19,7 @@ import utils.DBContext;
  */
 public class ReviewDAO {
 
-    public boolean createReview(Review review) {
+     public boolean createReview(Review review) {
         String sql = "INSERT INTO reviews (customer_id, motor_id, rating, review_text, review_date, review_status) VALUES (?, ?, ?, ?, GETDATE(), ?)";
         try (Connection connection = DBContext.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -100,8 +100,36 @@ public class ReviewDAO {
         review.setMotorId(resultSet.getInt("motor_id"));
         review.setRating(resultSet.getInt("rating"));
         review.setReviewText(resultSet.getString("review_text"));
-        review.setReviewDate(resultSet.getDate("review_date"));
+        review.setReviewDate(resultSet.getString("review_date"));
         review.setReviewStatus(resultSet.getBoolean("review_status"));
         return review;
+    }
+
+    public static List<Review> getAllReviewOfCar(int motorId) throws SQLException {
+        String sql = "SELECT r.*, c.name "
+                + "FROM reviews r "
+                + "JOIN customers c ON r.customer_id = c.customer_id "
+                + "WHERE r.motor_id = ? AND r.review_status = 1"; // Fetch only active reviews
+
+        List<Review> reviews = new ArrayList<>();
+
+        try (Connection conn = DBContext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, motorId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Review review = new Review();
+                    review.setReviewId(rs.getInt("review_id"));
+                    review.setCustomerId(rs.getInt("customer_id"));
+                    review.setMotorId(rs.getInt("motor_id"));
+                    review.setRating(rs.getInt("rating"));
+                    review.setReviewText(rs.getString("review_text"));
+                    review.setReviewDate(rs.getString("review_date"));
+                    review.setReviewStatus(rs.getBoolean("review_status"));
+                    review.setCustomer_name(rs.getString("name"));
+                    reviews.add(review);
+                }
+            }
+        }
+        return reviews;
     }
 }
