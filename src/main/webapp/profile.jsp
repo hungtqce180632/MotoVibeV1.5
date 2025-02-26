@@ -39,17 +39,17 @@
             }
 
             .form-control {
-                background: var(--rich-black);
+                background: var(--rich-black) !important;
                 border: 1px solid var(--secondary-gold);
-                color: var(--text-gold);
+                color: var(--text-gold) !important;
                 margin-bottom: 1rem;
                 padding: 0.75rem 1rem;
             }
 
             .form-control:focus {
-                background: var(--rich-black);
+                background: var(--rich-black) !important;
                 border-color: var(--primary-gold);
-                color: var(--text-gold);
+                color: var(--text-gold) !important;
                 box-shadow: 0 0 0 0.25rem rgba(218, 165, 32, 0.25);
             }
 
@@ -148,6 +148,24 @@
 
             .badge.bg-danger {
                 background-color: #8b2e2e !important;
+            }
+
+            /* Override any white backgrounds */
+            .container, 
+            .row, 
+            .col-md-12, 
+            .col-md-6, 
+            .col-12 {
+                background: transparent;
+            }
+
+            /* Ensure text inputs maintain dark background when autofilled */
+            input:-webkit-autofill,
+            input:-webkit-autofill:hover,
+            input:-webkit-autofill:focus,
+            input:-webkit-autofill:active {
+                -webkit-box-shadow: 0 0 0 30px var(--rich-black) inset !important;
+                -webkit-text-fill-color: var(--text-gold) !important;
             }
         </style>
     </head>
