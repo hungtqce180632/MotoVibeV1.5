@@ -5,6 +5,7 @@
 package controllers;
 
 import dao.AppointmentDAO;
+import dao.CustomerDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -34,6 +35,20 @@ public class ListAppointmentServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+    }
+
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if a input/output error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
         UserAccount user = (UserAccount) session.getAttribute("user");
@@ -45,16 +60,18 @@ public class ListAppointmentServlet extends HttpServlet {
             response.sendRedirect("login.jsp"); // Redirect to login if not logged in
             return;
         }
-
+        CustomerDAO customerDAO = new CustomerDAO();
         AppointmentDAO appointmentDAO = new AppointmentDAO();
         List<Appointment> appointmentList = null; // Initialize to null for debugging
+        int customerID;
 
         System.out.println("User Role: " + user.getRole()); // DEBUG
 
         try {
             if (user.getRole().equalsIgnoreCase("Customer")) {
                 // Customer: Get appointments for the logged-in customer
-                appointmentList = appointmentDAO.getAppointmentsByCustomerId(user.getUserId());
+                customerID = customerDAO.getCustomerIdByUserId(user.getUserId());
+                appointmentList = appointmentDAO.getAppointmentsByCustomerId(customerID);
                 request.setAttribute("userRole", "customer"); // Indicate role for JSP
                 System.out.println("User is Customer. Fetched appointments for customer ID: " + user.getUserId() + ", List size: " + (appointmentList != null ? appointmentList.size() : "null")); // DEBUG
             } else if (user.getRole().equalsIgnoreCase("Employee")) {
@@ -73,24 +90,11 @@ public class ListAppointmentServlet extends HttpServlet {
             e.printStackTrace(); // DEBUG - Print full stack trace to server log
         }
 
+        
         request.setAttribute("appointments", appointmentList);
         System.out.println("Setting appointments attribute. List is " + (appointmentList != null ? "not null" : "null")); // DEBUG
         request.getRequestDispatcher("list_appointments.jsp").forward(request, response); // Forward to JSP for display
         System.out.println("Forwarded to list_appointments.jsp"); // DEBUG
-    }
-
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if a input/output error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
     }
 
     /**

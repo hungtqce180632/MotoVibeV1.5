@@ -101,4 +101,24 @@ public class CustomerDAO {
         }
         return null; // Customer not found or exception
     }
+    
+    
+    public int getCustomerIdByUserId(int userId) {
+        String sql = "SELECT customer_id FROM customers WHERE user_id = ?";  // Assuming 'user_id' in 'customers' table
+        int customerId = -1; // Default value if no match is found
+
+        try (Connection connection = DBContext.getConnection(); 
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, userId);  // Set userId parameter in the query
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    customerId = resultSet.getInt("customer_id");  // Retrieve customer_id from the result set
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle potential SQL errors
+        }
+
+        return customerId; // Return the customerId (or -1 if not found)
+    }
 }
