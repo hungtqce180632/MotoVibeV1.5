@@ -19,16 +19,18 @@ import utils.DBContext;
  */
 public class ReviewDAO {
 
-     public boolean createReview(Review review) {
-        String sql = "INSERT INTO reviews (customer_id, motor_id, rating, review_text, review_date, review_status) VALUES (?, ?, ?, ?, GETDATE(), ?)";
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+    public boolean createReview(Review review) {
+        String sql = "INSERT INTO reviews (customer_id, motor_id, rating, review_text, review_date, review_status) "
+                + "VALUES (?, ?, ?, ?, GETDATE(), ?)";
+        try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
             preparedStatement.setInt(1, review.getCustomerId());
             preparedStatement.setInt(2, review.getMotorId());
             preparedStatement.setInt(3, review.getRating());
             preparedStatement.setString(4, review.getReviewText());
             preparedStatement.setBoolean(5, review.isReviewStatus());
             return preparedStatement.executeUpdate() > 0;
+
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -37,8 +39,8 @@ public class ReviewDAO {
 
     public Review getReviewById(int reviewId) {
         String sql = "SELECT * FROM reviews WHERE review_id = ?";
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
             preparedStatement.setInt(1, reviewId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -53,8 +55,8 @@ public class ReviewDAO {
     public List<Review> getReviewsByMotorId(int motorId) {
         List<Review> reviews = new ArrayList<>();
         String sql = "SELECT * FROM reviews WHERE motor_id = ?";
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
             preparedStatement.setInt(1, motorId);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -68,13 +70,14 @@ public class ReviewDAO {
 
     public boolean updateReview(Review review) {
         String sql = "UPDATE reviews SET rating = ?, review_text = ?, review_status = ? WHERE review_id = ?";
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
             preparedStatement.setInt(1, review.getRating());
             preparedStatement.setString(2, review.getReviewText());
             preparedStatement.setBoolean(3, review.isReviewStatus());
             preparedStatement.setInt(4, review.getReviewId());
             return preparedStatement.executeUpdate() > 0;
+
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -83,10 +86,11 @@ public class ReviewDAO {
 
     public boolean deleteReview(int reviewId) {
         String sql = "DELETE FROM reviews WHERE review_id = ?";
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
             preparedStatement.setInt(1, reviewId);
             return preparedStatement.executeUpdate() > 0;
+
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -109,13 +113,14 @@ public class ReviewDAO {
         String sql = "SELECT r.*, c.name "
                 + "FROM reviews r "
                 + "JOIN customers c ON r.customer_id = c.customer_id "
-                + "WHERE r.motor_id = ? AND r.review_status = 1"; // Fetch only active reviews
+                + "WHERE r.motor_id = ? AND r.review_status = 1";
 
         List<Review> reviews = new ArrayList<>();
 
-        try (Connection conn = DBContext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setInt(1, motorId);
-            try (ResultSet rs = stmt.executeQuery()) {
+            try ( ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Review review = new Review();
                     review.setReviewId(rs.getInt("review_id"));

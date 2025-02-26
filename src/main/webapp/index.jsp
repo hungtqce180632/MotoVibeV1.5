@@ -195,17 +195,17 @@
 
         <jsp:include page="header.jsp"></jsp:include>
 
-        <div class="hero-section">
-            <div class="container">
-                <h1 class="hero-title">Welcome to MotoVibe!</h1>
-                <p class="hero-subtitle">Your premier online destination for motorbikes, services, and events.</p>
-                <a class="btn btn-primary btn-lg btn-primary-moto" href="motorList" type="button"><i class="fas fa-motorcycle me-2"></i> Explore Motorbikes</a>
+            <div class="hero-section">
+                <div class="container">
+                    <h1 class="hero-title">Welcome to MotoVibe!</h1>
+                    <p class="hero-subtitle">Your premier online destination for motorbikes, services, and events.</p>
+                    <a class="btn btn-primary btn-lg btn-primary-moto" href="motorList" type="button"><i class="fas fa-motorcycle me-2"></i> Explore Motorbikes</a>
+                </div>
             </div>
-        </div>
 
-        <div class="container featured-motorbikes">
-            <h2 class="text-center mb-5">Featured Motorbikes</h2>
-            <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+            <div class="container featured-motorbikes">
+                <h2 class="text-center mb-5">Featured Motorbikes</h2>
+                <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
                 <c:forEach var="i" begin="1" end="6"> <%-- Example: Display 6 featured motorbikes (can be dynamic later) --%>
                     <div class="col">
                         <div class="card h-100 motorbike-card">
@@ -247,7 +247,7 @@
                     <button id="chat-close-button">x</button>
                 </div>
                 <div id="chat-body">
-                    </div>
+                </div>
                 <div id="appointment-button-container">
                     <button id="create-appointment-button">Create Appointment</button>
                 </div>
@@ -260,7 +260,7 @@
 
         <%-- Chat Widget Javascript - ADDED JAVASCRIPT CODE HERE --%>
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function () {
                 const chatButton = document.getElementById('chat-button');
                 const chatPopup = document.getElementById('chat-popup');
                 const chatCloseButton = document.getElementById('chat-close-button');
@@ -284,7 +284,7 @@
                 });
 
                 // Close chat when clicking outside of it
-                document.addEventListener('click', function(event) {
+                document.addEventListener('click', function (event) {
                     if (isChatOpen && !chatPopup.contains(event.target) && !chatButton.contains(event.target)) {
                         chatPopup.style.display = 'none';
                         isChatOpen = false;
@@ -293,14 +293,14 @@
 
                 chatSendButton.addEventListener('click', sendMessage);
 
-                chatInput.addEventListener('keypress', function(event) {
+                chatInput.addEventListener('keypress', function (event) {
                     if (event.key === 'Enter') {
                         sendMessage();
                         event.preventDefault(); // Prevent default form submission
                     }
                 });
 
-                createAppointmentButton.addEventListener('click', function() {
+                createAppointmentButton.addEventListener('click', function () {
                     // Check if user is logged in (JSP variable passed from server-side)
                     var isLoggedIn = <%= session.getAttribute("user") != null %>; // Correct way to check in JSP
                     if (isLoggedIn) {
@@ -317,25 +317,25 @@
                         appendMessage(messageText, 'user-message');
                         chatInput.value = '';
 
-                        fetch('ChatServlet', { // Servlet URL - adjust if needed
+                        fetch('ChatServlet', {// Servlet URL - adjust if needed
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded',
                             },
                             body: 'message=' + encodeURIComponent(messageText)
                         })
-                        .then(response => response.text())
-                        .then(aiResponse => {
-                            appendMessage(aiResponse, 'ai-message');
-                            questionCount++;
-                            if (questionCount >= 3) {
-                                appointmentButtonContainer.style.display = 'block'; // Show button after 3 questions
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error sending message:', error);
-                            appendMessage('Sorry, I could not process your request.', 'ai-message');
-                        });
+                                .then(response => response.text())
+                                .then(aiResponse => {
+                                    appendMessage(aiResponse, 'ai-message');
+                                    questionCount++;
+                                    if (questionCount >= 3) {
+                                        appointmentButtonContainer.style.display = 'block'; // Show button after 3 questions
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error sending message:', error);
+                                    appendMessage('Sorry, I could not process your request.', 'ai-message');
+                                });
                     }
                 }
 

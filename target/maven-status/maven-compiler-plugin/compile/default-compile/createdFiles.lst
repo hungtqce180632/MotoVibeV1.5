@@ -26,6 +26,8 @@ dao\WarrantyDAO.class
 controllers\CreateWarrantyServlet.class
 controllers\EditReviewServlet.class
 models\Motor.class
+models\Employee.class
+controllers\CreateEventServlet.class
 dao\BrandDAO.class
 controllers\AppointmentServlet.class
 controllers\ChatServlet.class
@@ -39,6 +41,7 @@ utils\DBContext.class
 controllers\MotorDetailServlet.class
 controllers\MotorListServlet.class
 controllers\MotorServlet.class
+controllers\ProfileServlet.class
 controllers\AddMotorServlet.class
 controllers\ListReviewsServlet.class
 models\Event.class
@@ -54,4 +57,5 @@ dao\AppointmentDAO.class
 controllers\LogoutServlet.class
 controllers\ConfirmOrderServlet.class
 models\Customer.class
+dao\EmployeeDAO.class
 models\Warranty.class

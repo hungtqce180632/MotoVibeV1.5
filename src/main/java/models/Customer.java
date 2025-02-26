@@ -9,38 +9,37 @@ package models;
  * @author truon
  */
 public class Customer {
-    private int customerId;
-    private Integer userId; // Can be null, using Integer wrapper class
-    private String name;
-    private String email;
-    private String phoneNumber;
-    private String cusIdNumber;
-    private String address;
-    private boolean status; // Assuming status is boolean (e.g., active/inactive)
-    private String picture; // Path to picture or BLOB, depending on your DB setup
-    private String preferredContactMethod;
+
+    private Integer customerId;   // from [customers]
+    private Integer userId;       // from [customers], FK to user_account.user_id
+    private String name;          // from [customers]
+    private String phoneNumber;   // from [customers]
+    private String address;       // from [customers]
+
+    // Extra fields from user_account table:
+    private String email;         // from user_account.email
+    private String role;          // from user_account.role
+    private boolean status;
 
     public Customer() {
     }
 
-    public Customer(int customerId, Integer userId, String name, String email, String phoneNumber, String cusIdNumber, String address, boolean status, String picture, String preferredContactMethod) {
+    public Customer(Integer customerId, Integer userId, String name, String phoneNumber, String address, String email, String role, boolean status) {
         this.customerId = customerId;
         this.userId = userId;
         this.name = name;
-        this.email = email;
         this.phoneNumber = phoneNumber;
-        this.cusIdNumber = cusIdNumber;
         this.address = address;
+        this.email = email;
+        this.role = role;
         this.status = status;
-        this.picture = picture;
-        this.preferredContactMethod = preferredContactMethod;
     }
 
-    public int getCustomerId() {
+    public Integer getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(int customerId) {
+    public void setCustomerId(Integer customerId) {
         this.customerId = customerId;
     }
 
@@ -60,28 +59,12 @@ public class Customer {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public String getCusIdNumber() {
-        return cusIdNumber;
-    }
-
-    public void setCusIdNumber(String cusIdNumber) {
-        this.cusIdNumber = cusIdNumber;
     }
 
     public String getAddress() {
@@ -92,6 +75,22 @@ public class Customer {
         this.address = address;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     public boolean isStatus() {
         return status;
     }
@@ -100,21 +99,4 @@ public class Customer {
         this.status = status;
     }
 
-    public String getPicture() {
-        return picture;
-    }
-
-    public void setPicture(String picture) {
-        this.picture = picture;
-    }
-
-    public String getPreferredContactMethod() {
-        return preferredContactMethod;
-    }
-
-    public void setPreferredContactMethod(String preferredContactMethod) {
-        this.preferredContactMethod = preferredContactMethod;
-    }
-    
-    
 }

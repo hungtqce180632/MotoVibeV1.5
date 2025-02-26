@@ -11,6 +11,7 @@ import java.sql.Date;
  * @author truon
  */
 public class Warranty {
+
     private int warrantyId;
     private int orderId;
     private String warrantyDetails;
@@ -57,7 +58,5 @@ public class Warranty {
     public void setWarrantyExpiry(Date warrantyExpiry) {
         this.warrantyExpiry = warrantyExpiry;
     }
-    
-    
-    
+
 }

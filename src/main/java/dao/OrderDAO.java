@@ -5,14 +5,12 @@
 package dao;
 
 import models.Order;
-import models.Motor;
+import models.Warranty;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import utils.DBContext;
-import models.Warranty;
 
 /**
  *
@@ -22,7 +20,8 @@ public class OrderDAO {
 
     public boolean createOrder(Order order) {
         String sql = "INSERT INTO [dbo].[Orders] "
-                + "([customer_id], [employee_id], [motor_id], [payment_method], [total_amount], [deposit_status], [order_status], [date_start], [date_end], [has_warranty], [warranty_id]) "
+                + "([customer_id], [employee_id], [motor_id], [payment_method], [total_amount], "
+                + "[deposit_status], [order_status], [date_start], [date_end], [has_warranty], [warranty_id]) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -37,7 +36,7 @@ public class OrderDAO {
             preparedStatement.setString(4, order.getPaymentMethod());
             preparedStatement.setDouble(5, order.getTotalAmount());
             preparedStatement.setBoolean(6, order.isDepositStatus());
-            preparedStatement.setString(7, order.getOrderStatus()); // **setString for orderStatus**
+            preparedStatement.setString(7, order.getOrderStatus());
             preparedStatement.setDate(8, order.getDateStart());
             preparedStatement.setDate(9, order.getDateEnd());
             preparedStatement.setBoolean(10, order.isHasWarranty());
@@ -64,8 +63,9 @@ public class OrderDAO {
     }
 
     public Order getOrderById(int orderId) {
-        String sql = "SELECT * FROM [dbo].[Orders] WHERE order_id = ?"; // Changed table name here too
+        String sql = "SELECT * FROM [dbo].[Orders] WHERE order_id = ?";
         try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
             preparedStatement.setInt(1, orderId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -77,7 +77,6 @@ public class OrderDAO {
         return null;
     }
 
-    // ... Add methods to get orders by customer, etc., if needed ...
     private Order mapOrder(ResultSet resultSet) throws SQLException {
         Order order = new Order();
         order.setOrderId(resultSet.getInt("order_id"));
@@ -91,7 +90,7 @@ public class OrderDAO {
         order.setPaymentMethod(resultSet.getString("payment_method"));
         order.setTotalAmount(resultSet.getDouble("total_amount"));
         order.setDepositStatus(resultSet.getBoolean("deposit_status"));
-        order.setOrderStatus(resultSet.getString("order_status")); // **getString for order_status**
+        order.setOrderStatus(resultSet.getString("order_status"));
         order.setDateStart(resultSet.getDate("date_start"));
         order.setDateEnd(resultSet.getDate("date_end"));
         order.setHasWarranty(resultSet.getBoolean("has_warranty"));
@@ -115,6 +114,7 @@ public class OrderDAO {
     public Warranty getWarrantyByOrderId(int orderId) {
         String sql = "SELECT * FROM warranty WHERE order_id = ?";
         try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
             preparedStatement.setInt(1, orderId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -133,5 +133,29 @@ public class OrderDAO {
         warranty.setWarrantyDetails(resultSet.getString("warranty_details"));
         warranty.setWarrantyExpiry(resultSet.getDate("warranty_expiry"));
         return warranty;
+    }
+
+    /**
+     * Check if a customer has purchased (Completed) a given motor.
+     */
+    public boolean hasPurchasedMotor(int customerId, int motorId) {
+        String sql = "SELECT COUNT(*) AS cnt "
+                + "FROM Orders "
+                + "WHERE customer_id = ? AND motor_id = ? AND order_status = 'Completed'";
+        try ( Connection connection = DBContext.getConnection();  PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, customerId);
+            ps.setInt(2, motorId);
+
+            try ( ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int count = rs.getInt("cnt");
+                    return count > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

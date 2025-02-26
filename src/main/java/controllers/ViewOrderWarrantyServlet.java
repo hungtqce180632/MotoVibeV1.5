@@ -5,6 +5,7 @@
 package controllers;
 
 import dao.OrderDAO;
+import dao.CustomerDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -12,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import models.Order;
+import models.Customer;
 import models.UserAccount;
 import java.io.IOException;
 
@@ -21,7 +23,11 @@ import java.io.IOException;
  */
 @WebServlet("/viewOrderWarranty")
 public class ViewOrderWarrantyServlet extends HttpServlet {
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
         HttpSession session = request.getSession();
         UserAccount user = (UserAccount) session.getAttribute("user");
 
@@ -31,26 +37,39 @@ public class ViewOrderWarrantyServlet extends HttpServlet {
         }
 
         int orderId = Integer.parseInt(request.getParameter("orderId"));
+
         OrderDAO orderDAO = new OrderDAO();
         Order order = orderDAO.getOrderWithWarranty(orderId);
 
-        if (order != null) {
-            // Role-based authorization - Example, adapt to your needs.
-            boolean isAuthorized = false;
-            if (user.getRole().equalsIgnoreCase("Customer") && order.getCustomerId() == user.getUserId()) { // Customer can view own order warranty
-                isAuthorized = true;
-            } else if (user.getRole().equalsIgnoreCase("Employee")) { // Employee can view all order warranties
+        if (order == null) {
+            // No such order found
+            response.sendRedirect("orderList?orderNotFound=true");
+            return;
+        }
+
+        // Check role-based authorization
+        boolean isAuthorized = false;
+
+        if (user.getRole().equalsIgnoreCase("Customer")) {
+            // Get the actual customer ID via CustomerDAO
+            CustomerDAO customerDAO = new CustomerDAO();
+            Customer c = customerDAO.getCustomerByUserId(user.getUserId());
+
+            // Ensure the order's customer_id matches this Customer's ID
+            if (c != null && order.getCustomerId() == c.getCustomerId()) {
                 isAuthorized = true;
             }
 
-            if (isAuthorized) {
-                request.setAttribute("order", order);
-                request.getRequestDispatcher("view_order_warranty.jsp").forward(request, response);
-            } else {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Not authorized to view this warranty.");
-            }
+        } else if (user.getRole().equalsIgnoreCase("Employee")) {
+            // Employee can see all orders/warranties
+            isAuthorized = true;
+        }
+
+        if (isAuthorized) {
+            request.setAttribute("order", order);
+            request.getRequestDispatcher("view_order_warranty.jsp").forward(request, response);
         } else {
-            response.sendRedirect("orderList?orderNotFound=true"); // Or wherever order lists are shown
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Not authorized to view this warranty.");
         }
     }
 }
