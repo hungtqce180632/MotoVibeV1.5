@@ -40,7 +40,6 @@ controllers\ImageServlet.class
 utils\DBContext.class
 controllers\MotorDetailServlet.class
 controllers\MotorListServlet.class
-controllers\MotorServlet.class
 controllers\ProfileServlet.class
 controllers\AddMotorServlet.class
 controllers\ListReviewsServlet.class

@@ -9,19 +9,21 @@ import dao.FuelDAO;
 import dao.ModelDAO;
 import dao.MotorDAO;
 import dao.ReviewDAO;
+import dao.OrderDAO; // Add so we can check if user purchased
+import dao.CustomerDAO;
 import java.io.IOException;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import java.util.List;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.*;
 import models.Brand;
+import models.Customer;
 import models.Fuel;
 import models.Model;
 import models.Motor;
 import models.Review;
+import models.UserAccount;
 
 /**
  *
@@ -31,39 +33,65 @@ import models.Review;
 public class MotorDetailServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
         try {
-            // Get motorId from the request parameter
+            // 1) Parse the motorId
             int motorId = Integer.parseInt(request.getParameter("id"));
-            
-            // Retrieve motor and related data
+
+            // 2) Prepare DAOs
             MotorDAO motorDAO = new MotorDAO();
             BrandDAO brandDAO = new BrandDAO();
             ModelDAO modelDAO = new ModelDAO();
             FuelDAO fuelDAO = new FuelDAO();
-            ReviewDAO reviewDAO = new ReviewDAO();  // ReviewDAO to fetch reviews
-            
+            ReviewDAO reviewDAO = new ReviewDAO();
+            OrderDAO orderDAO = new OrderDAO();
+            CustomerDAO customerDAO = new CustomerDAO();
+
+            // 3) Load motor
             Motor motor = motorDAO.getMotorById(motorId);
             if (motor == null) {
                 response.sendRedirect("error.jsp");
                 return;
             }
 
-            // Retrieve related data for motorbike
+            // 4) Load brand/model/fuel
             Brand brand = brandDAO.getBrandById(motor.getBrandId());
             Model model = modelDAO.getModelById(motor.getModelId());
             Fuel fuel = fuelDAO.getFuelById(motor.getFuelId());
-            List<Review> reviews = reviewDAO.getAllReviewOfCar(motorId); // Fetch reviews for motorbike
-            
-            // Set attributes to be used in the JSP
+
+            // 5) Load reviews
+            List<Review> reviews = reviewDAO.getAllReviewOfCar(motorId);
+
+            // 6) Check if the logged-in user is a CUSTOMER who purchased the motor
+            boolean canReview = false;  // By default, can't
+            HttpSession session = request.getSession(false);
+            UserAccount user = (session != null) ? (UserAccount) session.getAttribute("user") : null;
+
+            if (user != null && "customer".equalsIgnoreCase(user.getRole())) {
+                // Find the customer's row
+                Customer c = customerDAO.getCustomerByUserId(user.getUserId());
+                if (c != null) {
+                    // Check if they have purchased this motor (with Completed status)
+                    boolean purchased = orderDAO.hasPurchasedMotor(c.getCustomerId(), motorId);
+                    if (purchased) {
+                        canReview = true;
+                    }
+                }
+            }
+
+            // 7) Put everything in request scope
             request.setAttribute("motor", motor);
             request.setAttribute("brand", brand);
             request.setAttribute("model", model);
             request.setAttribute("fuel", fuel);
             request.setAttribute("reviews", reviews);
-            
-            // Forward the request to the motor_detail.jsp page
+            request.setAttribute("canReview", canReview);
+
+            // 8) Forward to JSP
             request.getRequestDispatcher("motor_detail.jsp").forward(request, response);
+
         } catch (NumberFormatException | SQLException e) {
             throw new ServletException("Error retrieving motor details", e);
         }

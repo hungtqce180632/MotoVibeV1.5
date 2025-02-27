@@ -40,6 +40,64 @@
                 tooltip.style.display = "none";
             }
         </script>
+        <style>
+            :root {
+                --primary-gold: #D4AF37;
+                --secondary-gold: #C5A028;
+                --dark-black: #111111;
+                --rich-black: #1A1A1A;
+                --text-gold: #F5E6CC;
+            }
+
+            body {
+                background: var(--dark-black);
+                color: var(--text-gold);
+            }
+
+            .container {
+                padding-top: 80px;
+            }
+
+            .card {
+                background: linear-gradient(145deg, var(--dark-black), var(--rich-black));
+                border: 1px solid var(--primary-gold);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            }
+
+            .card-title {
+                color: var(--primary-gold);
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            }
+
+            .card-body {
+                color: var(--text-gold);
+            }
+
+            strong {
+                color: var(--primary-gold);
+            }
+
+            .btn {
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                transition: all 0.3s ease;
+                margin: 0 5px;
+            }
+
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+            }
+
+            #brandTooltip {
+                background: linear-gradient(145deg, var(--dark-black), var(--rich-black)) !important;
+                border: 1px solid var(--primary-gold) !important;
+                color: var(--text-gold) !important;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            }
+        </style>
     </head>
     <body>
         <div class="container mt-4">

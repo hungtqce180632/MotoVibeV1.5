@@ -51,7 +51,7 @@
     overflow: hidden;
     padding: 0;
     display: flex;
-    min-height: 00vh;
+    min-height: 500vh;
     width: 100%;
     margin: 0;
 }
@@ -179,30 +179,97 @@ body {
     padding: 0;
 }
 
-/* Featured Motorbikes Section Enhancement */
-.featured-motorbikes-wrapper {
-    background: var(--dark-black);
-    width: 100%;
+/* Global background fixes */
+html, 
+body {
+    background: var(--dark-black) !important;
+    min-height: 100vh;
     margin: 0;
     padding: 0;
+    color: var(--text-gold);
 }
 
-.featured-motorbikes {
-    padding: 80px 0;
-    background: linear-gradient(145deg, var(--dark-black), var(--rich-black));
-    position: relative;
-    margin: 0;
+/* Container backgrounds */
+.container,
+.container-fluid,
+.content-wrapper,
+.page-content {
+    background: var(--dark-black) !important;
+    color: var(--text-gold);
 }
 
-.featured-motorbikes::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-        linear-gradient(45deg, transparent 45%, rgba(212, 175, 55, 0.05) 45%, rgba(212, 175, 55, 0.05) 55%, transparent 55%),
-        radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.05) 0%, transparent 20%);
-    pointer-events: none;
+/* Table styles */
+.table {
+    color: var(--text-gold) !important;
+    background: transparent !important;
+}
+
+.table-dark {
+    background: var(--rich-black) !important;
+    color: var(--text-gold) !important;
+}
+
+.table td,
+.table th {
+    background: transparent !important;
+    color: var(--text-gold) !important;
+    border-color: var(--primary-gold) !important;
+}
+
+.table-bordered {
+    border-color: var(--primary-gold) !important;
+}
+
+/* Video background section fix */
+.video-background-section {
+    min-height: auto !important;
+    height: auto !important;
+    padding: 4rem 0;
+}
+
+.ready-to-ride-content {
+    background: linear-gradient(90deg, 
+        rgba(17, 17, 17, 0.95) 0%,
+        rgba(17, 17, 17, 0.85) 50%,
+        rgba(17, 17, 17, 0.95) 100%
+    ) !important;
+    padding: 3rem;
+    margin: 2rem 0;
+    border: 1px solid var(--primary-gold);
+    border-radius: 10px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.ready-to-ride-title {
+    color: var(--primary-gold);
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.ready-to-ride-text {
+    color: var(--text-gold);
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Alert styles */
+.alert {
+    background: var(--rich-black) !important;
+    border: 1px solid var(--primary-gold) !important;
+    color: var(--text-gold) !important;
+}
+
+/* Card styles */
+.card {
+    background: linear-gradient(145deg, var(--dark-black), var(--rich-black)) !important;
+    border: 1px solid var(--primary-gold) !important;
+    color: var(--text-gold) !important;
+}
+
+.card-header,
+.card-footer {
+    background: var(--rich-black) !important;
+    border-color: var(--primary-gold) !important;
 }

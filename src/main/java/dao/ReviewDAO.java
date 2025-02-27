@@ -5,13 +5,10 @@
 package dao;
 
 import models.Review;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.ArrayList;
 import utils.DBContext;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -22,14 +19,16 @@ public class ReviewDAO {
     public boolean createReview(Review review) {
         String sql = "INSERT INTO reviews (customer_id, motor_id, rating, review_text, review_date, review_status) "
                 + "VALUES (?, ?, ?, ?, GETDATE(), ?)";
-        try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
-            preparedStatement.setInt(1, review.getCustomerId());
-            preparedStatement.setInt(2, review.getMotorId());
-            preparedStatement.setInt(3, review.getRating());
-            preparedStatement.setString(4, review.getReviewText());
-            preparedStatement.setBoolean(5, review.isReviewStatus());
-            return preparedStatement.executeUpdate() > 0;
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, review.getCustomerId());
+            ps.setInt(2, review.getMotorId());
+            ps.setInt(3, review.getRating());
+            ps.setString(4, review.getReviewText());
+            ps.setBoolean(5, review.isReviewStatus());
+
+            return ps.executeUpdate() > 0;
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -39,12 +38,13 @@ public class ReviewDAO {
 
     public Review getReviewById(int reviewId) {
         String sql = "SELECT * FROM reviews WHERE review_id = ?";
-        try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            preparedStatement.setInt(1, reviewId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return mapReview(resultSet);
+            ps.setInt(1, reviewId);
+            try ( ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapReview(rs);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -52,32 +52,33 @@ public class ReviewDAO {
         return null;
     }
 
-    public List<Review> getReviewsByMotorId(int motorId) {
-        List<Review> reviews = new ArrayList<>();
-        String sql = "SELECT * FROM reviews WHERE motor_id = ?";
-        try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+    public List<Review> getAllReviewOfCar(int motorId) throws SQLException {
+        String sql = "SELECT * FROM reviews WHERE motor_id = ? AND review_status = 1";
+        // or remove 'AND review_status=1' if you want to show all
+        List<Review> list = new ArrayList<>();
 
-            preparedStatement.setInt(1, motorId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                reviews.add(mapReview(resultSet));
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, motorId);
+            try ( ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(mapReview(rs));
+                }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-        return reviews;
+        return list;
     }
 
-    public boolean updateReview(Review review) {
-        String sql = "UPDATE reviews SET rating = ?, review_text = ?, review_status = ? WHERE review_id = ?";
-        try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+    public boolean updateReview(Review r) {
+        String sql = "UPDATE reviews SET rating=?, review_text=?, review_status=? WHERE review_id=?";
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            preparedStatement.setInt(1, review.getRating());
-            preparedStatement.setString(2, review.getReviewText());
-            preparedStatement.setBoolean(3, review.isReviewStatus());
-            preparedStatement.setInt(4, review.getReviewId());
-            return preparedStatement.executeUpdate() > 0;
+            ps.setInt(1, r.getRating());
+            ps.setString(2, r.getReviewText());
+            ps.setBoolean(3, r.isReviewStatus());
+            ps.setInt(4, r.getReviewId());
 
+            return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -86,10 +87,10 @@ public class ReviewDAO {
 
     public boolean deleteReview(int reviewId) {
         String sql = "DELETE FROM reviews WHERE review_id = ?";
-        try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            preparedStatement.setInt(1, reviewId);
-            return preparedStatement.executeUpdate() > 0;
+            ps.setInt(1, reviewId);
+            return ps.executeUpdate() > 0;
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -97,44 +98,16 @@ public class ReviewDAO {
         }
     }
 
-    private Review mapReview(ResultSet resultSet) throws SQLException {
-        Review review = new Review();
-        review.setReviewId(resultSet.getInt("review_id"));
-        review.setCustomerId(resultSet.getInt("customer_id"));
-        review.setMotorId(resultSet.getInt("motor_id"));
-        review.setRating(resultSet.getInt("rating"));
-        review.setReviewText(resultSet.getString("review_text"));
-        review.setReviewDate(resultSet.getString("review_date"));
-        review.setReviewStatus(resultSet.getBoolean("review_status"));
-        return review;
-    }
-
-    public static List<Review> getAllReviewOfCar(int motorId) throws SQLException {
-        String sql = "SELECT r.*, c.name "
-                + "FROM reviews r "
-                + "JOIN customers c ON r.customer_id = c.customer_id "
-                + "WHERE r.motor_id = ? AND r.review_status = 1";
-
-        List<Review> reviews = new ArrayList<>();
-
-        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, motorId);
-            try ( ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    Review review = new Review();
-                    review.setReviewId(rs.getInt("review_id"));
-                    review.setCustomerId(rs.getInt("customer_id"));
-                    review.setMotorId(rs.getInt("motor_id"));
-                    review.setRating(rs.getInt("rating"));
-                    review.setReviewText(rs.getString("review_text"));
-                    review.setReviewDate(rs.getString("review_date"));
-                    review.setReviewStatus(rs.getBoolean("review_status"));
-                    review.setCustomer_name(rs.getString("name"));
-                    reviews.add(review);
-                }
-            }
-        }
-        return reviews;
+    // Helper to map a row into a Review
+    private Review mapReview(ResultSet rs) throws SQLException {
+        Review r = new Review();
+        r.setReviewId(rs.getInt("review_id"));
+        r.setCustomerId(rs.getInt("customer_id"));
+        r.setMotorId(rs.getInt("motor_id"));
+        r.setRating(rs.getInt("rating"));
+        r.setReviewText(rs.getString("review_text"));
+        r.setReviewDate(rs.getString("review_date"));
+        r.setReviewStatus(rs.getBoolean("review_status"));
+        return r;
     }
 }

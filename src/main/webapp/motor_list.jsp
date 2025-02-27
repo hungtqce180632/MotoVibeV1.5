@@ -13,6 +13,78 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Danh sách Motorbike - MotoVibe</title> <%-- Tiêu đề trang, thân thiện hơn --%>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+        <style>
+            :root {
+                --primary-gold: #D4AF37;
+                --secondary-gold: #C5A028;
+                --dark-black: #111111;
+                --rich-black: #1A1A1A;
+                --text-gold: #F5E6CC;
+            }
+
+            body {
+                background: var(--dark-black);
+                color: var(--text-gold);
+            }
+
+            .container {
+                padding-top: 80px; /* Account for fixed header */
+            }
+
+            h2 {
+                color: var(--primary-gold);
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+                position: relative;
+                padding-bottom: 15px;
+            }
+
+            h2::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100px;
+                height: 2px;
+                background: var(--primary-gold);
+                box-shadow: 0 0 10px var(--primary-gold);
+            }
+
+            .table {
+                background: linear-gradient(145deg, var(--dark-black), var(--rich-black));
+                color: var(--text-gold);
+                border: 1px solid var(--primary-gold);
+                border-radius: 15px;
+                overflow: hidden;
+            }
+
+            .table thead th {
+                background: linear-gradient(145deg, var(--primary-gold), var(--secondary-gold));
+                color: var(--dark-black);
+                border: none;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+
+            .form-control, .form-select {
+                background: rgba(26, 26, 26, 0.9);
+                border: 1px solid var(--primary-gold);
+                color: var(--text-gold);
+            }
+
+            .btn {
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                transition: all 0.3s ease;
+            }
+
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+            }
+        </style>
     </head>
     <body>
         <jsp:include page="header.jsp"></jsp:include> <%-- Include header (menu điều hướng) --%>
