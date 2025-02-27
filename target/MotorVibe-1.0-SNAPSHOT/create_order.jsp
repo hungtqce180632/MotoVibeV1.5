@@ -152,7 +152,7 @@
     <jsp:include page="header.jsp"></jsp:include>
     <div class="container mt-4">
         <h1><i class="fas fa-shopping-cart"></i> Create Your Order</h1>
-        <p class="lead">Please review the motorbike details and enter your information to place your order.</p>
+        <p class="lead">Please fill in the form below to confirm your order.</p>
 
         <div class="card mb-4">
             <div class="row g-0">
@@ -188,16 +188,64 @@
                 <input type="email" class="form-control" id="customerEmail" name="customerEmail" required>
             </div>
             <div class="mb-3">
-                <label for="customerPhone" class="form-label">Phone Number</label>
-                <input type="tel" class="form-control" id="customerPhone" name="customerPhone" required>
+                <label for="customerPhone" class="form-label">Phone Number (10 digits)</label>
+                <input type="tel" 
+                       class="form-control" 
+                       id="customerPhone" 
+                       name="customerPhone" 
+                       pattern="[0-9]{10}"
+                       maxlength="10"
+                       title="Please enter a valid 10-digit phone number"
+                       required>
+                <div class="invalid-feedback">
+                    Please enter a valid 10-digit phone number
+                </div>
             </div>
             <div class="mb-3">
-                <label for="customerIdNumber" class="form-label">ID Number (e.g., Passport/ID Card)</label>
-                <input type="text" class="form-control" id="customerIdNumber" name="customerIdNumber" required>
+                <label for="customerIdNumber" class="form-label">ID Number (12 digits)</label>
+                <input type="text" 
+                       class="form-control" 
+                       id="customerIdNumber" 
+                       name="customerIdNumber" 
+                       pattern="[0-9]{12}"
+                       maxlength="12"
+                       title="Please enter a valid 12-digit ID number"
+                       required>
+                <div class="invalid-feedback">
+                    Please enter a valid 12-digit ID number
+                </div>
             </div>
             <div class="mb-3">
                 <label for="customerAddress" class="form-label">Shipping Address</label>
                 <textarea class="form-control" id="customerAddress" name="customerAddress" rows="3" required></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Warranty Options</label>
+                <div class="card p-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="hasWarranty" id="noWarranty" value="false" checked>
+                        <label class="form-check-label" for="noWarranty">
+                            No Warranty
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="hasWarranty" id="withWarranty" value="true">
+                        <label class="form-check-label" for="withWarranty">
+                            Include Warranty (Recommended)
+                            <small class="text-muted d-block">Protects your purchase for 12 months</small>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="depositStatus" name="depositStatus">
+                    <label class="form-check-label" for="depositStatus">
+                        Pay Deposit
+                    </label>
+                </div>
             </div>
 
             <div class="mt-4">
@@ -212,5 +260,52 @@
     </div>
     <jsp:include page="footer.jsp"></jsp:include>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Form validation
+        (function () {
+            'use strict'
+            
+            const forms = document.querySelectorAll('.needs-validation')
+            
+            // Phone number validation
+            const phoneInput = document.getElementById('customerPhone')
+            phoneInput.addEventListener('input', function(e) {
+                // Remove any non-digit characters
+                this.value = this.value.replace(/\D/g, '')
+                
+                // Check if length is exactly 10 digits
+                if (this.value.length !== 10) {
+                    this.setCustomValidity('Phone number must be exactly 10 digits')
+                } else {
+                    this.setCustomValidity('')
+                }
+            })
+            
+            // ID number validation
+            const idInput = document.getElementById('customerIdNumber')
+            idInput.addEventListener('input', function(e) {
+                // Remove any non-digit characters
+                this.value = this.value.replace(/\D/g, '')
+                
+                // Check if length is exactly 12 digits
+                if (this.value.length !== 12) {
+                    this.setCustomValidity('ID number must be exactly 12 digits')
+                } else {
+                    this.setCustomValidity('')
+                }
+            })
+
+            // Loop over forms and prevent submission if invalid
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
 </body>
 </html>

@@ -299,6 +299,15 @@
                     <p><strong>Phone:</strong> <span><%= emp.getPhoneNumber() %></span></p>
                     <p><em class="text-muted">Employees cannot edit their own profile here.</em></p>
                 </div>
+                <% if (isEmployee) { %>
+                    <div class="mt-4">
+                        <h4>Reviews Management</h4>
+                        <p>Manage customer reviews across all motors.</p>
+                        <a href="listReviews" class="btn btn-outline-gold">
+                            <i class="fas fa-star"></i> <span>Manage Reviews</span>
+                        </a>
+                    </div>
+                <% } %>
                 <%
                     } else {
                 %>

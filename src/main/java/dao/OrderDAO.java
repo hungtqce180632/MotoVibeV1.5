@@ -20,48 +20,62 @@ import utils.DBContext;
  */
 public class OrderDAO {
 
-    public boolean createOrder(Order order) {
-        String sql = "INSERT INTO [dbo].[Orders] "
-                + "([customer_id], [employee_id], [motor_id], [payment_method], [total_amount], "
-                + "[deposit_status], [order_status], [date_start], [date_end], [has_warranty], [warranty_id]) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-        try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-
-            preparedStatement.setInt(1, order.getCustomerId());
-            if (order.getEmployeeId() != null) {
-                preparedStatement.setInt(2, order.getEmployeeId());
-            } else {
-                preparedStatement.setNull(2, java.sql.Types.INTEGER);
+    public int getEmployeeWithFewestOrders() {
+        String sql = "SELECT TOP 1 e.employee_id, COUNT(o.order_id) as order_count " +
+                    "FROM employees e " +
+                    "LEFT JOIN orders o ON e.employee_id = o.employee_id " +
+                    "GROUP BY e.employee_id " +
+                    "ORDER BY order_count ASC";
+        
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            
+            if (rs.next()) {
+                return rs.getInt("employee_id");
             }
-            preparedStatement.setInt(3, order.getMotorId());
-            preparedStatement.setString(4, order.getPaymentMethod());
-            preparedStatement.setDouble(5, order.getTotalAmount());
-            preparedStatement.setBoolean(6, order.isDepositStatus());
-            preparedStatement.setString(7, order.getOrderStatus());
-            preparedStatement.setDate(8, order.getDateStart());
-            preparedStatement.setDate(9, order.getDateEnd());
-            preparedStatement.setBoolean(10, order.isHasWarranty());
-            if (order.getWarrantyId() != null) {
-                preparedStatement.setInt(11, order.getWarrantyId());
-            } else {
-                preparedStatement.setNull(11, java.sql.Types.INTEGER);
-            }
-
-            int affectedRows = preparedStatement.executeUpdate();
-            if (affectedRows > 0) {
-                ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
-                if (generatedKeys.next()) {
-                    int orderId = generatedKeys.getInt(1);
-                    order.setOrderId(orderId);
-                    return true;
-                }
-            }
-            return false;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
+        return 1; // Default to first employee if error occurs
+    }
+
+    public boolean createOrder(Order order) {
+        String sql = "INSERT INTO Orders (customer_id, employee_id, motor_id, create_date, " +
+                    "payment_method, total_amount, deposit_status, order_status, " +
+                    "date_start, date_end, has_warranty) " +
+                    "VALUES (?, ?, ?, GETDATE(), ?, ?, ?, ?, " +
+                    "GETDATE(), DATEADD(day, 2, GETDATE()), ?)";
+
+        try (Connection connection = DBContext.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            
+            // Assign employee with fewest orders
+            int employeeId = getEmployeeWithFewestOrders();
+            
+            ps.setInt(1, order.getCustomerId());
+            ps.setInt(2, employeeId);
+            ps.setInt(3, order.getMotorId());
+            ps.setString(4, order.getPaymentMethod());
+            ps.setDouble(5, order.getTotalAmount());
+            ps.setBoolean(6, order.isDepositStatus());
+            ps.setString(7, "Pending");
+            ps.setBoolean(8, order.isHasWarranty());
+            
+            int affectedRows = ps.executeUpdate();
+            
+            if (affectedRows > 0) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        order.setOrderId(rs.getInt(1));
+                        return true;
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public Order getOrderById(int orderId) {

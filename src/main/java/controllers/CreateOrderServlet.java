@@ -16,7 +16,8 @@ import models.Order;
 import models.UserAccount;
 import java.io.IOException;
 import java.sql.Date;
-import java.time.LocalDate;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import models.Motor;
 
 /**
@@ -25,7 +26,9 @@ import models.Motor;
  */
 @WebServlet("/createOrder")
 public class CreateOrderServlet extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
         HttpSession session = request.getSession();
         UserAccount user = (UserAccount) session.getAttribute("user");
 
@@ -34,51 +37,47 @@ public class CreateOrderServlet extends HttpServlet {
             return;
         }
 
-        int motorId = Integer.parseInt(request.getParameter("motorId"));
-        String paymentMethod = request.getParameter("paymentMethod");
-        double totalAmount = Double.parseDouble(request.getParameter("totalAmount"));
-        boolean depositStatus = Boolean.parseBoolean(request.getParameter("depositStatus"));
-        boolean hasWarranty = Boolean.parseBoolean(request.getParameter("hasWarranty"));
-        LocalDate startDate = LocalDate.parse(request.getParameter("startDate")); // Assuming yyyy-MM-dd format from input
-        LocalDate endDate = LocalDate.parse(request.getParameter("endDate"));
+        try {
+            // Get form data
+            int motorId = Integer.parseInt(request.getParameter("motorId"));
+            String paymentMethod = request.getParameter("paymentMethod");
+            boolean hasWarranty = Boolean.parseBoolean(request.getParameter("hasWarranty"));
+            boolean depositStatus = Boolean.parseBoolean(request.getParameter("depositStatus"));
 
-        Order order = new Order();
-        order.setCustomerId(user.getUserId()); // Customer user ID
-        order.setMotorId(motorId);
-        order.setPaymentMethod(paymentMethod);
-        order.setTotalAmount(totalAmount);
-        order.setDepositStatus(depositStatus);
-        order.setOrderStatus("Pending"); // Assuming order starts as "active"
-        order.setDateStart(Date.valueOf(startDate)); // Convert LocalDate to java.sql.Date
-        order.setDateEnd(Date.valueOf(endDate));
-        order.setHasWarranty(hasWarranty);
-        order.setWarrantyId(null); // Warranty initially null, employee will set later
+            // Create new order
+            Order order = new Order();
+            order.setCustomerId(user.getUserId());
+            order.setMotorId(motorId);
+            order.setPaymentMethod(paymentMethod);
+            order.setTotalAmount(getMotorPrice(motorId));
+            order.setDepositStatus(depositStatus);
+            order.setHasWarranty(hasWarranty);
+            
+            // Note: dates and employee assignment are handled in OrderDAO
+            
+            OrderDAO orderDAO = new OrderDAO();
+            boolean success = orderDAO.createOrder(order);
 
-
-        OrderDAO orderDAO = new OrderDAO();
-        MotorDAO motorDAO = new MotorDAO();
-
-        // Check if quantity is available and decrease it
-        Motor motor = motorDAO.getMotorById(motorId);
-        if (motor != null && motor.getQuantity() > 0) {
-            if (motorDAO.decreaseMotorQuantity(motorId, 1)) { // Decrease quantity by 1 upon order
-                if (orderDAO.createOrder(order)) {
-                    response.sendRedirect("orderConfirmation.jsp?orderId=" + order.getOrderId()); // Redirect to confirmation page
-                    return;
-                } else {
-                    // Order creation failed but quantity was decreased, need to handle rollback or inventory log
-                    // For simplicity here, just redirect with error and *not* rollback quantity decrease. Robust system needs rollback.
-                    response.sendRedirect("create_order.jsp?orderError=dbError&motorId=" + motorId);
-                    return;
-                }
+            if (success) {
+                // Update motor quantity
+                MotorDAO motorDAO = new MotorDAO();
+                motorDAO.decreaseMotorQuantity(motorId, 1);
+                
+                response.sendRedirect("orderConfirmation.jsp?orderId=" + order.getOrderId());
             } else {
-                response.sendRedirect("create_order.jsp?orderError=quantityUpdateFailed&motorId=" + motorId); // Quantity update failed
-                return;
+                response.sendRedirect("error.jsp");
             }
 
-        } else {
-            response.sendRedirect("create_order.jsp?orderError=outOfStock&motorId=" + motorId); // Out of stock
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect("error.jsp");
         }
+    }
+
+    private Double getMotorPrice(int motorId) throws SQLException {
+        MotorDAO motorDAO = new MotorDAO();
+        Motor motor = motorDAO.getMotorById(motorId);
+        return motor != null ? motor.getPrice() : 0.0;
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

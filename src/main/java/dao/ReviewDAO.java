@@ -110,4 +110,24 @@ public class ReviewDAO {
         r.setReviewStatus(rs.getBoolean("review_status"));
         return r;
     }
+
+    public List<Review> getAllReviews() throws SQLException {
+        String sql = "SELECT r.*, c.name as customer_name FROM reviews r " +
+                    "LEFT JOIN customers c ON r.customer_id = c.customer_id " +
+                    "ORDER BY r.review_date DESC";
+        
+        List<Review> list = new ArrayList<>();
+        
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            
+            while (rs.next()) {
+                Review r = mapReview(rs);
+                r.setCustomer_name(rs.getString("customer_name"));
+                list.add(r);
+            }
+        }
+        return list;
+    }
 }
