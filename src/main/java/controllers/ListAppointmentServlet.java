@@ -13,15 +13,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import models.Appointment;
+import models.Customer;
 import models.UserAccount;
 
 /**
  *
  * @author truon
  */
-@WebServlet("/listAppointments")
+@WebServlet({"/listAppointments", "/approveAppointment", "/declineAppointment"})
 public class ListAppointmentServlet extends HttpServlet {
 
     /**
@@ -30,24 +33,29 @@ public class ListAppointmentServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+    }
+
+    /**
+     * Handles the HTTP GET method by calling processRequest.
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
         HttpSession session = request.getSession();
         UserAccount user = (UserAccount) session.getAttribute("user");
 
-        System.out.println("ListAppointmentServlet - processRequest started"); // DEBUG
-
         if (user == null) {
-            System.out.println("User is null, redirecting to login.jsp"); // DEBUG
+
             response.sendRedirect("login.jsp"); // Not logged in -> login
             return;
         }
 
-        System.out.println("User Role: " + user.getRole()); // DEBUG
-
         CustomerDAO customerDAO = new CustomerDAO();
         AppointmentDAO appointmentDAO = new AppointmentDAO();
         List<Appointment> appointmentList = null;
+        Map<Integer, Customer> customerMap = new HashMap<>();
 
         try {
             String role = user.getRole();
@@ -57,32 +65,28 @@ public class ListAppointmentServlet extends HttpServlet {
                 appointmentList = appointmentDAO.getAppointmentsByCustomerId(customerID);
 
                 request.setAttribute("userRole", "customer");
-                System.out.println("User is Customer. Fetched appointments for customer ID: "
-                        + customerID + ", list size: "
-                        + (appointmentList != null ? appointmentList.size() : "null"));
 
             } else if (role.equalsIgnoreCase("Employee")) {
-                // Employee: get all appointments
                 appointmentList = appointmentDAO.getAllAppointments();
 
+                for (Customer customer : customerDAO.getAllCustomers()) {
+                customerMap.put(customer.getCustomerId(), customer);
+            }
+
                 request.setAttribute("userRole", "employee");
-                System.out.println("User is Employee. Fetched all appointments. List size: "
-                        + (appointmentList != null ? appointmentList.size() : "null"));
+                request.setAttribute("customerMap", customerMap);
 
             } else if (role.equalsIgnoreCase("Admin")) {
                 // Admin: also get all appointments (if that's your logic)
                 appointmentList = appointmentDAO.getAllAppointments();
 
                 request.setAttribute("userRole", "admin");
-                System.out.println("User is Admin. Fetched all appointments. List size: "
-                        + (appointmentList != null ? appointmentList.size() : "null"));
 
             } else {
                 // Some unexpected role - default to no appointments or treat as employee
                 appointmentList = appointmentDAO.getAllAppointments(); // or none, up to you
                 request.setAttribute("userRole", "employee"); // or "unknownRole"
-                System.out.println("User has unknown role. Fetched all appointments. List size: "
-                        + (appointmentList != null ? appointmentList.size() : "null"));
+
             }
 
         } catch (Exception e) {
@@ -90,22 +94,45 @@ public class ListAppointmentServlet extends HttpServlet {
             e.printStackTrace(); // log full stack trace
         }
 
-        // Put the list of appointments in request scope, forward to JSP
+        // ✅ Set appointments in request scope
         request.setAttribute("appointments", appointmentList);
-        System.out.println("Setting appointments attribute. List is "
-                + (appointmentList != null ? "not null" : "null"));
 
+        try {
+            String successParam = request.getParameter("success");
+            String errorParam = request.getParameter("error");
+
+            if (successParam != null) {
+                int successCode = Integer.parseInt(successParam);
+                if (successCode == 1) {
+                    request.setAttribute("success", "Appointment added successfully!");
+                } else if (successCode == 2) {
+                    request.setAttribute("success", "Appointment cancelled successfully!");
+                } else if (successCode == 3) {
+                    request.setAttribute("success", "Appointment approved successfully!");
+                } else if (successCode == 4) {
+                    request.setAttribute("success", "Appointment declined successfully!");
+                }
+            }
+
+            if (errorParam != null) {
+                int errorCode = Integer.parseInt(errorParam);
+                if (errorCode == 1) {
+                    request.setAttribute("error", "Error adding appointment. Please try again.");
+                } else if (errorCode == 2) {
+                    request.setAttribute("error", "Failed to cancel appointment.");
+                } else if (errorCode == 3) {
+                    request.setAttribute("error", "Failed to approve appointment.");
+                } else if (errorCode == 4) {
+                    request.setAttribute("error", "Failed to decline appointment.");
+                }
+            }
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid success/error parameter: " + e.getMessage());
+        }
+
+        // ✅ Forward to JSP
         request.getRequestDispatcher("list_appointments.jsp").forward(request, response);
-        System.out.println("Forwarded to list_appointments.jsp"); // DEBUG
-    }
 
-    /**
-     * Handles the HTTP GET method by calling processRequest.
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
     }
 
     /**
@@ -114,7 +141,39 @@ public class ListAppointmentServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+
+        String action = request.getServletPath();
+        AppointmentDAO appointmentDAO = new AppointmentDAO();
+        try {
+            int appointmentId = Integer.parseInt(request.getParameter("appointmentId"));
+
+            if ("/approveAppointment".equals(action)) {
+                boolean success = appointmentDAO.updateAppointmentStatus(appointmentId, true);
+                if (success) {
+                    response.sendRedirect("listAppointments?success=3");
+                } else {
+                    response.sendRedirect("listAppointments?error=3");
+                }
+            } else if ("/declineAppointment".equals(action)) {
+                boolean success = appointmentDAO.updateAppointmentStatus(appointmentId, false);
+                if (success) {
+                    response.sendRedirect("listAppointments?success=4");
+                } else {
+                    response.sendRedirect("listAppointments?error=4");
+                }
+            } else if ("/listAppointments".equals(action)) {
+                boolean success = appointmentDAO.deleteAppointment(appointmentId);
+                if (success) {
+                    response.sendRedirect("listAppointments?success=2");
+                } else {
+                    response.sendRedirect("listAppointments?error=2");
+                }
+            }
+
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            response.sendRedirect("listAppointments?error=Invalid appointment ID");
+        }
     }
 
     /**

@@ -61,15 +61,28 @@ public class AppointmentDAO {
     }
 
     public boolean createAppointment(Appointment appointment) {
-        String sql = "INSERT INTO Appointments (customer_id, date_start, date_end, note, appointment_status) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Appointments (customer_id, employee_id, date_start, date_end, note, appointment_status) "
+                + "VALUES (?, ?, ?, ?, ?, ?)";
+
         try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+
             preparedStatement.setInt(1, appointment.getCustomerId());
-            preparedStatement.setTimestamp(2, appointment.getDateStart());
-            preparedStatement.setTimestamp(3, appointment.getDateEnd());
-            preparedStatement.setString(4, appointment.getNote());
-            preparedStatement.setBoolean(5, appointment.isAppointmentStatus());
+
+            // Allow `null` for employeeId (if not assigned yet)
+            if (appointment.getEmployeeId() > 0) {
+                preparedStatement.setInt(2, appointment.getEmployeeId());
+            } else {
+                preparedStatement.setNull(2, java.sql.Types.INTEGER);
+            }
+
+            preparedStatement.setTimestamp(3, appointment.getDateStart());
+            preparedStatement.setTimestamp(4, appointment.getDateEnd());
+            preparedStatement.setString(5, appointment.getNote());
+            preparedStatement.setBoolean(6, appointment.isAppointmentStatus());
 
             int affectedRows = preparedStatement.executeUpdate();
+
+            // Check if insertion was successful
             if (affectedRows > 0) {
                 ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
                 if (generatedKeys.next()) {
@@ -88,6 +101,7 @@ public class AppointmentDAO {
         Appointment appointment = new Appointment();
         appointment.setAppointmentId(resultSet.getInt("appointment_id"));
         appointment.setCustomerId(resultSet.getInt("customer_id"));
+        appointment.setEmployeeId(resultSet.getInt("employee_id"));
         appointment.setDateStart(resultSet.getTimestamp("date_start"));
         appointment.setDateEnd(resultSet.getTimestamp("date_end"));
         appointment.setNote(resultSet.getString("note"));
@@ -107,5 +121,34 @@ public class AppointmentDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public boolean deleteAppointment(int appointmentId) {
+        String sql = "DELETE FROM Appointments WHERE appointment_id = ? AND appointment_status = 0"; // Delete only if Inactive
+        try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, appointmentId);
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            return rowsAffected > 0; // Return true if delete was successful
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean updateAppointmentStatus(int appointmentId, boolean status) {
+        String sql = "UPDATE Appointments SET appointment_status = ? WHERE appointment_id = ?";
+        try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setBoolean(1, status);
+            preparedStatement.setInt(2, appointmentId);
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            return rowsAffected > 0; // Return true nếu cập nhật thành công
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

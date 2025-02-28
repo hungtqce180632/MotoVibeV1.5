@@ -12,18 +12,19 @@ import java.sql.Timestamp;
  */
 public class Appointment {
     private int appointmentId;
-    private int customerId; // For Employee View
+    private int customerId;
+    private int employeeId;
     private Timestamp dateStart;
     private Timestamp dateEnd;
     private String note;
     private boolean appointmentStatus;
 
-    public Appointment() {
-    }
+    public Appointment() {}
 
-    public Appointment(int appointmentId, int customerId, Timestamp dateStart, Timestamp dateEnd, String note, boolean appointmentStatus) {
+    public Appointment(int appointmentId, int customerId, int employeeId, Timestamp dateStart, Timestamp dateEnd, String note, boolean appointmentStatus) {
         this.appointmentId = appointmentId;
         this.customerId = customerId;
+        this.employeeId = employeeId;
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
         this.note = note;
@@ -44,6 +45,14 @@ public class Appointment {
 
     public void setCustomerId(int customerId) {
         this.customerId = customerId;
+    }
+
+    public int getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(int employeeId) {
+        this.employeeId = employeeId;
     }
 
     public Timestamp getDateStart() {
@@ -77,6 +86,5 @@ public class Appointment {
     public void setAppointmentStatus(boolean appointmentStatus) {
         this.appointmentStatus = appointmentStatus;
     }
-    
     
 }
