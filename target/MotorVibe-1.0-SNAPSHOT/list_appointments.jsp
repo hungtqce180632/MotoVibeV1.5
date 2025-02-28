@@ -17,10 +17,24 @@
     </head>
 
     <body>
-        
-            <jsp:include page="header.jsp"></jsp:include>
-            
+
+        <jsp:include page="header.jsp"></jsp:include>
+
+
             <div class="container mt-4 pt-5">
+            <c:if test="${not empty success}">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    ${success}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </c:if>
+            <c:if test="${not empty error}">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    ${error}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </c:if>
+
             <c:choose>
                 <c:when test="${userRole == 'customer'}">
                     <h1><i class="fas fa-calendar-check"></i> Your Appointments</h1>
@@ -35,7 +49,7 @@
                 </c:otherwise>
             </c:choose>
 
-                    
+
             <div class="table-responsive">
                 <table class="table table-striped table-bordered">
                     <thead class="table-light">
@@ -83,9 +97,12 @@
                 </table>
             </div>
             <div class="mt-3">
-                <a href="index.jsp" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+                <a href="index.jsp" class="btn btn-outline-secondary"><i class="fas fa-arrow-left"></i>Back to Dashboard</a>
+
+                <a href="appointment" class="btn btn-outline-info"><i class="fa-solid fa-plus"></i>Add appointments</a>
             </div>
         </div>
+        <br>
         <jsp:include page="footer.jsp"></jsp:include> <%-- Include footer --%>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>

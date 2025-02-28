@@ -35,15 +35,11 @@ public class ListAppointmentServlet extends HttpServlet {
         HttpSession session = request.getSession();
         UserAccount user = (UserAccount) session.getAttribute("user");
 
-        System.out.println("ListAppointmentServlet - processRequest started"); // DEBUG
-
         if (user == null) {
-            System.out.println("User is null, redirecting to login.jsp"); // DEBUG
+
             response.sendRedirect("login.jsp"); // Not logged in -> login
             return;
         }
-
-        System.out.println("User Role: " + user.getRole()); // DEBUG
 
         CustomerDAO customerDAO = new CustomerDAO();
         AppointmentDAO appointmentDAO = new AppointmentDAO();
@@ -57,32 +53,24 @@ public class ListAppointmentServlet extends HttpServlet {
                 appointmentList = appointmentDAO.getAppointmentsByCustomerId(customerID);
 
                 request.setAttribute("userRole", "customer");
-                System.out.println("User is Customer. Fetched appointments for customer ID: "
-                        + customerID + ", list size: "
-                        + (appointmentList != null ? appointmentList.size() : "null"));
 
             } else if (role.equalsIgnoreCase("Employee")) {
                 // Employee: get all appointments
                 appointmentList = appointmentDAO.getAllAppointments();
 
                 request.setAttribute("userRole", "employee");
-                System.out.println("User is Employee. Fetched all appointments. List size: "
-                        + (appointmentList != null ? appointmentList.size() : "null"));
 
             } else if (role.equalsIgnoreCase("Admin")) {
                 // Admin: also get all appointments (if that's your logic)
                 appointmentList = appointmentDAO.getAllAppointments();
 
                 request.setAttribute("userRole", "admin");
-                System.out.println("User is Admin. Fetched all appointments. List size: "
-                        + (appointmentList != null ? appointmentList.size() : "null"));
 
             } else {
                 // Some unexpected role - default to no appointments or treat as employee
                 appointmentList = appointmentDAO.getAllAppointments(); // or none, up to you
                 request.setAttribute("userRole", "employee"); // or "unknownRole"
-                System.out.println("User has unknown role. Fetched all appointments. List size: "
-                        + (appointmentList != null ? appointmentList.size() : "null"));
+
             }
 
         } catch (Exception e) {
@@ -90,13 +78,21 @@ public class ListAppointmentServlet extends HttpServlet {
             e.printStackTrace(); // log full stack trace
         }
 
-        // Put the list of appointments in request scope, forward to JSP
+        // ✅ Set appointments in request scope
         request.setAttribute("appointments", appointmentList);
-        System.out.println("Setting appointments attribute. List is "
-                + (appointmentList != null ? "not null" : "null"));
 
+        // ✅ Handle success/error messages from redirects
+        if (request.getParameter("success") != null) {
+            request.setAttribute("success", "Appointment added successfully!");
+        }
+        if (request.getParameter("error") != null) {
+            request.setAttribute("error", "Error adding appointment. Please try again.");
+        }
+
+        // ✅ Forward to JSP
         request.getRequestDispatcher("list_appointments.jsp").forward(request, response);
-        System.out.println("Forwarded to list_appointments.jsp"); // DEBUG
+
+
     }
 
     /**
