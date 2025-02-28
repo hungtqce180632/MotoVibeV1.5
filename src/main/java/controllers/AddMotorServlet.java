@@ -18,16 +18,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import models.Motor;
 import models.UserAccount;
-import java.sql.Date;
-import java.util.UUID;
 
 /**
  *
@@ -40,7 +36,7 @@ import java.util.UUID;
 public class AddMotorServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private static final String UPLOAD_DIR = "images";
+    private static final String UPLOAD_DIR = "images/motor_pictures";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -63,6 +59,7 @@ public class AddMotorServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
+            // Get form data
             String motorName = request.getParameter("motorName");
             int brandId = Integer.parseInt(request.getParameter("brandId"));
             int modelId = Integer.parseInt(request.getParameter("modelId"));
@@ -70,33 +67,49 @@ public class AddMotorServlet extends HttpServlet {
             String color = request.getParameter("color");
             double price = Double.parseDouble(request.getParameter("price"));
             String description = request.getParameter("description");
-            LocalDate localDateStart = LocalDate.now();
-            Date dateStart = Date.valueOf(localDateStart); // Convert LocalDate to java.sql.Date
-
+            Date dateStart = new Date(System.currentTimeMillis());
+            
             // Handle file upload
             Part filePart = request.getPart("picture");
             String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-            String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIR;
+            
+            // Get the web app root directory
+            String webappPath = getServletContext().getRealPath("/").replace("target\\MotorVibe-1.0-SNAPSHOT\\", "src\\main\\webapp\\");
+            String uploadPath = webappPath + UPLOAD_DIR;
 
+            // Create directories if they don't exist
             File uploadDir = new File(uploadPath);
             if (!uploadDir.exists()) {
-                uploadDir.mkdir();
+                uploadDir.mkdirs();
             }
 
-            String newFileName = fileName;
-            if (!fileName.isEmpty()) {
-                // Rename file with timestamp to prevent duplication
-                String extension = fileName.substring(fileName.lastIndexOf("."));
-                String baseName = fileName.substring(0, fileName.lastIndexOf("."));
-                newFileName = baseName + "_" + System.currentTimeMillis() + extension;
-                filePart.write(uploadPath + File.separator + newFileName);
-            }
+            // Generate new filename
+            String extension = fileName.substring(fileName.lastIndexOf("."));
+            String newFileName = "motor_" + System.currentTimeMillis() + extension;
 
-            Motor motor = new Motor(0, brandId, modelId, motorName, dateStart, color, price, fuelId, true, description, 0, newFileName); // Use java.sql.Date
-            new MotorDAO().addMotor(motor);
+            // Save file to webapp directory
+            filePart.write(uploadPath + File.separator + newFileName);
 
-            response.sendRedirect("motorManagement");
-        } catch (NumberFormatException | SQLException e) {
+            // Create new Motor object
+            Motor motor = new Motor();
+            motor.setMotorName(motorName);
+            motor.setBrandId(brandId);
+            motor.setModelId(modelId);
+            motor.setFuelId(fuelId);
+            motor.setColor(color);
+            motor.setPrice(price);
+            motor.setDescription(description);
+            motor.setDateStart(dateStart);
+            motor.setPresent(true);
+            motor.setQuantity(0); // Initial quantity
+            motor.setPicture("motor_pictures/" + newFileName); // Store relative path
+
+            // Save to database
+            MotorDAO motorDAO = new MotorDAO();
+            motorDAO.addMotor(motor);
+
+            response.sendRedirect("motorList");
+        } catch (Exception e) {
             throw new ServletException("Error adding motor", e);
         }
     }

@@ -11,7 +11,9 @@
     <c:forEach var="motor" items="${motors}"> <%-- Loop through the list of motors --%>
         <div class="col"> <%-- Each motor is in a column --%>
             <div class="card h-100"> <%-- Bootstrap card with fixed height --%>
-                <img src="${motor.picture}" class="card-img-top" alt="${motor.motorName}"> <%-- Motorbike picture --%>
+                <div class="product-img">
+                    <img src="images/${motor.picture}" alt="${motor.motorName}" class="img-fluid">
+                </div>
                 <div class="card-body"> <%-- Card body for content --%>
                     <h5 class="card-title ${motor.present eq true ? 'text-success' : 'text-danger'}">${motor.motorName}</h5> <%-- Motor name as title, colored based on 'present' status --%>
                     <p class="card-text">

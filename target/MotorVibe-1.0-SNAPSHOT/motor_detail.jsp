@@ -84,7 +84,7 @@
 
             body {
                 background: var(--dark-black);
-                color: var(--text-gold);
+                color: var (--text-gold);
             }
 
             .container {

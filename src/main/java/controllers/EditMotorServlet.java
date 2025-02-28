@@ -35,7 +35,7 @@ import models.UserAccount;
 public class EditMotorServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private static final String UPLOAD_DIR = "images";
+    private static final String UPLOAD_DIR = "images/motor_pictures"; // Changed directory path
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -89,28 +89,41 @@ public class EditMotorServlet extends HttpServlet {
             // Handle file upload
             Part filePart = request.getPart("picture");
             String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-            String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIR;
+            
+            // Get both paths - one for webapp and one for source
+            String webappPath = getServletContext().getRealPath("/").replace("target\\MotorVibe-1.0-SNAPSHOT\\", "src\\main\\webapp\\");
+            String targetPath = getServletContext().getRealPath("/");
+            
+            // Define uploadPath variables for both source and target
+            String sourceUploadPath = webappPath + UPLOAD_DIR;
+            String targetUploadPath = targetPath + UPLOAD_DIR;
+            
+            String picture = request.getParameter("existingPicture"); // Default to existing picture
 
-            File uploadDir = new File(uploadPath);
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
-
-            String newFileName = fileName;
-            if (!fileName.isEmpty()) {
-                // Đổi tên file bằng cách thêm timestamp để tránh trùng
+            if (fileName != null && !fileName.isEmpty()) {
                 String extension = fileName.substring(fileName.lastIndexOf("."));
-                String baseName = fileName.substring(0, fileName.lastIndexOf("."));
-                newFileName = baseName + "_" + System.currentTimeMillis() + extension;
-
-                // Lưu file với tên mới
-                filePart.write(uploadPath + File.separator + newFileName);
+                String newFileName = "motor_" + motorId + "_" + System.currentTimeMillis() + extension;
+                
+                // Save to webapp source directory
+                File uploadDirSource = new File(sourceUploadPath);
+                if (!uploadDirSource.exists()) {
+                    uploadDirSource.mkdirs();
+                }
+                filePart.write(sourceUploadPath + File.separator + newFileName);
+                
+                // Save to target directory
+                File uploadDirTarget = new File(targetUploadPath);
+                if (!uploadDirTarget.exists()) {
+                    uploadDirTarget.mkdirs();
+                }
+                filePart.write(targetUploadPath + File.separator + newFileName);
+                
+                picture = "motor_pictures/" + newFileName;
             }
 
-            // Nếu người dùng không upload ảnh mới, giữ nguyên ảnh cũ
-            String picture = fileName.isEmpty() ? request.getParameter("existingPicture") : newFileName;
-
-            Motor motor = new Motor(motorId, brandId, modelId, motorName, dateStart, color, price, fuelId, true, description, quantity, picture); // Use java.sql.Date
+            // Create and update motor object
+            Motor motor = new Motor(motorId, brandId, modelId, motorName, dateStart, color, price, 
+                                  fuelId, true, description, quantity, picture);
             motorDAO.updateMotor(motor);
 
             response.sendRedirect("motorDetail?id=" + motorId);

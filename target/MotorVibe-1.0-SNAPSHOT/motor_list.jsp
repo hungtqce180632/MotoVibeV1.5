@@ -71,7 +71,7 @@
             .form-control, .form-select {
                 background: rgba(26, 26, 26, 0.9);
                 border: 1px solid var(--primary-gold);
-                color: var(--text-gold);
+                color: var (--text-gold);
             }
 
             .btn {
@@ -156,6 +156,7 @@
                                 <th>Price</th>
                                 <th>Date</th>
                                 <th>Ammount</th>
+                                <th>Picture</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -175,6 +176,9 @@
                                     <td>${motor.price}</td>
                                     <td>${motor.dateStart}</td>
                                     <td>${motor.quantity}</td>
+                                    <td>
+                                        <img src="images/${motor.picture}" alt="${motor.motorName}" style="max-width: 100px; height: auto;">
+                                    </td>
                                     <td>
                                         <c:if test="${sessionScope.user.role eq 'admin'}">
                                             <a href="changeQuantity?id=${motor.motorId}" class="btn btn-warning btn-sm btn-full-width mt-1">Đổi Số lượng</a>

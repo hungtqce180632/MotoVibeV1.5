@@ -69,12 +69,12 @@
                         <textarea class="form-control" name="description" required>${motor.description}</textarea>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Upload New Picture</label>
-                        <input type="file" class="form-control" name="picture" id="pictureInput">
-                        <div class="mt-2">
-                            <img id="previewImage" src="images/${motor.picture}" class="img-fluid rounded" alt="Current Image" style="max-width: 200px; ${motor.picture == null || motor.picture == '' ? 'display: none;' : ''}">
-                        </div>
+                    <div class="form-group">
+                        <label>Current Image:</label>
+                        <img src="${pageContext.request.contextPath}/images/${motor.picture}" alt="${motor.motorName}" style="max-width: 200px"><br>
+                        <input type="hidden" name="existingPicture" value="${motor.picture}">
+                        <label for="picture">New Image (optional):</label>
+                        <input type="file" class="form-control" id="picture" name="picture" accept="image/*">
                     </div>
 
                     <div class="text-center">
