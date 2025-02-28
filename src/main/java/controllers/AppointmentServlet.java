@@ -82,9 +82,9 @@ public class AppointmentServlet extends HttpServlet {
 
         CustomerDAO customerDAO = new CustomerDAO();
         EmployeeDAO employeeDAO = new EmployeeDAO();
-        
+
         int customerId = customerDAO.getCustomerIdByUserId(user.getUserId());
-        List<Employee> employees = employeeDAO.getAllEmployees(); 
+        List<Employee> employees = employeeDAO.getAllEmployees();
 
         request.setAttribute("customerId", customerId);
         request.setAttribute("employees", employees);
@@ -110,21 +110,21 @@ public class AppointmentServlet extends HttpServlet {
             Integer employeeId = (employeeIdStr != null && !employeeIdStr.isEmpty()) ? Integer.parseInt(employeeIdStr) : null;
 
             String dateStartStr = request.getParameter("dateStart");
-            String dateEndStr = request.getParameter("dateEnd");
+
             String note = request.getParameter("note");
             boolean appointmentStatus = request.getParameter("appointmentStatus").equals("1");
 
             // Convert date strings to SQL Timestamp format
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             Date startDate = formatter.parse(dateStartStr);
-            Date endDate = (dateEndStr != null && !dateEndStr.isEmpty()) ? formatter.parse(dateEndStr) : null;
+            Date endDate = new Date(startDate.getTime() + (2L * 24 * 60 * 60 * 1000));
 
             // Create Appointment object
             Appointment appointment = new Appointment();
             appointment.setCustomerId(customerId);
             appointment.setEmployeeId(employeeId != null ? employeeId : 0); // Default to 0 if null
             appointment.setDateStart(new java.sql.Timestamp(startDate.getTime()));
-            appointment.setDateEnd(endDate != null ? new java.sql.Timestamp(endDate.getTime()) : null);
+            appointment.setDateEnd(new java.sql.Timestamp(endDate.getTime()));
             appointment.setNote(note);
             appointment.setAppointmentStatus(appointmentStatus);
 

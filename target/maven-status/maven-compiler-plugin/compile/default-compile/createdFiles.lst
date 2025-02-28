@@ -9,6 +9,7 @@ dao\CustomerDAO.class
 OTP\VerifyOtpServlet.class
 dao\MotorDAO.class
 models\InventoryLog.class
+controllers\WishlistServlet.class
 models\Wishlist.class
 dao\UserAccountDAO.class
 models\Fuel.class
@@ -24,6 +25,7 @@ dao\FuelDAO.class
 controllers\DeleteReviewServlet.class
 OTP\SendOtpServlet$1.class
 dao\WarrantyDAO.class
+dao\WishlistDAO.class
 controllers\CreateWarrantyServlet.class
 controllers\EditReviewServlet.class
 models\Motor.class
@@ -59,6 +61,7 @@ models\Model.class
 dao\AppointmentDAO.class
 controllers\LogoutServlet.class
 controllers\ConfirmOrderServlet.class
+controllers\RegisterServlet.class
 models\Customer.class
 controllers\EditEventServlet.class
 dao\EmployeeDAO.class

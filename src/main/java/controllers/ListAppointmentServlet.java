@@ -13,15 +13,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import models.Appointment;
+import models.Customer;
 import models.UserAccount;
 
 /**
  *
  * @author truon
  */
-@WebServlet("/listAppointments")
+@WebServlet({"/listAppointments", "/approveAppointment"})
 public class ListAppointmentServlet extends HttpServlet {
 
     /**
@@ -52,6 +55,7 @@ public class ListAppointmentServlet extends HttpServlet {
         CustomerDAO customerDAO = new CustomerDAO();
         AppointmentDAO appointmentDAO = new AppointmentDAO();
         List<Appointment> appointmentList = null;
+        Map<Integer, Customer> customerMap = new HashMap<>();
 
         try {
             String role = user.getRole();
@@ -63,10 +67,14 @@ public class ListAppointmentServlet extends HttpServlet {
                 request.setAttribute("userRole", "customer");
 
             } else if (role.equalsIgnoreCase("Employee")) {
-                // Employee: get all appointments
                 appointmentList = appointmentDAO.getAllAppointments();
 
+                for (Customer customer : customerDAO.getAllCustomers()) {
+                customerMap.put(customer.getCustomerId(), customer);
+            }
+
                 request.setAttribute("userRole", "employee");
+                request.setAttribute("customerMap", customerMap);
 
             } else if (role.equalsIgnoreCase("Admin")) {
                 // Admin: also get all appointments (if that's your logic)
@@ -99,6 +107,10 @@ public class ListAppointmentServlet extends HttpServlet {
                     request.setAttribute("success", "Appointment added successfully!");
                 } else if (successCode == 2) {
                     request.setAttribute("success", "Appointment cancelled successfully!");
+                } else if (successCode == 3) {
+                    request.setAttribute("success", "Appointment approved successfully!");
+                } else if (successCode == 4) {
+                    request.setAttribute("success", "Appointment declined successfully!");
                 }
             }
 
@@ -108,6 +120,10 @@ public class ListAppointmentServlet extends HttpServlet {
                     request.setAttribute("error", "Error adding appointment. Please try again.");
                 } else if (errorCode == 2) {
                     request.setAttribute("error", "Failed to cancel appointment.");
+                } else if (errorCode == 3) {
+                    request.setAttribute("error", "Failed to approve appointment.");
+                } else if (errorCode == 4) {
+                    request.setAttribute("error", "Failed to decline appointment.");
                 }
             }
         } catch (NumberFormatException e) {
@@ -125,19 +141,27 @@ public class ListAppointmentServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        String action = request.getServletPath();
+        AppointmentDAO appointmentDAO = new AppointmentDAO();
         try {
             int appointmentId = Integer.parseInt(request.getParameter("appointmentId"));
 
-            AppointmentDAO appointmentDAO = new AppointmentDAO();
-            boolean success = appointmentDAO.deleteAppointment(appointmentId);
-
-            if (success) {
-                response.sendRedirect("listAppointments?success=2"); // Success deleting appointment
-            } else {
-                response.sendRedirect("listAppointments?error=2"); // Error deleting appointment
+            if ("/approveAppointment".equals(action)) {
+                boolean success = appointmentDAO.updateAppointmentStatus(appointmentId, true);
+                if (success) {
+                    response.sendRedirect("listAppointments?success=3");
+                } else {
+                    response.sendRedirect("listAppointments?error=3");
+                }
+            } else if ("/listAppointments".equals(action)) {
+                boolean success = appointmentDAO.deleteAppointment(appointmentId);
+                if (success) {
+                    response.sendRedirect("listAppointments?success=2");
+                } else {
+                    response.sendRedirect("listAppointments?error=2");
+                }
             }
-            
-            
 
         } catch (NumberFormatException e) {
             e.printStackTrace();

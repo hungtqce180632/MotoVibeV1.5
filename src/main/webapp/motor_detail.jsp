@@ -39,6 +39,39 @@
                 let tooltip = document.getElementById("brandTooltip");
                 tooltip.style.display = "none";
             }
+
+            function addToWishlist(event, motorId) {
+                event.preventDefault(); // Ngừng chuyển trang
+
+                // Kiểm tra nếu motorId không hợp lệ (chắc chắn nó phải là một số hợp lệ)
+                if (isNaN(motorId) || motorId === "") {
+                    alert("Invalid motorId.");
+                    return;
+                }
+
+                $.ajax({
+                    url: "wishlist",
+                    type: "POST",
+                    data: {motorId: motorId, action: 'add'},
+                    success: function (response) {
+                        if (response === "success") {
+                            $("#success-message").show().delay(3000).fadeOut();
+                            location.reload(); // Reload trang để cập nhật danh sách
+                        } else {
+                            $("#error-message").show().delay(3000).fadeOut();
+                            alert('Error adding motor to wishlist: ' + response);
+                        }
+                    },
+                    error: function () {
+                        $("#error-message").show().delay(3000).fadeOut();
+                        alert('Error adding motor to wishlist.');
+                    }
+                });
+            }
+
+
+
+
         </script>
         <style>
             :root {
@@ -142,6 +175,7 @@
                     </c:when>
                     <c:otherwise>
                         <a href="orderMotor?id=${motor.motorId}" class="btn btn-success">Order Motor</a>
+                        <button class="btn btn-success" onclick="addToWishlist(event, ${motor.motorId})">Add to Wishlist</button>
                     </c:otherwise>
                 </c:choose>
                 <a href="motorManagement" class="btn btn-secondary">Back to list</a>
@@ -150,6 +184,6 @@
 
         <jsp:include page="review.jsp"/>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
     </body>
 </html>
+
