@@ -272,6 +272,9 @@
                             <a href="listOrders" class="btn btn-outline-gold">
                                 <i class="fas fa-history"></i> <span>View My Orders</span>
                             </a>
+                            <a href="wishlist" class="btn btn-outline-gold">
+                                <i class="fas fa-history"></i> <span>View My Wishlist</span>
+                            </a>
                         </div>
                         
                     </div>

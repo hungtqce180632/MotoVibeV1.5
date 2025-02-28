@@ -8,8 +8,7 @@ public class UserAccount {
     private String role;
     private boolean status;
 
-    public UserAccount() {
-    }
+
 
     public UserAccount(int userId, String email, String password, String role, boolean status) {
         this.userId = userId;
@@ -17,6 +16,14 @@ public class UserAccount {
         this.password = password;
         this.role = role;
         this.status = status;
+    }
+
+    public UserAccount(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    public UserAccount() {
     }
 
     public int getUserId() {
@@ -57,5 +64,9 @@ public class UserAccount {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public int getId() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

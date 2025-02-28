@@ -152,7 +152,10 @@
                 transform: translate(1.4em, 2em) scale(0.65);
                 opacity: 1;
             }
-
+            #otpForm {
+                display: none; /* Ban đầu ẩn */
+                margin-top: 2em;
+            }
 
             /* boostrap layout */
             .logo {
@@ -305,6 +308,18 @@
 
                             <div class="text-center mt-3">
                                 <a href="/MotoVibe/login.jsp">Remember your password? Login</a>
+                            </div>
+                        </form>
+                        <form action="verifyOtp" method="POST" id="otpForm" style="display: none;">
+                            <div class="inputGroup inputGroup1">
+                                <label for="otp" class="form-label">Enter OTP</label>
+                                <input name="otp" required type="text" class="form-control" id="otp" placeholder="Enter OTP sent to your email">
+                                <p class="helper helper1">123456</p>
+                                <span id="otpError" class="text-danger"></span> 
+                            </div>
+
+                            <div class="inputGroup inputGroup3">
+                                <button type="submit" class="btn btn-primary w-100 mb-3" name="submit">Verify OTP</button>
                             </div>
                         </form>
                     </div>
