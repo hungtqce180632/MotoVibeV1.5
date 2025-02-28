@@ -13,8 +13,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Wishlist</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/luxury-theme.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .wishlist-container {
+            background: var(--dark-black);
+            border: 1px solid var(--primary-gold);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .wishlist-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .wishlist-table th, 
+        .wishlist-table td {
+            border: 1px solid var(--secondary-gold);
+            padding: 0.75rem;
+            color: var(--text-gold);
+        }
+        .remove-btn {
+            background: transparent;
+            border: 1px solid var(--primary-gold);
+            color: var(--primary-gold);
+            padding: 0.25rem 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .remove-btn:hover {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--primary-gold);
+        }
+    </style>
 </head>
 <body>
 

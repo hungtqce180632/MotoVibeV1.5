@@ -6,6 +6,7 @@
         <title>Footer</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/luxury-theme.css">
 
         <style>
             :root {
@@ -56,6 +57,7 @@
                 box-shadow: 0 0 10px var(--primary-gold);
             }
 
+            /* Enhance the social icons with subtle golden glow */
             .footer-social-icons a {
                 display: inline-flex;
                 align-items: center;
@@ -77,6 +79,24 @@
                 background: var(--primary-gold);
                 color: var(--dark-black);
                 box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+            }
+            
+            /* Add a golden particle effect on hover */
+            .footer-social-icons a::before {
+                content: '';
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                background: var(--primary-gold);
+                opacity: 0;
+                transform: scale(0);
+                transition: all 0.4s ease;
+            }
+            
+            .footer-social-icons a:hover::before {
+                opacity: 0.1;
+                transform: scale(1.5);
             }
 
             .footer-list-item {
@@ -103,6 +123,7 @@
             .footer-list-item a:hover {
                 color: var(--primary-gold);
                 transform: translateX(5px);
+                text-shadow: 0 0 5px rgba(212, 175, 55, 0.4);
             }
 
             .footer-list-item a:hover::before {
@@ -126,6 +147,27 @@
                 width: 50%;
                 height: 1px;
                 background: linear-gradient(90deg, transparent, var(--primary-gold), transparent);
+            }
+            
+            .copyright-section p {
+                color: var(--text-gold);
+                opacity: 0.8;
+            }
+            
+            .text-muted {
+                color: var(--text-gold) !important;
+                opacity: 0.5;
+            }
+            
+            /* Add a subtle logo glow */
+            .footer-logo {
+                font-family: "Oswald", sans-serif;
+                color: var(--primary-gold);
+                font-size: 1.8rem;
+                font-weight: 600;
+                text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+                letter-spacing: 1px;
+                margin-bottom: 1rem;
             }
 
             /* Update existing media query */
@@ -151,7 +193,8 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-4 footer-section">
-                        <h4 class="footer-heading">About MotoVibe</h4>
+                        <div class="footer-logo">MotoVibe</div>
+                        <h4 class="footer-heading">About Us</h4>
                         <p>MotoVibe is your premier online destination for discovering and experiencing the world of motorbikes. We offer a wide selection of motorbikes, events, and services to fuel your passion for riding.</p>
                         <div class="footer-social-icons">
                             <a href="https://www.facebook.com/quochung.truong.1910" title="Facebook" target="_blank" rel="noopener"><i class="fab fa-facebook-f"></i></a>

@@ -14,6 +14,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
         <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,300" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Oswald:500,400" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="css/luxury-theme.css">
         <style>
             /* colors and layout from login.jsp (no changes needed for register.jsp) */
             html {

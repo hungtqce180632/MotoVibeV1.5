@@ -17,28 +17,84 @@
         <script src="https://kit.fontawesome.com/a611f8fd5b.js" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <link rel="stylesheet" type="text/css" href="css/font.css"/>
+        <link rel="stylesheet" href="css/luxury-theme.css">
         <link rel="icon" href="${host}/ImageController/logo.png" type="image/x-icon">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.min.css">
-        <title>ResetPass</title>
+        <title>Reset Password</title>
         <%
             String host = request.getRequestURI();
         %>
         <style>
-            .logo  {
+            .logo {
                 font-family: "Oswald", sans-serif;
                 font-optical-sizing: auto;
                 font-weight: 500;
                 font-style: normal;
-                color: #050B20;
+                color: var(--primary-gold);
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             }
 
             a:hover {
-                color: inherit; /* Giữ nguyên màu */
+                color: inherit;
             }
 
-            .btn-dark{
-                background-color: #050B20;
+            .btn-dark {
+                background: linear-gradient(145deg, var(--primary-gold), var(--secondary-gold));
+                border: none;
+                color: var(--dark-black);
+                font-weight: 600;
+                transition: all 0.3s ease;
+            }
+            
+            .btn-dark:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+            }
+            
+            .form-label {
+                color: var(--primary-gold);
+                font-weight: 500;
+            }
+            
+            .form-control {
+                background-color: var(--rich-black);
+                border: 1px solid var(--secondary-gold);
+                color: white;
+            }
+            
+            .form-control:focus {
+                background-color: var(--rich-black);
+                border-color: var(--primary-gold);
+                box-shadow: 0 0 0 0.25rem rgba(218, 165, 32, 0.25);
+                color: white;
+            }
+            
+            .btn-outline-dark {
+                border-color: var(--primary-gold);
+                color: var(--primary-gold);
+            }
+            
+            .btn-outline-dark:hover {
+                background-color: var(--primary-gold);
+                color: var(--dark-black);
+            }
+            
+            h2 {
+                color: var(--primary-gold);
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            }
+            
+            .alert-warning {
+                background: rgba(218, 165, 32, 0.2);
+                border: 1px solid var(--primary-gold);
+                color: var(--primary-gold);
+            }
+            
+            .col-lg-6:not(.d-none) {
+                background: linear-gradient(145deg, var(--dark-black), var(--rich-black));
             }
         </style>
     </head>
@@ -161,10 +217,10 @@
                                     <i class="fa-solid fa-eye p-0 m-0" id="icon"></i>                                    
                                 </button>                               
                             </div>
-                            <span id="passwordError" class="text-danger mb-3"></span> <!-- Thêm thẻ này để hiển thị lỗi -->                           
+                            <span id="passwordError" class="text-danger mb-3"></span>                         
 
                             <div class="form-group mb-3">
-                                <label for="confirmPassword">Confirm Password:</label>
+                                <label for="confirmPassword" class="form-label">Confirm Password:</label>
                                 <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required oninput="checkPasswordsMatch()">
                                 <small id="confirmError" class="text-danger"></small>
                             </div>                            

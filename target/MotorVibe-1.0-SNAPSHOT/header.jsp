@@ -11,6 +11,7 @@
     <head>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/luxury-theme.css">
         <style>
             :root {
                 --primary-gold: #D4AF37;
@@ -27,28 +28,34 @@
                 padding: 1rem 0;
                 box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
                 backdrop-filter: blur(10px);
-                border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+                border-bottom: 1px solid var(--primary-gold);
             }
 
             .navbar-brand {
                 color: var(--primary-gold) !important;
-                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3), 
+                            0 0 10px rgba(212, 175, 55, 0.3);
                 font-size: 1.8rem;
                 position: relative;
                 transition: all 0.3s ease;
+                font-weight: 700;
+                letter-spacing: 1px;
             }
 
             .navbar-brand:hover {
                 color: var(--secondary-gold) !important;
                 transform: translateY(-2px);
+                text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
             }
-
+            
+            /* Enhanced nav links with gold hover effect */
             .navbar-nav .nav-link {
                 color: #fff !important;
                 padding: 0.7rem 1.2rem;
                 position: relative;
                 transition: all 0.3s ease;
                 text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+                font-weight: 500;
             }
 
             .navbar-nav .nav-link::after {
@@ -61,11 +68,14 @@
                 background: var(--primary-gold);
                 transition: all 0.3s ease;
                 transform: translateX(-50%);
+                box-shadow: 0 0 5px var(--primary-gold);
+                opacity: 0;
             }
 
             .navbar-nav .nav-link:hover::after,
             .navbar-nav .nav-link.active::after {
-                width: 80%;
+                width: 70%;
+                opacity: 1;
             }
 
             .navbar-nav .nav-link:hover,
@@ -73,15 +83,67 @@
                 color: var(--primary-gold) !important;
                 transform: translateY(-2px);
             }
+            
+            /* Add a glow to icons */
+            .navbar-nav .nav-link i {
+                margin-right: 5px;
+                transition: all 0.3s ease;
+            }
+            
+            .navbar-nav .nav-link:hover i {
+                text-shadow: 0 0 10px var(--primary-gold);
+            }
 
+            /* Enhanced dropdown menu */
+            .dropdown-menu {
+                background: linear-gradient(145deg, var(--dark-black), var(--rich-black));
+                border: 1px solid var(--primary-gold);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            }
+            
+            .dropdown-item {
+                color: var(--text-gold);
+                transition: all 0.3s ease;
+            }
+            
+            .dropdown-item:hover, 
+            .dropdown-item:focus {
+                background: rgba(212, 175, 55, 0.1);
+                color: var(--primary-gold);
+                transform: translateX(5px);
+            }
+
+            /* Enhanced toggler button */
             .navbar-toggler {
                 border: 1px solid var(--primary-gold) !important;
                 padding: 0.5rem;
                 transition: all 0.3s ease;
+                position: relative;
+                overflow: hidden;
             }
 
             .navbar-toggler:hover {
                 background: rgba(212, 175, 55, 0.1);
+                box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+            }
+            
+            .navbar-toggler:after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: rgba(212, 175, 55, 0.2);
+                transition: all 0.5s ease;
+            }
+            
+            .navbar-toggler:hover:after {
+                left: 100%;
+            }
+            
+            .navbar-toggler-icon {
+                background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='%23D4AF37' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
             }
 
             /* Update existing media query styles */

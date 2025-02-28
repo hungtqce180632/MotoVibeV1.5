@@ -1,6 +1,6 @@
 <%-- 
     Document   : edit_motor
-    Created on : Feb 21, 2025, 3:47:35 PM
+    Created on : Feb 21, 2025, 3:47:35 PM
     Author     : tiend
 --%>
 
@@ -13,11 +13,60 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Edit Motor</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/luxury-theme.css">
+        <style>
+            h2 {
+                color: var(--primary-gold);
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            }
+            
+            .form-label {
+                color: var(--primary-gold);
+                font-weight: 500;
+            }
+            
+            .form-control, .form-select {
+                background-color: var(--rich-black);
+                border: 1px solid var(--secondary-gold);
+                color: white;
+            }
+            
+            .form-control:focus, .form-select:focus {
+                background-color: var(--rich-black);
+                border-color: var(--primary-gold);
+                box-shadow: 0 0 0 0.25rem rgba(218, 165, 32, 0.25);
+                color: white;
+            }
+            
+            .btn-success {
+                background: linear-gradient(145deg, var(--primary-gold), var(--secondary-gold));
+                border: none;
+                color: var(--dark-black);
+                font-weight: 600;
+            }
+            
+            .btn-secondary {
+                background: transparent;
+                border: 1px solid var(--primary-gold);
+                color: var(--primary-gold);
+            }
+            
+            .btn-secondary:hover {
+                background: var(--primary-gold);
+                color: var(--dark-black);
+            }
+            
+            .card {
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            }
+        </style>
     </head>
     <body>
         <div class="container mt-4">
-            <h2 class="text-center mb-4">Edit Motorbike</h2>
-            <div class="card p-4">
+            <h2 class="text-center mb-4 luxury-text">Edit Motorbike</h2>
+            <div class="card p-4 luxury-card">
                 <form action="editMotor" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="motorId" value="${motor.motorId}">
                     <input type="hidden" name="existingPicture" value="${motor.picture}">
@@ -29,7 +78,7 @@
 
                     <div class="mb-3">
                         <label class="form-label">Brand</label>
-                        <select class="form-control" name="brandId">
+                        <select class="form-control form-select" name="brandId">
                             <c:forEach var="brand" items="${brands}">
                                 <option value="${brand.brandId}" ${brand.brandId == motor.brandId ? 'selected' : ''}>${brand.brandName}</option>
                             </c:forEach>
@@ -38,7 +87,7 @@
 
                     <div class="mb-3">
                         <label class="form-label">Model</label>
-                        <select class="form-control" name="modelId">
+                        <select class="form-control form-select" name="modelId">
                             <c:forEach var="model" items="${models}">
                                 <option value="${model.modelId}" ${model.modelId == motor.modelId ? 'selected' : ''}>${model.modelName}</option>
                             </c:forEach>
@@ -47,7 +96,7 @@
 
                     <div class="mb-3">
                         <label class="form-label">Fuel Type</label>
-                        <select class="form-control" name="fuelId">
+                        <select class="form-control form-select" name="fuelId">
                             <c:forEach var="fuel" items="${fuels}">
                                 <option value="${fuel.fuelId}" ${fuel.fuelId == motor.fuelId ? 'selected' : ''}>${fuel.fuelName}</option>
                             </c:forEach>
@@ -69,16 +118,16 @@
                         <textarea class="form-control" name="description" required>${motor.description}</textarea>
                     </div>
 
-                    <div class="form-group">
-                        <label>Current Image:</label>
-                        <img src="${pageContext.request.contextPath}/images/${motor.picture}" alt="${motor.motorName}" style="max-width: 200px"><br>
+                    <div class="form-group mb-4">
+                        <label class="form-label">Current Image:</label>
+                        <img src="${pageContext.request.contextPath}/images/${motor.picture}" alt="${motor.motorName}" style="max-width: 200px; border: 2px solid var(--primary-gold); border-radius: 5px;" class="d-block mb-2">
                         <input type="hidden" name="existingPicture" value="${motor.picture}">
-                        <label for="picture">New Image (optional):</label>
+                        <label for="picture" class="form-label">New Image (optional):</label>
                         <input type="file" class="form-control" id="picture" name="picture" accept="image/*">
                     </div>
 
                     <div class="text-center">
-                        <button type="submit" class="btn btn-success">Update Motor</button>
+                        <button type="submit" class="btn btn-success btn-luxury">Update Motor</button>
                         <a href="motorDetail?id=${motor.motorId}" class="btn btn-secondary">Cancel</a>
                     </div>
                 </form>
@@ -86,7 +135,7 @@
         </div>
 
         <script>
-            document.getElementById("pictureInput").addEventListener("change", function (event) {
+            document.getElementById("picture").addEventListener("change", function (event) {
                 const file = event.target.files[0];
                 const preview = document.getElementById("previewImage");
 

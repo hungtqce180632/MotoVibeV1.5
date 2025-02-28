@@ -11,14 +11,23 @@
         <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,300" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Oswald:500,400" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.4/dist/sweetalert2.min.css">
+        <link rel="stylesheet" href="css/luxury-theme.css">
         <style>
-            /* colors */
+            :root {
+                --primary-gold: #FFD700;
+                --secondary-gold: #DAA520;
+                --dark-black: #111111;
+                --rich-black: #1A1A1A;
+                --text-gold: #F8D231;
+            }
+            
             html {
                 width: 100%;
                 height: 100%;
             }
+            
             body {
-                background-color: #eff3f4;
+                background: linear-gradient(145deg, var(--dark-black), var(--rich-black));
                 position: relative;
                 width: 100%;
                 height: 100%;
@@ -26,34 +35,42 @@
                 font-family: 'Source Sans Pro', sans-serif;
                 font-weight: 400;
                 -webkit-font-smoothing: antialiased;
+                color: var(--text-gold);
             }
+            
             form {
                 position: relative;
                 display: block;
                 width: 100%;
                 max-width: 400px;
-                background-color: #fff;
+                background: linear-gradient(145deg, #1a1a1a, #222);
                 margin: 0;
                 padding: 2.25em;
                 box-sizing: border-box;
-                border: solid 1px #ddd;
+                border: solid 1px var(--primary-gold);
                 border-radius: 0.5em;
                 font-family: 'Source Sans Pro', sans-serif;
                 top: 0;
                 left: 0;
                 transform: none;
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
             }
+            
+            /* SVG Container styling with gold border */
             form .svgContainer {
                 position: relative;
                 width: 200px;
                 height: 200px;
                 margin: 0 auto 1em;
                 border-radius: 50%;
-                background: none;
-                border: solid 2.5px #3a5e77;
+                background: var(--rich-black);
+                border: solid 2.5px var(--primary-gold);
                 overflow: hidden;
                 pointer-events: none;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3),
+                            inset 0 0 15px rgba(212, 175, 55, 0.2);
             }
+            
             form .svgContainer div {
                 position: relative;
                 width: 100%;
@@ -81,31 +98,33 @@
                 margin: 0 0 12px;
                 display: block;
                 font-size: 1.25em;
-                color: #217093;
+                color: var(--primary-gold);
                 font-weight: 700;
                 font-family: inherit;
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
             }
             form input[type='email'], form input[type="text"], form input[type='password'] {
                 display: block;
                 margin: 0;
                 padding: 0 1em 0;
-                background-color: #f3fafd;
-                border: solid 2px #217093;
+                background: rgba(0, 0, 0, 0.2);
+                border: solid 2px var(--primary-gold);
                 border-radius: 4px;
                 -webkit-appearance: none;
                 box-sizing: border-box;
                 width: 100%;
                 height: 65px;
                 font-size: 1.55em;
-                color: #353538;
+                color: var(--text-gold);
                 font-weight: 600;
                 font-family: inherit;
-                transition: box-shadow 0.2s linear, border-color 0.25s ease-out;
+                transition: all 0.3s ease;
             }
             form input[type='email']:focus, form input[type="text"]:focus, form input[type='password']:focus {
                 outline: none;
-                box-shadow: 0px 2px 10px rgba(0, 0, 0, .1);
-                border: solid 2px #4eb8dd;
+                box-shadow: 0px 0px 10px rgba(255, 215, 0, 0.3);
+                border: solid 2px #FFD700;
+                background: rgba(0, 0, 0, 0.3);
             }
             form input[type='email'], form input[type="text"] {
                 padding: 14px 1em 0px;
@@ -114,36 +133,40 @@
                 display: block;
                 margin: 0;
                 padding: 0.65em 1em 1em;
-                background-color: #4eb8dd;
+                background: linear-gradient(145deg, var(--primary-gold), var(--secondary-gold));
                 border: none;
                 border-radius: 4px;
                 box-sizing: border-box;
-                box-shadow: none;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
                 width: 100%;
                 height: 65px;
                 font-size: 1.55em;
-                color: #fff;
+                color: var(--dark-black);
                 font-weight: 600;
                 font-family: inherit;
-                transition: background-color 0.2s ease-out;
+                transition: all 0.3s ease;
+                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
             }
             form button:hover, form button:active {
-                background-color: #217093;
+                background: linear-gradient(145deg, #FFD700, #DAA520);
+                box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+                transform: translateY(-2px);
             }
             form .inputGroup1 .helper {
                 position: absolute;
                 z-index: 1;
                 font-family: inherit;
+                color: var(--primary-gold);
+                opacity: 0.6;
+                transition: all 0.2s ease;
             }
             form .inputGroup1 .helper1 {
                 top: 0;
                 left: 0;
                 transform: translate(1.4em, 2.6em) scale(1);
                 transform-origin: 0 0;
-                color: #217093;
                 font-size: 1.25em;
                 font-weight: 400;
-                opacity: 0.65;
                 pointer-events: none;
                 transition: transform 0.2s ease-out, opacity 0.2s linear;
             }
@@ -161,7 +184,12 @@
             .logo {
                 font-family: "Oswald", sans-serif;
                 font-weight: 500;
-                color: #050B20;
+                color: var(--primary-gold);
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+                transition: all 0.3s ease;
+            }
+            .logo:hover {
+                text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
             }
             a:hover {
                 color: inherit; /* Keep original color on hover */
@@ -175,6 +203,7 @@
                 align-items: center;
                 height: 100vh;
                 padding: 0;
+                background: linear-gradient(145deg, var(--dark-black), var(--rich-black));
             }
 
             .row {
@@ -188,6 +217,44 @@
                 max-width: 400px; /* Set a max width to the form */
                 width: 100%;
                 margin: 0 auto; /* Center the form horizontally */
+            }
+            .form-check-input {
+                border: 1px solid var(--primary-gold);
+                background-color: transparent;
+            }
+            .form-check-input:checked {
+                background-color: var(--primary-gold);
+                border-color: var(--primary-gold);
+            }
+            .form-check-label {
+                color: var(--text-gold);
+            }
+            .form-check-label a {
+                color: var(--primary-gold);
+                text-decoration: none;
+                transition: all 0.2s ease;
+            }
+            .form-check-label a:hover {
+                text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+            }
+            .text-danger {
+                color: #ff6b6b !important;
+            }
+            a {
+                color: var(--primary-gold);
+                transition: all 0.2s ease;
+                text-decoration: none;
+            }
+            a:hover {
+                text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+                color: var(--primary-gold);
+            }
+            h2 {
+                color: var(--primary-gold);
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+                margin-bottom: 1.5rem;
             }
         </style>
     </head>

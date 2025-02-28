@@ -19,6 +19,7 @@
         <link rel="stylesheet" type="text/css" href="css/font.css"/>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.min.css">
+        <link rel="stylesheet" href="css/luxury-theme.css">
         <title>ResetPassword</title>
         <style>
             .logo {
@@ -73,6 +74,15 @@
 
             .alert.show {
                 display: block;
+            }
+
+            .reset-password-form {
+                background: var(--rich-black);
+                border: 1px solid var(--primary-gold);
+                border-radius: 10px;
+                padding: 2rem;
+                max-width: 500px;
+                margin: 2rem auto;
             }
         </style>
     </head>
@@ -252,7 +262,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-6 d-flex justify-content-center align-items-center">
-                    <div class="form-container">
+                    <div class="form-container reset-password-form">
                         <a class="logo text-decoration-none" href="/"><h1 class="mb-5">MotoVibe</h1></a>   
                         <div class="alert alert-warning d-none" id="alertOTP">Please verify OTP.</div>
                         <c:if test="${not empty message}">
