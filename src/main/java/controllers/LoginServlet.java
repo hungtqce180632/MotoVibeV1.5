@@ -26,11 +26,17 @@ public class LoginServlet extends HttpServlet {
         if (user != null) {
             // Lưu thông tin người dùng vào session
             HttpSession session = request.getSession();
+<<<<<<< HEAD
+            session.setAttribute("user", user);
+            session.setAttribute("userRole", user.getRole()); // Add this line
+            response.sendRedirect("motorManagement"); // Chuyển hướng sau khi đăng nhập thành công
+=======
             session.setAttribute("user", user); // Lưu đối tượng UserAccount vào session
             session.setAttribute("userId", user.getUserId()); // Lưu ID người dùng vào session
             
             // Chuyển hướng sau khi đăng nhập thành công
             response.sendRedirect("index.jsp");
+>>>>>>> origin/main
         } else {
             // Thông báo lỗi nếu đăng nhập không thành công
             request.setAttribute("error", "Invalid email or password");

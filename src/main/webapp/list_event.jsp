@@ -20,8 +20,8 @@
                 margin-top: 20px;
                 margin-bottom: 20px;
             }
-            
-            
+
+
             .flex-container {
                 display: flex;
                 align-items: stretch;
@@ -46,8 +46,13 @@
         <jsp:include page="header.jsp"></jsp:include>
             <h1 class="text-center">Event List</h1>
 
+        <c:if test="${sessionScope.userRole == 'admin'}">
+            <div class="text-center my-4">
+                <a href="ManageEventServlet" class="btn btn-success">Manage Event</a>
+            </div>
+        </c:if>
 
-            <div class="container my-5 pt-5">
+        <div class="container my-5 pt-5">
 
 
             <c:choose>
@@ -58,7 +63,7 @@
                                 <div class="card">
 
                                     <h5 class="card-title align-items-center align-self-center degignmagin">${event.event_name}</h5>
-                                    
+
                                     <img src="${pageContext.request.contextPath}/images/new-motorcycle-launch.jpg" alt="${event.event_name}" class="img-fluid"/>
                                     <div class="flex-container degignmagin">
                                         <div>

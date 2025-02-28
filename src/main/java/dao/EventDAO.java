@@ -15,16 +15,16 @@ public class EventDAO {
 
     public boolean createEvent(Event event, byte[] imageBytes) {
         String sql = "INSERT INTO events (event_name, event_details, image, date_start, date_end, event_status, user_id) "
-                   + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection conn = DBContext.getConnection()) {
+        try ( Connection conn = DBContext.getConnection()) {
             if (conn == null) {
                 System.err.println("Database connection is null - check DBContext configuration");
                 return false;
             }
             System.out.println("Database connection established");
 
-            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            try ( PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, event.getEvent_name());
                 stmt.setString(2, event.getEvent_details());
                 if (imageBytes != null && imageBytes.length > 0) {
@@ -62,34 +62,38 @@ public class EventDAO {
 
     public Event getEventById(int eventId) throws SQLException {
         String sql = "SELECT * FROM events WHERE event_id = ?";
-        Event event = new Event();
+        Event event = null;
 
-        try (Connection conn = DBContext.getConnection(); 
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
+            // Set the event_id parameter to the prepared statement
             stmt.setInt(1, eventId);
-            try (ResultSet rs = stmt.executeQuery()) {
+
+            try ( ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
+                    // Map the result set to an Event object
+                    event = new Event();
                     event.setEvent_id(rs.getInt("event_id"));
                     event.setEvent_name(rs.getString("event_name"));
                     event.setEvent_details(rs.getString("event_details"));
-                    event.setImage(rs.getBytes("image") != null ? "Image stored" : null);
-                    event.setDate_start(rs.getDate("date_start") != null ? rs.getDate("date_start").toString() : null);
-                    event.setDate_end(rs.getDate("date_end") != null ? rs.getDate("date_end").toString() : null);
-                    event.setEvent_status(rs.getBoolean("event_status"));
+                    event.setImage(rs.getString("image"));
+                    event.setDate_start(rs.getString("date_start"));
+                    event.setDate_end(rs.getString("date_end"));
+                    event.setEvent_status(rs.getBoolean("event_status"));  // Assuming event_status is a boolean
                     event.setUser_id(rs.getInt("user_id"));
                 }
             }
+        } catch (SQLException ex) {
+            throw new SQLException("Error while retrieving event: " + ex.getMessage(), ex);
         }
-        return event;
+
+        return event;  // Return the event object or null if no event found
     }
 
     public static List<Event> getAllEventsAvailable() throws SQLException {
         String sql = "SELECT * FROM events WHERE event_status = 1 AND date_end > CAST(GETDATE() AS date)";
         List<Event> events = new ArrayList<>();
 
-        try (Connection conn = DBContext.getConnection(); 
-             PreparedStatement stmt = conn.prepareStatement(sql); 
-             ResultSet rs = stmt.executeQuery()) {
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql);  ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 Event event = new Event();
                 event.setEvent_id(rs.getInt("event_id"));
@@ -106,5 +110,87 @@ public class EventDAO {
             e.printStackTrace();
         }
         return events;
+    }
+
+    // Method to get all events (without filter)
+    public static List<Event> getAllEvents() throws SQLException {
+        String sql = "SELECT event_id, event_name, event_details,image, date_start, date_end, event_status, user_id FROM events"; // No filter applied here
+        List<Event> events = new ArrayList<>();
+
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql);  ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                Event event = new Event();
+                event.setEvent_id(rs.getInt("event_id"));
+                event.setEvent_name(rs.getString("event_name"));
+                event.setEvent_details(rs.getString("event_details"));
+                event.setImage(rs.getBytes("image") != null ? "Image stored" : null);
+                event.setDate_start(rs.getDate("date_start") != null ? rs.getDate("date_start").toString() : null);
+                event.setDate_end(rs.getDate("date_end") != null ? rs.getDate("date_end").toString() : null);
+                event.setEvent_status(rs.getBoolean("event_status"));
+                event.setUser_id(rs.getInt("user_id"));
+                events.add(event);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return events;
+    }
+
+    public static boolean updateEvent(Event event, byte[] imageBytes) throws SQLException {
+        String sql = "UPDATE [MotoVibeDB].[dbo].[events] SET event_name = ?, event_details = ?, image = ?, date_start = ?, date_end = ?, event_status = ? WHERE event_id = ?";
+        try ( Connection conn = DBContext.getConnection()) {
+            if (conn == null) {
+                System.out.println("Database connection is null - check DBContext configuration");
+                return false;
+            }
+            try ( PreparedStatement stmt = conn.prepareStatement(sql)) {
+                stmt.setString(1, event.getEvent_name());
+                stmt.setString(2, event.getEvent_details());
+                if (imageBytes != null && imageBytes.length > 0) {
+                    stmt.setBytes(3, imageBytes);
+                } else {
+                    stmt.setNull(3, java.sql.Types.VARBINARY);
+                }
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                stmt.setDate(4, java.sql.Date.valueOf(LocalDate.parse(event.getDate_start(), formatter)));
+                stmt.setDate(5, java.sql.Date.valueOf(LocalDate.parse(event.getDate_end(), formatter)));
+                stmt.setBoolean(6, event.isEvent_status());
+                stmt.setInt(7, event.getEvent_id());
+
+                int affectedRows = stmt.executeUpdate();
+                System.out.println("Updated " + affectedRows + " rows for event_id: " + event.getEvent_id());
+                return affectedRows > 0;
+            }
+        } catch (SQLException e) {
+            System.err.println("SQL Error in updateEvent: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteEvent(int eventId) throws SQLException {
+        String sql = "DELETE FROM events WHERE event_id = ?";
+
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, eventId);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        }
+    }
+
+    public boolean changeEventStatus(int eventId) throws SQLException {
+        String sql = "UPDATE events SET event_status = NOT event_status WHERE event_id = ?";
+
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Set the event_id parameter
+            stmt.setInt(1, eventId);
+
+            // Execute the update query
+            int rowsAffected = stmt.executeUpdate();
+
+            // Return true if the status was successfully updated
+            return rowsAffected > 0;
+        }
     }
 }
