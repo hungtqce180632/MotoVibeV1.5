@@ -14,6 +14,84 @@
         <title>Appointment List</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <style>
+            :root {
+                --primary-gold: #D4AF37;
+                --secondary-gold: #C5A028;
+                --dark-black: #111111;
+                --rich-black: #1A1A1A;
+                --text-white: #FFFFFF;
+            }
+
+            body {
+                background: var(--dark-black);
+                color: var(--text-white);
+            }
+
+            .container {
+                background: var(--rich-black);
+                padding: 2rem;
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+                border: 1px solid var(--primary-gold);
+                margin-top: 80px;
+            }
+
+            h1, .lead {
+                color: var(--primary-gold);
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            }
+
+            .table {
+                color: var(--text-white);
+            }
+
+            .table thead th {
+                background: var(--primary-gold);
+                color: var(--dark-black);
+                font-weight: 600;
+            }
+
+            .table tbody td {
+                color: var(--text-white);
+                background: transparent;
+            }
+
+            .form-control {
+                background: transparent;
+                border: 1px solid var(--primary-gold);
+                color: var(--text-white);
+            }
+
+            .form-control:focus {
+                background: rgba(255, 255, 255, 0.1);
+                color: var(--text-white);
+                border-color: var(--secondary-gold);
+            }
+
+            .btn-outline-success {
+                color: var(--primary-gold);
+                border-color: var(--primary-gold);
+                background: transparent;
+            }
+
+            .btn-outline-success:hover {
+                background: var(--primary-gold);
+                color: var(--dark-black);
+            }
+
+            .btn-outline-danger {
+                color: #dc3545;
+                border-color: #dc3545;
+                background: transparent;
+            }
+
+            .alert {
+                background: linear-gradient(145deg, #1a1a1a, #222);
+                border: 1px solid var(--primary-gold);
+                color: var(--text-gold);
+            }
+        </style>
     </head>
 
     <body>
@@ -54,7 +132,7 @@
 
 
             <div class="table-responsive">
-                <table class="table table-striped table-bordered">
+                <table class="table table-hover">
                     <thead class="table-light">
                         <tr>
                             <th>Appointment ID</th>
@@ -101,15 +179,8 @@
                                     <td>
                                         <form action="approveAppointment" method="POST" class="d-inline">
                                             <input type="hidden" name="appointmentId" value="${appointment.appointmentId}">
-                                            <button type="submit" class="btn btn-outline-success btn-sm me-1" title="Approve Appointment">
+                                            <button type="submit" class="btn btn-outline-success btn-sm" title="Approve Appointment">
                                                 <i class="fas fa-check"></i> Approve
-                                            </button>
-                                        </form>
-
-                                        <form action="declineAppointment" method="POST" class="d-inline">
-                                            <input type="hidden" name="appointmentId" value="${appointment.appointmentId}">
-                                            <button type="submit" class="btn btn-outline-danger btn-sm" title="Decline Appointment">
-                                                <i class="fas fa-times"></i> Decline
                                             </button>
                                         </form>
                                     </td>

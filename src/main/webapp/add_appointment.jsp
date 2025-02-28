@@ -13,6 +13,94 @@
         <title>Add Appointment</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        <style>
+            :root {
+                --primary-gold: #D4AF37;
+                --secondary-gold: #C5A028;
+                --dark-black: #111111;
+                --rich-black: #1A1A1A;
+                --text-white: #FFFFFF;
+            }
+
+            body {
+                background: var(--dark-black);
+                color: var(--text-white);
+            }
+
+            .container {
+                background: var(--rich-black);
+                padding: 2rem;
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+                border: 1px solid var(--primary-gold);
+                margin-top: 80px;
+            }
+
+            h2 {
+                color: var(--primary-gold);
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            }
+
+            .lead {
+                color: var(--text-white);
+            }
+
+            .form-label {
+                color: var(--primary-gold);
+                font-weight: 500;
+            }
+
+            .form-control {
+                background: transparent !important;
+                border: 1px solid var(--primary-gold);
+                color: var(--text-white) !important;
+            }
+
+            .form-control:focus {
+                background: rgba(255, 255, 255, 0.05) !important;
+                border-color: var(--secondary-gold);
+                box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+                color: var(--text-white) !important;
+            }
+
+            .form-control::placeholder {
+                color: rgba(255, 255, 255, 0.5);
+            }
+
+            .form-control:disabled {
+                background: rgba(0, 0, 0, 0.2) !important;
+                color: rgba(255, 255, 255, 0.5) !important;
+            }
+
+            select.form-control option {
+                background: var(--rich-black);
+                color: var(--text-white);
+            }
+
+            .btn-primary {
+                background: linear-gradient(145deg, var(--primary-gold), var(--secondary-gold));
+                border: none;
+                color: var(--dark-black);
+                font-weight: 600;
+                transition: all 0.3s ease;
+            }
+
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+            }
+
+            .btn-secondary {
+                background: transparent;
+                border: 1px solid var(--primary-gold);
+                color: var(--primary-gold);
+            }
+
+            .btn-secondary:hover {
+                background: var(--primary-gold);
+                color: var(--dark-black);
+            }
+        </style>
     </head>
     <body>
         <jsp:include page="header.jsp"></jsp:include> <%-- Include Header --%>

@@ -24,7 +24,7 @@ import models.UserAccount;
  *
  * @author truon
  */
-@WebServlet({"/listAppointments", "/approveAppointment", "/declineAppointment"})
+@WebServlet({"/listAppointments", "/approveAppointment"})
 public class ListAppointmentServlet extends HttpServlet {
 
     /**
@@ -153,13 +153,6 @@ public class ListAppointmentServlet extends HttpServlet {
                     response.sendRedirect("listAppointments?success=3");
                 } else {
                     response.sendRedirect("listAppointments?error=3");
-                }
-            } else if ("/declineAppointment".equals(action)) {
-                boolean success = appointmentDAO.updateAppointmentStatus(appointmentId, false);
-                if (success) {
-                    response.sendRedirect("listAppointments?success=4");
-                } else {
-                    response.sendRedirect("listAppointments?error=4");
                 }
             } else if ("/listAppointments".equals(action)) {
                 boolean success = appointmentDAO.deleteAppointment(appointmentId);
