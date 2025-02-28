@@ -82,8 +82,8 @@
                                     <td>${customerMap[appointment.customerId].phoneNumber}</td>
                                 </c:if>
                                     
-                                <td><fmt:formatDate value="${appointment.dateStart}" pattern="yyyy-MM-dd HH:mm" /></td> <%-- Format date and time --%>
-                                <td><fmt:formatDate value="${appointment.dateEnd}" pattern="yyyy-MM-dd HH:mm" /></td>
+                                <td><fmt:formatDate value="${appointment.dateStart}" pattern="yyyy-MM-dd" /></td> <%-- Format date and time --%>
+                                <td><fmt:formatDate value="${appointment.dateEnd}" pattern="yyyy-MM-dd" /></td>
                                 <td>${appointment.note}</td>
                                 
                                 <td>

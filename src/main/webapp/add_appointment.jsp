@@ -28,8 +28,8 @@
                 </div>
                 <div class="mb-3">
                     <label for="employeeId" class="form-label">Assign Employee (Optional):</label>
-                    <select class="form-control" id="employeeId" name="employeeId">
-                        <option value="">-- Select an Employee --</option>
+                    <select class="form-control" id="employeeId" name="employeeId" required>
+                        <option value="" disabled selected>-- Select an Employee --</option>
                         <c:forEach var="employee" items="${employees}">
                             <option value="${employee.employeeId}">${employee.name}</option>
                         </c:forEach>
@@ -37,12 +37,10 @@
                 </div>
                 <div class="mb-3">
                     <label for="dateStart" class="form-label">Start Date:</label>
-                    <input type="datetime-local" class="form-control" id="dateStart" name="dateStart" required>
+                    <input type="date" class="form-control" id="dateStart" name="dateStart" required>
                 </div>
-                <div class="mb-3">
-                    <label for="dateEnd" class="form-label">End Date (Optional):</label>
-                    <input type="datetime-local" class="form-control" id="dateEnd" name="dateEnd">
-                </div>
+                <!-- Trường End Date sẽ tự động điền và ẩn -->
+                <input type="hidden" id="dateEnd" name="dateEnd">
                 <div class="mb-3">
                     <label for="note" class="form-label">Note:</label>
                     <textarea class="form-control" id="note" name="note" rows="3"></textarea>
@@ -63,6 +61,16 @@
         <jsp:include page="footer.jsp"></jsp:include> <%-- Include Footer --%>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            document.getElementById("dateStart").addEventListener("change", function () {
+                let startDate = new Date(this.value);
+                if (!isNaN(startDate.getTime())) {
+                    startDate.setDate(startDate.getDate() + 2); // Cộng 2 ngày
+                    let formattedDate = startDate.toISOString().slice(0, 10); // Format yyyy-MM-dd
+                    document.getElementById("dateEnd").value = formattedDate; // Gán giá trị vào input hidden
+                }
+            });
+        </script>
     </body>
 </html>
 
