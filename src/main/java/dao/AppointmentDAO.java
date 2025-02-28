@@ -123,4 +123,18 @@ public class AppointmentDAO {
         return null;
     }
 
+    public boolean deleteAppointment(int appointmentId) {
+        String sql = "DELETE FROM Appointments WHERE appointment_id = ? AND appointment_status = 0"; // Delete only if Inactive
+        try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, appointmentId);
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            return rowsAffected > 0; // Return true if delete was successful
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }

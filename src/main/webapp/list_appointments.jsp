@@ -22,14 +22,17 @@
 
 
             <div class="container mt-4 pt-5">
+                <!-- Hiển thị thông báo success -->
             <c:if test="${not empty success}">
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <div id="successAlert" class="alert alert-success alert-dismissible fade show" role="alert">
                     ${success}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             </c:if>
+
+            <!-- Hiển thị thông báo error -->
             <c:if test="${not empty error}">
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <div id="errorAlert" class="alert alert-danger alert-dismissible fade show" role="alert">
                     ${error}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
@@ -61,6 +64,8 @@
                             <th>Status</th>
                                 <c:if test="${userRole == 'employee'}">
                                 <th>Actions</th> </c:if>
+                                <c:if test="${userRole == 'customer'}">
+                                <th>Cancel appointment</th> </c:if>
                             </tr>
                         </thead>
                         <tbody>
@@ -86,13 +91,30 @@
                                         <button class="btn btn-outline-danger btn-sm" title="Decline Appointment"><i class="fas fa-times"></i> Decline</button>
                                     </td>
                                 </c:if>
+                                <c:if test="${userRole == 'customer'}">
+                                    <td>
+                                        <c:choose>
+                                            <c:when test="${appointment.appointmentStatus}">
+                                                <!-- Active Status: Disabled Delete Button -->
+                                                <button class="btn btn-outline-danger btn-sm" title="Cannot delete active appointment" disabled>
+                                                    <i class="fas fa-times"></i> Cancel
+                                                </button>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <!-- Inactive Status: Show Active Delete Button -->
+                                                <form action="listAppointments" method="POST" onsubmit="return confirm('Are you sure you want to delete this appointment?');">
+                                                    <input type="hidden" name="appointmentId" value="${appointment.appointmentId}">
+                                                    <button type="submit" class="btn btn-outline-danger btn-sm" title="Delete Appointment">
+                                                        <i class="fas fa-trash"></i> Cancel
+                                                    </button>
+                                                </form>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </td>
+                                </c:if>
                             </tr>
                         </c:forEach>
-                        <c:if test="${appointments.isEmpty()}">
-                            <tr>
-                                <td colspan="<c:choose><c:when test="${userRole == 'employee'}">6</c:when><c:otherwise>5</c:otherwise></c:choose>" class="text-center">No appointments found.</td>
-                                    </tr>
-                        </c:if>
+
                     </tbody>
                 </table>
             </div>
@@ -105,5 +127,24 @@
         <br>
         <jsp:include page="footer.jsp"></jsp:include> <%-- Include footer --%>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+                                                    // Tự động ẩn thông báo sau 3 giây
+                                                    setTimeout(function () {
+                                                        let successAlert = document.getElementById("successAlert");
+                                                        let errorAlert = document.getElementById("errorAlert");
+
+                                                        if (successAlert) {
+                                                            successAlert.style.transition = "opacity 0.5s";
+                                                            successAlert.style.opacity = "0";
+                                                            setTimeout(() => successAlert.style.display = "none", 500);
+                                                        }
+
+                                                        if (errorAlert) {
+                                                            errorAlert.style.transition = "opacity 0.5s";
+                                                            errorAlert.style.opacity = "0";
+                                                            setTimeout(() => errorAlert.style.display = "none", 500);
+                                                        }
+                                                    }, 3000); // 3 giây
+        </script>
     </body>
 </html>

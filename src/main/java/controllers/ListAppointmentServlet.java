@@ -30,6 +30,14 @@ public class ListAppointmentServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+    }
+
+    /**
+     * Handles the HTTP GET method by calling processRequest.
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
         HttpSession session = request.getSession();
@@ -81,27 +89,34 @@ public class ListAppointmentServlet extends HttpServlet {
         // ✅ Set appointments in request scope
         request.setAttribute("appointments", appointmentList);
 
-        // ✅ Handle success/error messages from redirects
-        if (request.getParameter("success") != null) {
-            request.setAttribute("success", "Appointment added successfully!");
-        }
-        if (request.getParameter("error") != null) {
-            request.setAttribute("error", "Error adding appointment. Please try again.");
+        try {
+            String successParam = request.getParameter("success");
+            String errorParam = request.getParameter("error");
+
+            if (successParam != null) {
+                int successCode = Integer.parseInt(successParam);
+                if (successCode == 1) {
+                    request.setAttribute("success", "Appointment added successfully!");
+                } else if (successCode == 2) {
+                    request.setAttribute("success", "Appointment cancelled successfully!");
+                }
+            }
+
+            if (errorParam != null) {
+                int errorCode = Integer.parseInt(errorParam);
+                if (errorCode == 1) {
+                    request.setAttribute("error", "Error adding appointment. Please try again.");
+                } else if (errorCode == 2) {
+                    request.setAttribute("error", "Failed to cancel appointment.");
+                }
+            }
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid success/error parameter: " + e.getMessage());
         }
 
         // ✅ Forward to JSP
         request.getRequestDispatcher("list_appointments.jsp").forward(request, response);
 
-
-    }
-
-    /**
-     * Handles the HTTP GET method by calling processRequest.
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
     }
 
     /**
@@ -110,7 +125,24 @@ public class ListAppointmentServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            int appointmentId = Integer.parseInt(request.getParameter("appointmentId"));
+
+            AppointmentDAO appointmentDAO = new AppointmentDAO();
+            boolean success = appointmentDAO.deleteAppointment(appointmentId);
+
+            if (success) {
+                response.sendRedirect("listAppointments?success=2"); // Success deleting appointment
+            } else {
+                response.sendRedirect("listAppointments?error=2"); // Error deleting appointment
+            }
+            
+            
+
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            response.sendRedirect("listAppointments?error=Invalid appointment ID");
+        }
     }
 
     /**
