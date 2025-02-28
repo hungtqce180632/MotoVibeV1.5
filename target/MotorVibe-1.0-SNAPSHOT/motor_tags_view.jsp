@@ -98,6 +98,8 @@
         transition: all 0.3s ease;
         margin-top: auto;
         width: 100%;
+        position: relative;
+        z-index: 2; /* Ensure button is above other elements */
     }
     
     .motor-card .btn-info:hover {
@@ -155,6 +157,7 @@
         z-index: 1;
         opacity: 0;
         transition: all 0.6s ease;
+        pointer-events: none; /* Add this line to make the overlay non-blocking */
     }
     
     .motor-card:hover::before {
