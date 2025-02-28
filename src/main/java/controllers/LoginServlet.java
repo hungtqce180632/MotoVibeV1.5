@@ -1,24 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controllers;
 
 import dao.UserAccountDAO;
-import java.io.IOException;
-import java.io.PrintWriter;
+import models.UserAccount;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import models.UserAccount;
+import java.io.IOException;
 
-/**
- *
- * @author tiend
- */
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
 
@@ -33,10 +24,15 @@ public class LoginServlet extends HttpServlet {
         UserAccount user = userDao.login(email, password);
 
         if (user != null) {
+            // Lưu thông tin người dùng vào session
             HttpSession session = request.getSession();
-            session.setAttribute("user", user);
-            response.sendRedirect("motorManagement"); // Chuyển hướng sau khi đăng nhập thành công
+            session.setAttribute("user", user); // Lưu đối tượng UserAccount vào session
+            session.setAttribute("userId", user.getUserId()); // Lưu ID người dùng vào session
+            
+            // Chuyển hướng sau khi đăng nhập thành công
+            response.sendRedirect("index.jsp");
         } else {
+            // Thông báo lỗi nếu đăng nhập không thành công
             request.setAttribute("error", "Invalid email or password");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }

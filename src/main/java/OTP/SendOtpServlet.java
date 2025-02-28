@@ -19,6 +19,7 @@ import java.io.PrintWriter;
 import java.util.Properties;
 import java.util.Random;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,6 +28,7 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author thaii
  */
+@WebServlet("/sendOtp")
 public class SendOtpServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -117,7 +119,7 @@ public class SendOtpServlet extends HttpServlet {
         props.put("mail.smtp.port", "587");
 
         // Create mail session with credentials
-        Session session = Session.getInstance(props, new jakarta.mail.Authenticator() {
+            Session session = Session.getInstance(props, new jakarta.mail.Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(fromEmail, password);
