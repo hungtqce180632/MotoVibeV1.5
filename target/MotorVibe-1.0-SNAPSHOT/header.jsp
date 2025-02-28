@@ -131,7 +131,12 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="inventoryLog"><i class="fas fa-clipboard-list me-1"></i> Inventory Log</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="revenueStatistic"><i class="fas fa-chart-line"></i> View Revenue</a>
+                                </li>
                             </c:if>
+
+
                         </ul>
                     </div>
                     <div class="d-flex">

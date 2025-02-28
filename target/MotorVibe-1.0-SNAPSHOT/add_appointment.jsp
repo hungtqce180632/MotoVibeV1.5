@@ -115,7 +115,7 @@
                         <input type="number" class="form-control" id="customerId" name="customerId" value="${customerId}" readonly>
                 </div>
                 <div class="mb-3">
-                    <label for="employeeId" class="form-label">Assign Employee (Optional):</label>
+                    <label for="employeeId" class="form-label">Assign Employee:</label>
                     <select class="form-control" id="employeeId" name="employeeId" required>
                         <option value="" disabled selected>-- Select an Employee --</option>
                         <c:forEach var="employee" items="${employees}">
