@@ -35,6 +35,7 @@ public class LoginServlet extends HttpServlet {
         if (user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
+            session.setAttribute("userRole", user.getRole()); // Add this line
             response.sendRedirect("motorManagement"); // Chuyển hướng sau khi đăng nhập thành công
         } else {
             request.setAttribute("error", "Invalid email or password");
