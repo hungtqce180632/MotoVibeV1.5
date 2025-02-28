@@ -137,4 +137,18 @@ public class AppointmentDAO {
         return false;
     }
 
+    public boolean updateAppointmentStatus(int appointmentId, boolean status) {
+        String sql = "UPDATE Appointments SET appointment_status = ? WHERE appointment_id = ?";
+        try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setBoolean(1, status);
+            preparedStatement.setInt(2, appointmentId);
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            return rowsAffected > 0; // Return true nếu cập nhật thành công
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

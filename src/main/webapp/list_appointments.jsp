@@ -58,6 +58,10 @@
                     <thead class="table-light">
                         <tr>
                             <th>Appointment ID</th>
+                                <c:if test="${userRole == 'employee'}">
+                                <th>Customer Name</th>
+                                <th>Phone Number</th>
+                                </c:if>
                             <th>Start Time</th>
                             <th>End Time</th>
                             <th>Note</th>
@@ -72,9 +76,16 @@
                         <c:forEach var="appointment" items="${appointments}">
                             <tr>
                                 <td>${appointment.appointmentId}</td>
+                                
+                                <c:if test="${userRole == 'employee'}">
+                                    <td>${customerMap[appointment.customerId].name}</td>
+                                    <td>${customerMap[appointment.customerId].phoneNumber}</td>
+                                </c:if>
+                                    
                                 <td><fmt:formatDate value="${appointment.dateStart}" pattern="yyyy-MM-dd HH:mm" /></td> <%-- Format date and time --%>
                                 <td><fmt:formatDate value="${appointment.dateEnd}" pattern="yyyy-MM-dd HH:mm" /></td>
                                 <td>${appointment.note}</td>
+                                
                                 <td>
                                     <c:choose>
                                         <c:when test="${appointment.appointmentStatus}">
@@ -85,12 +96,26 @@
                                         </c:otherwise>
                                     </c:choose>
                                 </td>
+                                <!-- Nếu là Employee, hiển thị nút Approve / Decline -->
                                 <c:if test="${userRole == 'employee'}">
                                     <td>
-                                        <button class="btn btn-outline-success btn-sm me-1" title="Approve Appointment"><i class="fas fa-check"></i> Approve</button>
-                                        <button class="btn btn-outline-danger btn-sm" title="Decline Appointment"><i class="fas fa-times"></i> Decline</button>
+                                        <form action="approveAppointment" method="POST" class="d-inline">
+                                            <input type="hidden" name="appointmentId" value="${appointment.appointmentId}">
+                                            <button type="submit" class="btn btn-outline-success btn-sm me-1" title="Approve Appointment">
+                                                <i class="fas fa-check"></i> Approve
+                                            </button>
+                                        </form>
+
+                                        <form action="declineAppointment" method="POST" class="d-inline">
+                                            <input type="hidden" name="appointmentId" value="${appointment.appointmentId}">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm" title="Decline Appointment">
+                                                <i class="fas fa-times"></i> Decline
+                                            </button>
+                                        </form>
                                     </td>
                                 </c:if>
+
+                                <!-- Nếu là Customer, hiển thị nút Cancel (chỉ khi appointment là Inactive) -->
                                 <c:if test="${userRole == 'customer'}">
                                     <td>
                                         <c:choose>
@@ -120,8 +145,9 @@
             </div>
             <div class="mt-3">
                 <a href="index.jsp" class="btn btn-outline-secondary"><i class="fas fa-arrow-left"></i>Back to Dashboard</a>
-
-                <a href="appointment" class="btn btn-outline-info"><i class="fa-solid fa-plus"></i>Add appointments</a>
+                <c:if test="${userRole == 'customer'}">
+                    <a href="appointment" class="btn btn-outline-info"><i class="fa-solid fa-plus"></i>Add appointments</a>
+                </c:if>
             </div>
         </div>
         <br>
