@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * khi Decline thÌ admin phải accept mới đc Decline
@@ -150,5 +151,9 @@ public class AppointmentDAO {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public List<Map<String, Object>> getRevenueStatistics() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

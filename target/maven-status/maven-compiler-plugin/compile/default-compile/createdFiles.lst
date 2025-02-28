@@ -25,6 +25,7 @@ dao\FuelDAO.class
 controllers\DeleteReviewServlet.class
 OTP\SendOtpServlet$1.class
 dao\WarrantyDAO.class
+controllers\RevenueStatisticServlet.class
 dao\WishlistDAO.class
 controllers\CreateWarrantyServlet.class
 controllers\EditReviewServlet.class
@@ -45,6 +46,7 @@ controllers\ImageServlet.class
 utils\DBContext.class
 controllers\MotorDetailServlet.class
 controllers\MotorListServlet.class
+controllers\MotorServlet.class
 controllers\ProfileServlet.class
 controllers\AddMotorServlet.class
 controllers\ListReviewsServlet.class

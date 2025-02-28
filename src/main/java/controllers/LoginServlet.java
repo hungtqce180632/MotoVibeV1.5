@@ -1,5 +1,7 @@
 package controllers;
 
+import dao.CustomerDAO;
+import dao.EmployeeDAO;
 import dao.UserAccountDAO;
 import models.UserAccount;
 import jakarta.servlet.ServletException;
@@ -9,6 +11,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.SQLException;
+import models.Customer;
+import models.Employee;
 
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
@@ -20,27 +25,40 @@ public class LoginServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        UserAccountDAO userDao = new UserAccountDAO();
-        UserAccount user = userDao.login(email, password);
+        UserAccountDAO userDAO = new UserAccountDAO();
 
-        if (user != null) {
-            // Lưu thông tin người dùng vào session
+        UserAccount user = userDAO.login(email, password);
+        if (user != null && user.isStatus()) { // Check if account is active
             HttpSession session = request.getSession();
-<<<<<<< HEAD
             session.setAttribute("user", user);
-            session.setAttribute("userRole", user.getRole()); // Add this line
-            response.sendRedirect("motorManagement"); // Chuyển hướng sau khi đăng nhập thành công
-=======
-            session.setAttribute("user", user); // Lưu đối tượng UserAccount vào session
-            session.setAttribute("userId", user.getUserId()); // Lưu ID người dùng vào session
             
-            // Chuyển hướng sau khi đăng nhập thành công
-            response.sendRedirect("index.jsp");
->>>>>>> origin/main
+            // Set role-specific attributes
+            if ("customer".equals(user.getRole())) {
+                CustomerDAO customerDAO = new CustomerDAO();
+                Customer customer = customerDAO.getCustomerByUserId(user.getUserId());
+                session.setAttribute("customer", customer);
+                response.sendRedirect("index.jsp");
+                return;
+            } else if ("employee".equals(user.getRole())) {
+                EmployeeDAO employeeDAO = new EmployeeDAO();
+                Employee employee = employeeDAO.getEmployeeByUserId(user.getUserId());
+                session.setAttribute("employee", employee);
+                response.sendRedirect("index.jsp");
+                return;
+            } else if ("admin".equals(user.getRole())) {
+                response.sendRedirect("index.jsp");
+                return;
+            }
         } else {
-            // Thông báo lỗi nếu đăng nhập không thành công
             request.setAttribute("error", "Invalid email or password");
             request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
         }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.getRequestDispatcher("login.jsp").forward(request, response);
     }
 }
