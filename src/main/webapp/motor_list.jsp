@@ -63,25 +63,25 @@
                 padding: 20px;
                 margin-bottom: 30px;
             }
-            
+
             .form-control, .form-select {
                 background: rgba(26, 26, 26, 0.9);
                 border: 1px solid var(--primary-gold);
                 color: var(--text-gold);
                 padding: 10px;
             }
-            
+
             .form-control::placeholder {
                 color: rgba(255, 255, 255, 0.5);
             }
-            
+
             .form-control:focus, .form-select:focus {
                 background: rgba(26, 26, 26, 0.95);
                 border-color: var(--primary-gold);
                 box-shadow: 0 0 0 0.25rem rgba(212, 175, 55, 0.25);
                 color: var(--text-gold);
             }
-            
+
             .btn-primary {
                 background: linear-gradient(145deg, var(--primary-gold), var(--secondary-gold));
                 border: none;
@@ -92,12 +92,12 @@
                 text-transform: uppercase;
                 letter-spacing: 1px;
             }
-            
+
             .btn-primary:hover {
                 transform: translateY(-2px);
                 box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
             }
-            
+
             .btn-secondary {
                 background: transparent;
                 border: 1px solid var(--primary-gold);
@@ -107,20 +107,20 @@
                 letter-spacing: 1px;
                 transition: all 0.3s ease;
             }
-            
+
             .btn-secondary:hover {
                 background: rgba(212, 175, 55, 0.1);
                 color: var(--primary-gold);
                 transform: translateY(-2px);
             }
-            
+
             .btn-outline-success {
                 border: 1px solid var(--primary-gold);
                 color: var(--primary-gold);
                 background: transparent;
                 transition: all 0.3s ease;
             }
-            
+
             .btn-outline-success:hover {
                 background: var(--primary-gold);
                 color: var(--dark-black);
@@ -149,55 +149,55 @@
                 border-bottom: 1px solid rgba(212, 175, 55, 0.2);
                 transition: all 0.3s ease;
             }
-            
+
             .table tbody tr:hover {
                 background: rgba(212, 175, 55, 0.05);
             }
-            
+
             .table tbody tr:last-child {
                 border-bottom: none;
             }
-            
+
             .table td, .table th {
                 vertical-align: middle;
             }
-            
+
             .text-success {
                 color: #6eff7a !important;
             }
-            
+
             .text-danger {
                 color: #ff6e6e !important;
             }
-            
+
             .btn-sm {
                 padding: 5px 10px;
                 font-size: 0.8rem;
             }
-            
+
             .btn-full-width {
                 width: 100%;
                 margin-top: 5px;
             }
-            
+
             .btn-warning {
                 background: linear-gradient(145deg, #f0ad4e, #ec971f);
                 border: none;
                 color: var(--dark-black);
             }
-            
+
             .btn-info {
                 background: linear-gradient(145deg, #5bc0de, #31b0d5);
                 border: none;
                 color: var(--dark-black);
             }
-            
+
             .motor-image {
                 border: 2px solid var(--primary-gold);
                 border-radius: 5px;
                 transition: all 0.3s ease;
             }
-            
+
             .motor-image:hover {
                 transform: scale(1.05);
                 box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
@@ -207,18 +207,21 @@
     <body>
         <jsp:include page="header.jsp"></jsp:include>
 
-        <div class="container mt-4">
-            <h2 class="text-center"><i class="fas fa-motorcycle me-2"></i>Motorbike Collection</h2>
+            <div class="container mt-4">
+                <h2 class="text-center"><i class="fas fa-motorcycle me-2"></i>Motorbike Collection</h2>
 
-            <div class="filter-container">
-                <div class="d-flex justify-content-between mb-3">
-                    <div>
+                <div class="filter-container">
+                    <div class="d-flex justify-content-between mb-3">
+                        <div>
                         <c:if test="${sessionScope.user.role eq 'admin'}">
                             <a href="addMotor" class="btn btn-primary">
                                 <i class="fas fa-plus me-2"></i>Add New Motorbike
                             </a>
                             <a href="inventoryLog" class="btn btn-secondary ms-2">
                                 <i class="fas fa-history me-2"></i>Inventory Log
+                            </a>
+                            <a href="adminOrders" class="btn btn-warning ms-2">
+                                <i class="fas fa-shopping-cart me-2"></i>Order
                             </a>
                         </c:if>
                     </div>

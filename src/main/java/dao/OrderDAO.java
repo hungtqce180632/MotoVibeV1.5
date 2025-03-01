@@ -179,7 +179,7 @@ public class OrderDAO {
         return false;
     }
 
-    public List<Order> getAllOrders() {
+    public  List<Order> getAllOrders() {
         List<Order> orders = new ArrayList<>();
         String sql = "SELECT * FROM [dbo].[Orders]";
 
@@ -214,4 +214,5 @@ public class OrderDAO {
         }
         return orders;
     }
+    
 }
