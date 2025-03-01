@@ -105,28 +105,47 @@ public class ChatServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String message = request.getParameter("message");
-        HttpSession session = request.getSession();
-        Integer questionCount = (Integer) session.getAttribute("questionCount");
-        if (questionCount == null) {
-            questionCount = 0;
-        }
-
-        String aiResponseText;
-        if (isMotorcycleRelated(message)) {
-            aiResponseText = getGeminiApiResponse(message); // Call Gemini API
-        } else {
-            aiResponseText = "I cannot support this problem. Please ask about motorbikes.";
-        }
-
-        questionCount++;
-        session.setAttribute("questionCount", questionCount);
-
-        response.setContentType("text/plain");
-        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/plain;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        out.write(aiResponseText);
-        out.flush();
+        
+        try {
+            String message = request.getParameter("message");
+            if (message == null || message.trim().isEmpty()) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                out.write("Please provide a message");
+                return;
+            }
+            
+            HttpSession session = request.getSession();
+            Integer questionCount = (Integer) session.getAttribute("questionCount");
+            if (questionCount == null) {
+                questionCount = 0;
+            }
+
+            String aiResponseText;
+            if (isMotorcycleRelated(message)) {
+                aiResponseText = getGeminiApiResponse(message); // Call Gemini API
+                if (aiResponseText == null || aiResponseText.isEmpty()) {
+                    aiResponseText = "I apologize, but I couldn't get a proper response. Please try again or ask a different question about motorcycles.";
+                }
+            } else {
+                aiResponseText = "I'm an AI assistant specialized in motorcycles. Please ask me about motorcycles, bikes, riding, or related topics.";
+            }
+
+            questionCount++;
+            session.setAttribute("questionCount", questionCount);
+
+            out.write(aiResponseText);
+        } catch (Exception e) {
+            // Log the error (in production, use a proper logger)
+            e.printStackTrace();
+            
+            // Send a friendly error message to the client
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.write("Sorry, I'm having trouble processing your request right now. Please try again later.");
+        } finally {
+            out.close();
+        }
     }
 
     private boolean isMotorcycleRelated(String message) {
@@ -140,24 +159,33 @@ public class ChatServlet extends HttpServlet {
     }
 
     private String getGeminiApiResponse(String message) {
-        StringBuilder responseBuilder = new StringBuilder();
         try {
             URL url = new URL(GEMINI_API_URL);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setDoOutput(true);
+            connection.setConnectTimeout(10000);  // 10 second timeout for connection
+            connection.setReadTimeout(30000);     // 30 second timeout for reading
 
-            String jsonInputString = String.format("{\"contents\": [{\"parts\":[{\"text\": \"%s\"}]}]}", message);
+            // Sanitize the message for JSON
+            String sanitizedMessage = message.replace("\\", "\\\\")
+                                           .replace("\"", "\\\"")
+                                           .replace("\n", "\\n")
+                                           .replace("\r", "\\r");
+            
+            String jsonInputString = String.format(
+                "{\"contents\": [{\"parts\":[{\"text\": \"Answer this motorcycle-related question in a helpful, friendly and concise way: %s\"}]}]}", 
+                sanitizedMessage);
 
-            try ( OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(), "UTF-8")) {
+            try (OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(), "UTF-8")) {
                 writer.write(jsonInputString);
                 writer.flush();
             }
 
             int responseCode = connection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
-                try ( BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"))) {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"))) {
                     // Use Jakarta JSON Processing to parse the JSON response
                     JsonReader jsonReader = Json.createReader(reader);
                     JsonObject jsonResponse = jsonReader.readObject();
@@ -167,61 +195,57 @@ public class ChatServlet extends HttpServlet {
                     if (aiTextResponse != null) {
                         return aiTextResponse;
                     } else {
-                        return "Sorry, I couldn't extract the text from the AI response."; // Handle parsing error
+                        return "Sorry, I couldn't extract the text from the AI response. Please try again.";
                     }
-
                 }
-
             } else {
-                return "Gemini API request failed. Response Code: " + responseCode; //API error
+                // Read error stream for better diagnosis
+                try (BufferedReader errorReader = new BufferedReader(new InputStreamReader(
+                        connection.getErrorStream() != null ? connection.getErrorStream() : 
+                        new java.io.ByteArrayInputStream(new byte[0])))) {
+                    StringBuilder errorResponse = new StringBuilder();
+                    String line;
+                    while ((line = errorReader.readLine()) != null) {
+                        errorResponse.append(line);
+                    }
+                    System.err.println("Gemini API error: " + errorResponse.toString());
+                }
+                
+                return "I'm having trouble connecting to my knowledge source (Error: " + responseCode + "). Please try again later.";
             }
-
         } catch (IOException e) {
-            e.printStackTrace(); // Log error properly in production
-            return "Error communicating with AI service: " + e.getMessage(); // Network/connection error
+            e.printStackTrace();
+            return "I'm having technical difficulties right now. Please try again in a moment.";
         }
     }
 
     private String extractTextFromGeminiResponse(JsonObject jsonResponse) {
         try {
-            // **Robust JSON extraction using Jakarta JSON Processing**
-
-            // Assuming the Gemini API response structure looks something like this (adjust based on actual API response):
-            // {
-            //   "candidates": [
-            //     {
-            //       "content": {
-            //         "parts": [
-            //           {
-            //             "text": "AI response text here" code mẫu của gemini nhưng ta sẽ biến thể lại chút
-            //           }
-            //         ]
-            //       }
-            //     }
-            //   ]
-            // }
             if (jsonResponse.containsKey("candidates")) {
                 JsonArray candidates = jsonResponse.getJsonArray("candidates");
                 if (!candidates.isEmpty()) {
-                    JsonObject candidate = candidates.getJsonObject(0); // Get the first candidate
+                    JsonObject candidate = candidates.getJsonObject(0);
                     if (candidate.containsKey("content")) {
                         JsonObject content = candidate.getJsonObject("content");
                         if (content.containsKey("parts")) {
                             JsonArray parts = content.getJsonArray("parts");
                             if (!parts.isEmpty()) {
-                                JsonObject part = parts.getJsonObject(0); // Get the first part
+                                JsonObject part = parts.getJsonObject(0);
                                 if (part.containsKey("text")) {
                                     JsonString textValue = part.getJsonString("text");
-                                    return textValue.getString(); // Extract the text
+                                    return textValue.getString();
                                 }
                             }
                         }
                     }
                 }
             }
-            return null; // Text not found in expected structure
+            
+            // If we can't find the expected structure, log the actual response for debugging
+            System.err.println("Unexpected Gemini response structure: " + jsonResponse.toString());
+            return null;
         } catch (Exception e) {
-            e.printStackTrace(); // Log parsing error
+            e.printStackTrace();
             return null;
         }
     }
