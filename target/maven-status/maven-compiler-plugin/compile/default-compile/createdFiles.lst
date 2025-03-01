@@ -6,6 +6,7 @@ controllers\CreateReviewServlet.class
 dao\OrderDAO.class
 controllers\CreateOrderServlet.class
 dao\CustomerDAO.class
+dao\MotoBikeStatisticsDAO.class
 OTP\VerifyOtpServlet.class
 dao\MotorDAO.class
 models\InventoryLog.class
@@ -51,6 +52,7 @@ controllers\MotorServlet.class
 controllers\ProfileServlet.class
 controllers\AddMotorServlet.class
 controllers\ListReviewsServlet.class
+controllers\MotoBikeStatisticsServlet.class
 models\Event.class
 models\UserAccount.class
 controllers\MotorManagementServlet.class

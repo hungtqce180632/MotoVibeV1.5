@@ -13,12 +13,12 @@
                 color: var(--text-gold);
             }
 
-           
-            .event-list-container {
+
+            .list-container {
                 padding-top: 100px;
                 padding-bottom: 50px;
             }
-            
+
             h1 {
                 color: var(--primary-gold);
                 text-transform: uppercase;
@@ -30,14 +30,14 @@
             }
 
             /* Nếu navbar của bạn có `fixed-top`, hãy chắc chắn nó có background */
-            
+
         </style>
     </head>
     <body class="d-flex flex-column min-vh-100">
         <%-- Include header để có navbar cố định --%>
         <jsp:include page="header.jsp"></jsp:include>
 
-            <div class="container event-list-container">
+            <div class="container list-container">
                 <h1><i class="fas fa-chart-line"></i> Revenue Statistics</h1>
                 <p class="lead">View monthly revenue statistics, including the number of cars sold and total revenue.</p>
 
