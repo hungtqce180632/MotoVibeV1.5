@@ -21,6 +21,7 @@ models\Appointment.class
 controllers\ToggleMotorStatusServlet.class
 controllers\LoginServlet.class
 controllers\ManageEventServlet.class
+controllers\ResetPasswordServlet.class
 dao\FuelDAO.class
 controllers\DeleteReviewServlet.class
 OTP\SendOtpServlet$1.class
@@ -59,7 +60,9 @@ controllers\ListAppointmentServlet.class
 dao\InventoryLogDAO.class
 controllers\ListOrdersServlet.class
 controllers\ChangeQuantityServlet.class
+dao\RevenueStatisticsDAO.class
 models\Model.class
+controllers\OrderAdminServlet.class
 dao\AppointmentDAO.class
 controllers\LogoutServlet.class
 controllers\ConfirmOrderServlet.class

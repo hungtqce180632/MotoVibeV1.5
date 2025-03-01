@@ -24,14 +24,16 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-
+        
         UserAccountDAO userDAO = new UserAccountDAO();
 
         UserAccount user = userDAO.login(email, password);
+
+        HttpSession session = request.getSession();
+        session.setAttribute("user", user);
+        session.setAttribute("userRole", "admin");
+
         if (user != null && user.isStatus()) { // Check if account is active
-            HttpSession session = request.getSession();
-            session.setAttribute("user", user);
-            session.setAttribute("userRole", "admin");
 
             // Set role-specific attributes
             if ("customer".equals(user.getRole())) {

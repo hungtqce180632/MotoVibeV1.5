@@ -24,17 +24,17 @@
                 --rich-black: #1A1A1A;
                 --text-gold: #F5E6CC;
             }
-            
+
             body {
                 background: var(--dark-black);
                 color: var(--text-gold);
             }
-            
+
             .event-list-container {
                 padding-top: 100px;
                 padding-bottom: 50px;
             }
-            
+
             h1 {
                 color: var(--primary-gold);
                 text-transform: uppercase;
@@ -44,7 +44,7 @@
                 text-align: center;
                 position: relative;
             }
-            
+
             h1::after {
                 content: '';
                 position: absolute;
@@ -56,7 +56,7 @@
                 background: var(--primary-gold);
                 box-shadow: 0 0 10px var(--primary-gold);
             }
-            
+
             .btn-gold {
                 background: linear-gradient(145deg, var(--primary-gold), var(--secondary-gold));
                 color: var(--dark-black);
@@ -68,12 +68,12 @@
                 transition: all 0.3s ease;
                 text-transform: uppercase;
             }
-            
+
             .btn-gold:hover {
                 transform: translateY(-3px);
                 box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
             }
-            
+
             .card {
                 background: linear-gradient(145deg, var(--dark-black), var(--rich-black));
                 border: 1px solid var(--secondary-gold);
@@ -86,13 +86,13 @@
                 display: flex;
                 flex-direction: column;
             }
-            
+
             .card:hover {
                 transform: translateY(-10px);
                 box-shadow: 0 15px 35px rgba(212, 175, 55, 0.3);
                 border-color: var(--primary-gold);
             }
-            
+
             .card img {
                 width: 100%;
                 height: 250px;
@@ -100,19 +100,19 @@
                 border-bottom: 2px solid var(--primary-gold);
                 transition: all 0.5s ease;
             }
-            
+
             .card:hover img {
                 transform: scale(1.05);
                 filter: brightness(1.1);
             }
-            
+
             .card-content {
                 padding: 1.5rem;
                 display: flex;
                 flex-direction: column;
                 flex-grow: 1;
             }
-            
+
             .card-title {
                 color: var(--primary-gold);
                 font-size: 1.5rem;
@@ -122,7 +122,7 @@
                 text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
                 position: relative;
             }
-            
+
             .card-title::after {
                 content: '';
                 position: absolute;
@@ -133,7 +133,7 @@
                 height: 2px;
                 background: var(--primary-gold);
             }
-            
+
             .card-meta {
                 margin-top: auto;
                 display: flex;
@@ -142,12 +142,12 @@
                 padding-top: 1.5rem;
                 border-top: 1px solid rgba(212, 175, 55, 0.2);
             }
-            
+
             .date-info {
                 font-size: 0.9rem;
                 opacity: 0.8;
             }
-            
+
             .btn-primary {
                 background: linear-gradient(145deg, var(--primary-gold), var(--secondary-gold));
                 border: none;
@@ -155,17 +155,17 @@
                 font-weight: 600;
                 transition: all 0.3s ease;
             }
-            
+
             .btn-primary:hover {
                 transform: translateY(-2px);
                 box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
             }
-            
+
             .text-muted {
                 color: var(--text-gold) !important;
                 opacity: 0.7;
             }
-            
+
             /* Empty state */
             .no-events {
                 background: linear-gradient(145deg, var(--rich-black), var(--dark-black));
@@ -175,12 +175,12 @@
                 text-align: center;
                 margin: 2rem 0;
             }
-            
+
             .no-events h4 {
                 color: var (--primary-gold);
                 margin-bottom: 1rem;
             }
-            
+
             .no-events i {
                 font-size: 4rem;
                 color: var(--primary-gold);
@@ -191,11 +191,12 @@
     </head>
     <body class="d-flex flex-column min-vh-100">
         <jsp:include page="header.jsp"></jsp:include>
-        
-        <div class="container event-list-container">
-            <h1><i class="fas fa-calendar-alt me-2"></i>Upcoming Events</h1>
 
-            <c:if test="${sessionScope.userRole == 'admin'}">
+            <div class="container event-list-container">
+                <h1><i class="fas fa-calendar-alt me-2"></i>Upcoming Events</h1>
+
+                <!-- Admin button -->
+            <c:if test="${sessionScope.user.role eq 'admin'}">
                 <div class="text-center mb-5">
                     <a href="ManageEventServlet" class="btn btn-gold">
                         <i class="fas fa-cog me-2"></i>Manage Events
@@ -211,16 +212,16 @@
                                 <div class="card h-100">
                                     <img src="${pageContext.request.contextPath}/images/new-motorcycle-launch.jpg" 
                                          alt="${event.event_name}" class="card-img-top"/>
-                                    
+
                                     <div class="card-content">
                                         <h5 class="card-title">${event.event_name}</h5>
-                                        
+
                                         <div class="card-meta">
                                             <div class="date-info">
                                                 <div><i class="fas fa-calendar-day me-2"></i>Start: ${event.date_start}</div>
                                                 <div><i class="fas fa-calendar-check me-2"></i>End: ${event.date_end}</div>
                                             </div>
-                                            
+
                                             <form action="listevents" method="post">
                                                 <input type="hidden" name="event_id" value="${event.event_id}">
                                                 <button type="submit" class="btn btn-primary">
