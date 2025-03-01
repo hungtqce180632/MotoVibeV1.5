@@ -79,7 +79,7 @@
                             <td>${motor.modelName}</td>
                             <td>$${motor.price}</td>
                             <td>${motor.description}</td>
-                            <td>${motor.quantity}</td>
+                            <td>1</td> <!-- Set quantity to 1 for each product -->
                             <td>
                                 <form class="wishlist-action-form" data-motor-id="${motor.motorId}">
                                     <input type="hidden" name="motorId" value="${motor.motorId}" />
@@ -94,19 +94,6 @@
         </c:if>
     </div>
 
-<<<<<<< HEAD
-=======
-    <!-- Add new motorbike to wishlist -->
-    <div class="add-motor">
-        <h2>Add a new motorbike to your wishlist</h2>
-        <form id="add-wishlist-form">
-            <label for="motorId">Motorbike ID:</label>
-            <input type="number" name="motorId" id="motorId" required>
-            <input type="hidden" name="action" value="add" />
-            <button type="submit">Add to Wishlist</button>
-        </form>
-    </div>
->>>>>>> origin/main
 
     <script>
         // Handle Add to Wishlist via AJAX

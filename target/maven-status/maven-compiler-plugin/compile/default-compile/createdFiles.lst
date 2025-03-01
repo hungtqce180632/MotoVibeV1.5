@@ -7,10 +7,7 @@ dao\OrderDAO.class
 controllers\CreateOrderServlet.class
 dao\CustomerDAO.class
 dao\MotoBikeStatisticsDAO.class
-<<<<<<< HEAD
 controllers\CustomerListServlet.class
-=======
->>>>>>> origin/main
 OTP\VerifyOtpServlet.class
 dao\MotorDAO.class
 models\InventoryLog.class
@@ -38,10 +35,7 @@ controllers\CreateWarrantyServlet.class
 controllers\EditReviewServlet.class
 models\Motor.class
 controllers\DeleteEventServlet.class
-<<<<<<< HEAD
 controllers\AccountManagementServlet.class
-=======
->>>>>>> origin/main
 controllers\ChangeEventStatusServlet.class
 models\Employee.class
 controllers\CreateEventServlet.class
@@ -65,15 +59,10 @@ controllers\MotoBikeStatisticsServlet.class
 models\Event.class
 models\UserAccount.class
 controllers\MotorManagementServlet.class
-<<<<<<< HEAD
-models\Order.class
-controllers\EmployeeOrderServlet.class
-controllers\ModelsListServlet.class
-=======
 controllers\ConfirmOrderEmployeeServlet.class
 models\Order.class
 controllers\EmployeeOrderServlet.class
->>>>>>> origin/main
+controllers\ModelsListServlet.class
 dao\ReviewDAO.class
 controllers\ListAppointmentServlet.class
 dao\InventoryLogDAO.class
@@ -85,10 +74,7 @@ controllers\OrderAdminServlet.class
 dao\AppointmentDAO.class
 controllers\LogoutServlet.class
 controllers\ConfirmOrderServlet.class
-<<<<<<< HEAD
 controllers\UpdateModelServlet.class
-=======
->>>>>>> origin/main
 controllers\RegisterServlet.class
 models\Customer.class
 controllers\EditEventServlet.class
