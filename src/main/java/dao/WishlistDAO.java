@@ -86,18 +86,23 @@ public class WishlistDAO {
     }
 
     public boolean addToWishlist(int motorId, int customerId) {
-        String sql = "INSERT INTO wishlist (motor_id, customer_id) VALUES (?, ?)";
-        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, motorId);  // Set motorId
-            stmt.setInt(2, customerId);  // Set customerId
-
-            int row = stmt.executeUpdate();  // Execute the insertion query
-            return row > 0; // Returns true if the insertion was successful
-        } catch (SQLException e) {
-            e.printStackTrace();  // Log the error for debugging
-            return false;  // Return false if insertion fails
-        }
+    // First, check if the motor already exists in the wishlist
+    if (checkHaveWish(motorId, customerId)) {
+        return false; // If motor already in wishlist, return false
     }
+
+    String sql = "INSERT INTO wishlist (motor_id, customer_id) VALUES (?, ?)";
+    try (Connection conn = DBContext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setInt(1, motorId);  // Set motorId
+        stmt.setInt(2, customerId);  // Set customerId
+
+        int row = stmt.executeUpdate();  // Execute the insertion query
+        return row > 0; // Returns true if the insertion was successful
+    } catch (SQLException e) {
+        e.printStackTrace();  // Log the error for debugging
+        return false;  // Return false if insertion fails
+    }
+}
 
     public boolean checkHaveWish(int motorId, int customerId) {
         String sql = "SELECT * FROM wishlist WHERE motor_id = ? AND customer_id = ?";  // Updated to motor_id

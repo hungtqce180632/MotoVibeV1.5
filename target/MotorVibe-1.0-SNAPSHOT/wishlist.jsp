@@ -79,7 +79,7 @@
                             <td>${motor.modelName}</td>
                             <td>$${motor.price}</td>
                             <td>${motor.description}</td>
-                            <td>${motor.quantity}</td>
+                            <td>1</td> <!-- Set quantity to 1 for each product -->
                             <td>
                                 <form class="wishlist-action-form" data-motor-id="${motor.motorId}">
                                     <input type="hidden" name="motorId" value="${motor.motorId}" />
