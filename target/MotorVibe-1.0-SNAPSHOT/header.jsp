@@ -200,7 +200,10 @@
                                         <li><a class="dropdown-item" href="inventoryLog"><i class="fas fa-clipboard-list me-2"></i> Inventory Log</a></li>
                                         <li><a class="dropdown-item" href="revenueStatistic"><i class="fas fa-chart-line me-2"></i> View Revenue</a></li>
                                         <li><a class="dropdown-item" href="motorbikeStatistics"><i class="fas fa-chart-bar me-2"></i> MotoBike Statistics</a></li>
+<<<<<<< HEAD
                                         <li><a class="dropdown-item" href="modelslist"><i class="fas fa-cogs me-2"></i> Model List</a></li>
+=======
+>>>>>>> origin/main
                                         <li><a class="dropdown-item" href="adminOrders"><i class="fas fa-shopping-cart me-2"></i> List Order</a></li>
 
                                     </ul>

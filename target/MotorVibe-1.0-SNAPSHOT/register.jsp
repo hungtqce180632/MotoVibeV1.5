@@ -309,6 +309,7 @@
                                 <label class="form-label" for="confirmPassword">Confirm Password</label>
                                 <input type="password" id="confirmPassword" class="password form-control" name="confirmPassword" required/>
                             </div>
+<<<<<<< HEAD
                                 <div class="inputGroup">
                                 <label for="name" class="form-label">Full Name</label>
                                 <input type="text" name="name" class="form-control" required />
@@ -323,6 +324,8 @@
                                 <label for="address" class="form-label">Address</label>
                                 <input type="text" name="address" class="form-control" required />
                             </div>
+=======
+>>>>>>> origin/main
                             <div class="inputGroup inputGroup3">
                                 <button id="login" type="submit" class="btn btn-primary w-100">Register</button> <%-- Changed button text to "Register" --%>
                             </div>
