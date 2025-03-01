@@ -44,18 +44,6 @@
                 position: relative;
             }
 
-            .section-title::after {
-                content: '';
-                position: absolute;
-                bottom: -15px;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 100px;
-                height: 2px;
-                background: var(--primary-gold);
-                box-shadow: 0 0 10px var(--primary-gold);
-            }
-
             .table {
                 margin-top: 2rem;
                 border: 1px solid var(--primary-gold);
@@ -82,112 +70,19 @@
                 vertical-align: middle;
             }
 
-            .table tbody tr {
-                transition: all 0.3s ease;
-                background: transparent;
-            }
-
-            .table tbody tr:hover {
-                background: rgba(212, 175, 55, 0.05);
-                transform: translateY(-2px);
-            }
-
-            .btn-primary {
-                background: linear-gradient(145deg, var(--primary-gold), var(--secondary-gold));
+            .btn-confirm-deposit {
+                background-color: var(--primary-gold);
+                color: var(--dark-black);
+                font-weight: bold;
+                padding: 0.5rem 1rem;
                 border: none;
-                color: var(--dark-black);
-                font-weight: 600;
-                padding: 0.5rem 1rem;
-                transition: all 0.3s ease;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-            }
-
-            .btn-primary:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
-            }
-
-            .btn-sm {
-                padding: 0.4rem 0.8rem;
-                font-size: 0.8rem;
-            }
-
-            .alert-info {
-                background: linear-gradient(145deg, var(--dark-black), var(--rich-black));
-                border: 1px solid var(--primary-gold);
-                color: var(--text-gold);
-                padding: 1.5rem;
-                border-radius: 10px;
-                text-align: center;
-                margin-top: 2rem;
-            }
-
-            .order-filters {
-                display: flex;
-                gap: 1rem;
-                margin-bottom: 1.5rem;
-                flex-wrap: wrap;
-            }
-
-            .filter-btn {
-                background: transparent;
-                border: 1px solid var(--secondary-gold);
-                color: var(--text-gold);
-                padding: 0.5rem 1rem;
-                border-radius: 20px;
-                font-size: 0.9rem;
+                border-radius: 5px;
+                cursor: pointer;
                 transition: all 0.3s ease;
             }
 
-            .filter-btn:hover, .filter-btn.active {
-                background: var(--primary-gold);
-                color: var(--dark-black);
-                transform: translateY(-2px);
-            }
-
-            /* Status pill badges */
-            .status-badge {
-                padding: 0.5rem 1rem;
-                border-radius: 20px;
-                font-weight: 600;
-                font-size: 0.8rem;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-            }
-
-            .status-pending {
-                background: linear-gradient(145deg, #ffc107, #e0a800);
-                color: var(--dark-black);
-            }
-
-            .status-shipped {
-                background: linear-gradient(145deg, #17a2b8, #138496);
-                color: white;
-            }
-
-            .status-delivered {
-                background: linear-gradient(145deg, #28a745, #218838);
-                color: white;
-            }
-
-            .status-cancelled {
-                background: linear-gradient(145deg, #dc3545, #c82333);
-                color: white;
-            }
-
-            .warranty-badge {
-                background: linear-gradient(145deg, var(--primary-gold), var(--secondary-gold));
-                color: var(--dark-black);
-                padding: 0.25rem 0.75rem;
-                border-radius: 20px;
-                font-size: 0.75rem;
-                font-weight: 600;
-            }
-
-            .container {
-                padding-top: 80px;
-                padding-bottom: 50px;
+            .btn-confirm-deposit:hover {
+                background-color: var(--secondary-gold);
             }
         </style>
     </head>
@@ -198,15 +93,7 @@
             <div class="orders-section">
                 <h2 class="section-title"><i class="fas fa-shopping-cart me-2"></i>Order Management</h2>
 
-                <c:if test="${sessionScope.user.role eq 'admin'}">
-                    <div class="order-filters">
-                        <button class="filter-btn active" data-filter="all">All Orders</button>
-                        <button class="filter-btn" data-filter="pending">Pending</button>
-                        <button class="filter-btn" data-filter="shipped">Shipped</button>
-                        <button class="filter-btn" data-filter="delivered">Delivered</button>
-                        <button class="filter-btn" data-filter="warranty">With Warranty</button>
-                    </div>
-
+                <c:if test="${sessionScope.user.role eq 'admin' ||sessionScope.user.role eq 'employee'}">
                     <c:if test="${empty orders}">
                         <div class="alert alert-info">
                             <i class="fas fa-info-circle me-2"></i> No orders found.
@@ -227,9 +114,7 @@
                                         <th>Total Amount</th>
                                         <th>Deposit Status</th>
                                         <th>Order Status</th>
-                                        <th>Date Start</th>
-                                        <th>Date End</th>
-                                        <th>Has Warranty</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -266,20 +151,30 @@
                                                        ${order.orderStatus}
                                                     </span>
                                                 </td>
-                                                <td>${not empty order.dateStart ? order.dateStart : 'N/A'}</td>
-                                                <td>${not empty order.dateEnd ? order.dateEnd : 'N/A'}</td>
                                                 <td>
-                                                    <c:choose>
-                                                        <c:when test="${order.hasWarranty != null && order.hasWarranty}">
-                                                            <span class="warranty-badge">
-                                                                <i class="fas fa-shield-alt me-1"></i> Included
-                                                            </span>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <span class="text-muted">None</span>
-                                                        </c:otherwise>
-                                                    </c:choose>
+                                                    <!-- Show Confirm Deposit Button only if Deposit Status is "No" -->
+                                                    <c:if test="${order.depositStatus eq false}">
+                                                        <div id="confirm-deposit-${order.orderId}" class="confirm-deposit-container">
+                                                            <form action="confirmDeposit" method="post">
+                                                                <input type="hidden" name="orderId" value="${order.orderId}">
+                                                                <button type="submit" class="btn-confirm-deposit">Confirm Deposit</button>
+                                                            </form>
+                                                        </div>
+                                                    </c:if>
+
+                                                    <!-- Show Create Warranty Button only if Deposit Status is "Yes" and Order Status is "Processing" -->
+                                                    <c:if test="${order.depositStatus eq true && order.orderStatus eq 'Processing'}">
+                                                        <div id="warranty-${order.orderId}" class="create-warranty-container">
+                                                            <form action="createWarranty" method="post">
+                                                                <input type="hidden" name="orderId" value="${order.orderId}">
+                                                                <button type="submit" class="btn-create-warranty">Create Warranty</button>
+                                                            </form>
+                                                        </div>
+                                                    </c:if>
                                                 </td>
+
+
+
                                             </tr>
                                         </c:forEach>
                                     </tbody>
@@ -287,42 +182,13 @@
                             </div>
                         </c:if>
                     </c:if>
+
+
                 </div>
             </div>
 
             <jsp:include page="footer.jsp"/>
 
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    const filterButtons = document.querySelectorAll('.filter-btn');
-                    const orderRows = document.querySelectorAll('tbody tr');
-
-                    filterButtons.forEach(button => {
-                        button.addEventListener('click', function () {
-                            filterButtons.forEach(btn => btn.classList.remove('active'));
-                            this.classList.add('active');
-
-                            const filter = this.getAttribute('data-filter');
-
-                            orderRows.forEach(row => {
-                                if (filter === 'all') {
-                                    row.style.display = '';
-                                } else if (filter === 'warranty') {
-                                    const hasWarranty = row.querySelector('.warranty-badge');
-                                    row.style.display = hasWarranty ? '' : 'none';
-                                } else {
-                                    const statusText = row.querySelector('.status-badge').textContent.trim();
-                                    if (statusText.toLowerCase() === filter) {
-                                        row.style.display = '';
-                                    } else {
-                                        row.style.display = 'none';
-                                    }
-                                }
-                            });
-                        });
-                    });
-                });
-            </script>
         </body>
     </html>
