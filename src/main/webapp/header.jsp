@@ -206,6 +206,17 @@
                                     </ul>
                                 </li>
                             </c:if>
+                            <c:if test="${sessionScope.user.role == 'employee'}">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-cogs"></i> Employee Tools
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="adminDropdown">
+                                        <li><a class="dropdown-item" href="adminOrders"><i class="fas fa-shopping-cart me-2"></i> List Order</a></li>
+
+                                    </ul>
+                                </li>
+                            </c:if>
 
 
                         </ul>
