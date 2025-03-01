@@ -5,6 +5,7 @@
 package controllers;
 
 import dao.AppointmentDAO;
+import dao.RevenueStatisticsDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -62,18 +63,19 @@ public class RevenueStatisticServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        UserAccount user = (UserAccount) session.getAttribute("user");
 
-        if (user == null || !"admin".equals(user.getRole())) {
-            response.sendRedirect("login.jsp");
-            return;
-        }
+        RevenueStatisticsDAO revenueDAO = new RevenueStatisticsDAO();
 
-        AppointmentDAO appointmentDAO = new AppointmentDAO();
-        List<Map<String, Object>> revenueData = appointmentDAO.getRevenueStatistics();
+        // Lấy dữ liệu từ DAO
+        List<Map<String, Object>> revenueData = revenueDAO.getMonthlyRevenue();
+        double totalRevenue = revenueDAO.getTotalRevenue();
+        int totalOrders = revenueDAO.getTotalOrders();
 
+        // Gửi dữ liệu đến JSP
         request.setAttribute("revenueData", revenueData);
+        request.setAttribute("totalRevenue", totalRevenue);
+        request.setAttribute("totalOrders", totalOrders);
+
         request.getRequestDispatcher("revenue_statistic.jsp").forward(request, response);
     }
 

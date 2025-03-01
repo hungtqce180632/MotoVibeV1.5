@@ -33,8 +33,8 @@
 
             .navbar-brand {
                 color: var(--primary-gold) !important;
-                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3), 
-                            0 0 10px rgba(212, 175, 55, 0.3);
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3),
+                    0 0 10px rgba(212, 175, 55, 0.3);
                 font-size: 1.8rem;
                 position: relative;
                 transition: all 0.3s ease;
@@ -47,7 +47,7 @@
                 transform: translateY(-2px);
                 text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
             }
-            
+
             /* Enhanced nav links with gold hover effect */
             .navbar-nav .nav-link {
                 color: #fff !important;
@@ -83,13 +83,13 @@
                 color: var(--primary-gold) !important;
                 transform: translateY(-2px);
             }
-            
+
             /* Add a glow to icons */
             .navbar-nav .nav-link i {
                 margin-right: 5px;
                 transition: all 0.3s ease;
             }
-            
+
             .navbar-nav .nav-link:hover i {
                 text-shadow: 0 0 10px var(--primary-gold);
             }
@@ -100,13 +100,13 @@
                 border: 1px solid var(--primary-gold);
                 box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             }
-            
+
             .dropdown-item {
                 color: var(--text-gold);
                 transition: all 0.3s ease;
             }
-            
-            .dropdown-item:hover, 
+
+            .dropdown-item:hover,
             .dropdown-item:focus {
                 background: rgba(212, 175, 55, 0.1);
                 color: var(--primary-gold);
@@ -126,7 +126,7 @@
                 background: rgba(212, 175, 55, 0.1);
                 box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
             }
-            
+
             .navbar-toggler:after {
                 content: '';
                 position: absolute;
@@ -137,11 +137,11 @@
                 background: rgba(212, 175, 55, 0.2);
                 transition: all 0.5s ease;
             }
-            
+
             .navbar-toggler:hover:after {
                 left: 100%;
             }
-            
+
             .navbar-toggler-icon {
                 background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='%23D4AF37' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
             }
@@ -190,11 +190,15 @@
                                 <a class="nav-link" href="listAppointments"><i class="fas fa-calendar-check me-1"></i> Appointments</a>
                             </li>
                             <c:if test="${sessionScope.user.role == 'admin'}">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="inventoryLog"><i class="fas fa-clipboard-list me-1"></i> Inventory Log</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="revenueStatistic"><i class="fas fa-chart-line"></i> View Revenue</a>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-cogs"></i> Admin Tools
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="adminDropdown">
+                                        <li><a class="dropdown-item" href="inventoryLog"><i class="fas fa-clipboard-list me-2"></i> Inventory Log</a></li>
+                                        <li><a class="dropdown-item" href="revenueStatistic"><i class="fas fa-chart-line me-2"></i> View Revenue</a></li>
+                                        <li><a class="dropdown-item" href="motorbikeStatistics"><i class="fas fa-chart-bar me-2"></i> MotoBike Statistics</a></li>
+                                    </ul>
                                 </li>
                             </c:if>
 
