@@ -132,7 +132,7 @@ public class CustomerDAO {
 
     public List<Customer> getAllCustomers() {
         List<Customer> customers = new ArrayList<>();
-        String sql = "SELECT customer_id, name, phone_number FROM customers";
+        String sql = "SELECT * FROM customers";
 
         try (Connection connection = DBContext.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql);

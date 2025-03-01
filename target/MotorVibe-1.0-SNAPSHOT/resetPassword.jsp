@@ -174,33 +174,95 @@
                 }
             }
 
-            function verifyOtp() {
-                const otp = $('#otp').val();
+            function sendOtp() {
+                var sendOtpButton = document.getElementById("sendOtpButton");
+                var countdown = 60; // 1 minute countdown
+
+                // Disable the Send OTP button
+                sendOtpButton.disabled = true;
+
+                // Show the countdown on the button
+                sendOtpButton.innerText = `Wait ${countdown} seconds`;
+
+                // Set up the countdown timer
+                var interval = setInterval(function () {
+                    countdown--;
+                    sendOtpButton.innerText = `Wait ${countdown} seconds`;
+
+                    // If countdown reaches zero, re-enable the button
+                    if (countdown <= 0) {
+                        clearInterval(interval);
+                        sendOtpButton.disabled = false;
+                        sendOtpButton.innerText = "Send OTP"; // Reset button text
+                    }
+                }, 1000); // Update every second
+
+                // Send OTP request to the server (use your actual AJAX endpoint here)
                 $.ajax({
                     type: "POST",
-                    url: "/VerifyOtpServlet",
-                    data: {otp: otp},
+                    url: "sendOtp", // replace with your server-side logic
                     success: function (response) {
-                        if (response === true) {
-                            $('#verificationResult').val('Success');
-                            $('#otpInput').hide();
-                            $('#OTPSuccess').css('display', 'block');
-                            $('#loginBtn').prop('disabled', false); // Bật lại nút Login
+                        // Handle the server's response to OTP request
+                        console.log(response);
+                        if (response.success) {
                             Swal.fire({
                                 icon: 'success',
-                                title: 'Authentication successful',
-                                text: 'OTP verified successfully!'
+                                title: 'OTP Sent',
+                                text: 'An OTP has been sent to your email.'
                             });
+                            document.getElementById("otpInput").style.display = "block"; // Show OTP input field
                         } else {
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Authentication failed',
-                                text: 'OTP is incorrect or expired. Please try again.'
+                                title: 'OTP Error',
+                                text: 'Failed to send OTP. Please try again.'
                             });
                         }
                     },
                     error: function (xhr, status, error) {
-                        alert("Lỗi: " + error);
+                        console.log("Error:", error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'An error occurred while sending OTP.'
+                        });
+                    }
+                });
+            }
+
+            function verifyOtp() {
+                var otp = document.getElementById("otp").value;
+                var verificationResult = document.getElementById("verificationResult");
+
+                $.ajax({
+                    type: "POST",
+                    url: "verifyOtp", // replace with your verification endpoint
+                    data: {otp: otp},
+                    success: function (response) {
+                        if (response.success) {
+                            verificationResult.value = "Success";
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'OTP Verified',
+                                text: 'OTP verification successful.'
+                            });
+                            document.getElementById("OTPSuccess").style.display = "block";
+                            document.getElementById("loginBtn").disabled = false; // Enable Login button
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Verification Failed',
+                                text: 'The OTP entered is incorrect or expired. Please try again.'
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log("Error:", error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'An error occurred during OTP verification.'
+                        });
                     }
                 });
             }

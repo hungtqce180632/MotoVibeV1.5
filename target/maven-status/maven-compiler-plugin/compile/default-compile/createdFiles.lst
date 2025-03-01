@@ -7,6 +7,7 @@ dao\OrderDAO.class
 controllers\CreateOrderServlet.class
 dao\CustomerDAO.class
 dao\MotoBikeStatisticsDAO.class
+controllers\CustomerListServlet.class
 OTP\VerifyOtpServlet.class
 dao\MotorDAO.class
 models\InventoryLog.class
@@ -15,6 +16,7 @@ models\Wishlist.class
 dao\UserAccountDAO.class
 models\Fuel.class
 controllers\ViewOrderWarrantyServlet.class
+controllers\ConfirmDepositServlet.class
 controllers\EditMotorServlet.class
 controllers\SearchMotorServlet.class
 controllers\InventoryLogServlet.class
@@ -33,6 +35,7 @@ controllers\CreateWarrantyServlet.class
 controllers\EditReviewServlet.class
 models\Motor.class
 controllers\DeleteEventServlet.class
+controllers\AccountManagementServlet.class
 controllers\ChangeEventStatusServlet.class
 models\Employee.class
 controllers\CreateEventServlet.class
@@ -57,6 +60,7 @@ models\Event.class
 models\UserAccount.class
 controllers\MotorManagementServlet.class
 models\Order.class
+controllers\EmployeeOrderServlet.class
 controllers\ModelsListServlet.class
 dao\ReviewDAO.class
 controllers\ListAppointmentServlet.class

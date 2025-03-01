@@ -7,6 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserAccountDAO {
 
@@ -124,13 +126,12 @@ public class UserAccountDAO {
         }
         return false;
     }
-    
+
     public boolean resetPassword(String email, String newPassword) {
         String sql = "UPDATE user_account SET password = ? WHERE email = ?";
-        
-        try (Connection conn = DBContext.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
+
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setString(1, newPassword);  // Set the new password
             stmt.setString(2, email);        // Set the email of the user to be updated
 
@@ -139,7 +140,7 @@ public class UserAccountDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
+
         return false;  // Return false if something goes wrong
     }
 
@@ -219,7 +220,7 @@ public class UserAccountDAO {
 
     public boolean registerUser(UserAccount newUser) {
         String sql = "INSERT INTO user_account (email, password, status, role, date_created) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = DBContext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, newUser.getEmail());
             stmt.setString(2, newUser.getPassword());
             stmt.setBoolean(3, newUser.isStatus());
@@ -229,7 +230,7 @@ public class UserAccountDAO {
             int affectedRows = stmt.executeUpdate();
             if (affectedRows > 0) {
                 // Retrieve the generated user_id from the user_account table
-                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                try ( ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         int userId = generatedKeys.getInt(1);
                         newUser.setUserId(userId);  // Set the userId to the newUser object
@@ -246,7 +247,7 @@ public class UserAccountDAO {
     // Method to add customer details after registration
     public boolean addCustomerDetails(UserAccount user, String name, String phoneNumber, String address) {
         String sql = "INSERT INTO customers (user_id, name, phone_number, address) VALUES (?, ?, ?, ?)";
-        try (Connection conn = DBContext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, user.getUserId());
             stmt.setString(2, name);
             stmt.setString(3, phoneNumber);
@@ -263,7 +264,7 @@ public class UserAccountDAO {
     // Method to add employee details after registration
     public boolean addEmployeeDetails(UserAccount user, String name, String phoneNumber) {
         String sql = "INSERT INTO employees (user_id, name, phone_number) VALUES (?, ?, ?)";
-        try (Connection conn = DBContext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, user.getUserId());
             stmt.setString(2, name);
             stmt.setString(3, phoneNumber);
@@ -275,4 +276,61 @@ public class UserAccountDAO {
         }
         return false; // Return false if adding employee details failed
     }
+
+    public List<UserAccount> getAllUsers() {
+        List<UserAccount> users = new ArrayList<>();
+        String sql = "SELECT user_id, email, password, role, status, date_created FROM user_account";
+
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql);  ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                users.add(new UserAccount(
+                        rs.getInt("user_id"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("role"),
+                        rs.getBoolean("status"),
+                        rs.getTimestamp("date_created")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
+    public List<UserAccount> getCustomers() {
+        List<UserAccount> customers = new ArrayList<>();
+        String query = "SELECT * FROM user_account WHERE role = 'customer'";
+
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(query);  ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                UserAccount user = new UserAccount();
+                user.setUserId(rs.getInt("user_id"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setRole(rs.getString("role"));
+                user.setStatus(rs.getBoolean("status"));
+                user.setDateCreated(rs.getTimestamp("date_created"));
+
+                customers.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customers;
+    }
+
+    public void toggleStatus(int userId) {
+        String query = "UPDATE user_account SET status = CASE WHEN status = 1 THEN 0 ELSE 1 END WHERE user_id = ?";
+
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, userId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
