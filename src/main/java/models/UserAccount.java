@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Date;
+
 public class UserAccount {
 
     private int userId;
@@ -7,23 +9,25 @@ public class UserAccount {
     private String password;
     private String role;
     private boolean status;
+    private Date dateCreated;
 
-
-
-    public UserAccount(int userId, String email, String password, String role, boolean status) {
+    public UserAccount(int userId, String email, String password, String role, boolean status, Date dateCreated) {
         this.userId = userId;
         this.email = email;
         this.password = password;
         this.role = role;
         this.status = status;
+        this.dateCreated = dateCreated;
     }
 
     public UserAccount(String email, String password) {
         this.email = email;
         this.password = password;
+        this.dateCreated = new Date();
     }
 
     public UserAccount() {
+        this.dateCreated = new Date();
     }
 
     public int getUserId() {
@@ -66,7 +70,17 @@ public class UserAccount {
         this.status = status;
     }
 
+    // Getter and Setter for dateCreated
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    // This method is no longer needed since we now have dateCreated field
     public int getId() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

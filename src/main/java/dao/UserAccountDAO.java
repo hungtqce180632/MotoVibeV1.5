@@ -24,7 +24,8 @@ public class UserAccountDAO {
                         rs.getString("email"),
                         rs.getString("password"),
                         rs.getString("role"),
-                        rs.getBoolean("status")
+                        rs.getBoolean("status"),
+                        rs.getTimestamp("date_created")
                 );
             }
         } catch (SQLException e) {
@@ -85,7 +86,7 @@ public class UserAccountDAO {
         return false;
     }
 
-    public void sendOTPToEmail(String email, String otp) {
+    public void SendOTPToEmail(String email, String otp) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
@@ -101,7 +102,8 @@ public class UserAccountDAO {
                         rs.getString("email"),
                         rs.getString("password"),
                         rs.getString("role"),
-                        rs.getBoolean("status")
+                        rs.getBoolean("status"),
+                        rs.getTimestamp("date_created")
                 );
             }
         } catch (SQLException e) {
