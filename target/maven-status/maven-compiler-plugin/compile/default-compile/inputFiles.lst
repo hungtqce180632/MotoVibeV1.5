@@ -21,6 +21,7 @@ D:\ki5\SWP391\projectjava2.0\MotoVibeV1.5\src\main\java\controllers\LoginServlet
 D:\ki5\SWP391\projectjava2.0\MotoVibeV1.5\src\main\java\models\InventoryLog.java
 D:\ki5\SWP391\projectjava2.0\MotoVibeV1.5\src\main\java\dao\EventDAO.java
 D:\ki5\SWP391\projectjava2.0\MotoVibeV1.5\src\main\java\dao\FuelDAO.java
+D:\ki5\SWP391\projectjava2.0\MotoVibeV1.5\src\main\java\controllers\UpdateModelServlet.java
 D:\ki5\SWP391\projectjava2.0\MotoVibeV1.5\src\main\java\controllers\MotorServlet.java
 D:\ki5\SWP391\projectjava2.0\MotoVibeV1.5\src\main\java\dao\CustomerDAO.java
 D:\ki5\SWP391\projectjava2.0\MotoVibeV1.5\src\main\java\models\Customer.java
@@ -37,6 +38,7 @@ D:\ki5\SWP391\projectjava2.0\MotoVibeV1.5\src\main\java\models\Employee.java
 D:\ki5\SWP391\projectjava2.0\MotoVibeV1.5\src\main\java\controllers\ListOrdersServlet.java
 D:\ki5\SWP391\projectjava2.0\MotoVibeV1.5\src\main\java\models\Order.java
 D:\ki5\SWP391\projectjava2.0\MotoVibeV1.5\src\main\java\controllers\EditMotorServlet.java
+D:\ki5\SWP391\projectjava2.0\MotoVibeV1.5\src\main\java\controllers\ModelsListServlet.java
 D:\ki5\SWP391\projectjava2.0\MotoVibeV1.5\src\main\java\models\Warranty.java
 D:\ki5\SWP391\projectjava2.0\MotoVibeV1.5\src\main\java\controllers\DeleteReviewServlet.java
 D:\ki5\SWP391\projectjava2.0\MotoVibeV1.5\src\main\java\controllers\MotoBikeStatisticsServlet.java
