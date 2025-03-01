@@ -6,13 +6,14 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Terms of Service - MotoVibe</title> <!- Title for Terms of Service -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/luxury-theme.css">
         <style>
             /* css/style.css - Terms of Service with Bulb Decoration Styles (reusing styles from PrivacyPolicy.jsp) */
             * {
@@ -141,10 +142,14 @@
                 color: #ddd;
             }
 
+            .tos-container {
+                /* Additional styling for terms page */
+            }
 
         </style>
     </head>
     <body>
+        <jsp:include page="header.jsp"></jsp:include>
         <div class="boss">
             <span id="moto-vibe-text" class="text-decoration">MotoVibe</span>
             <span id="tagline-text" class="text-decoration">Ride with Confidence, <br/> Ride with MotoVibe</span>
@@ -155,8 +160,8 @@
             <span id="website-link-text" class="text-decoration"><a href="index.jsp" style="color: #ddd; text-decoration: none;">www.motovibe.com</a></span>
         </div>
 
-        <div class="terms-of-service-content container"> <!- Updated class name -->
-            <h1>Terms of Service for MotoVibe</h1> <!- Updated Heading -->
+        <div class="terms-of-service-content container my-5 tos-container"> <!- Updated class name -->
+            <h1 class="text-center mb-4" style="color: var(--primary-gold);">Terms of Service</h1> <!- Updated Heading -->
 
             <p><strong>Last Updated:</strong> [Insert Date of Last Update]</p>
 

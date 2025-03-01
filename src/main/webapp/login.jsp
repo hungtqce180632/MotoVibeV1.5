@@ -5,23 +5,33 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Login</title>
+        <title>Login - MotoVibe</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
         <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,300" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Oswald:500,400" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="css/luxury-theme.css">
         <style>
-            /* colors */
+            :root {
+                --primary-gold: #D4AF37;
+                --secondary-gold: #C5A028;
+                --dark-black: #111111;
+                --rich-black: #1A1A1A;
+                --text-gold: #F5E6CC;
+            }
+            
             html {
                 width: 100%;
                 height: 100%;
             }
+            
             body {
-                background-color: #eff3f4;
+                background: linear-gradient(145deg, var(--dark-black), var(--rich-black));
                 position: relative;
                 width: 100%;
                 height: 100%;
@@ -29,34 +39,41 @@
                 font-family: 'Source Sans Pro', sans-serif;
                 font-weight: 400;
                 -webkit-font-smoothing: antialiased;
+                color: var(--text-gold);
             }
+            
             form {
                 position: relative;
                 display: block;
                 width: 100%;
                 max-width: 400px;
-                background-color: #fff;
+                background: linear-gradient(145deg, var(--dark-black), var(--rich-black));
                 margin: 0;
                 padding: 2.25em;
                 box-sizing: border-box;
-                border: solid 1px #ddd;
+                border: solid 1px var(--primary-gold);
                 border-radius: 0.5em;
                 font-family: 'Source Sans Pro', sans-serif;
                 top: 0;
                 left: 0;
                 transform: none;
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
             }
+            
             form .svgContainer {
                 position: relative;
                 width: 200px;
                 height: 200px;
                 margin: 0 auto 1em;
                 border-radius: 50%;
-                background: none;
-                border: solid 2.5px #3a5e77;
+                background: var(--rich-black);
+                border: solid 2.5px var(--primary-gold);
                 overflow: hidden;
                 pointer-events: none;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3),
+                            inset 0 0 15px rgba(212, 175, 55, 0.2);
             }
+            
             form .svgContainer div {
                 position: relative;
                 width: 100%;
@@ -64,6 +81,7 @@
                 overflow: hidden;
                 padding-bottom: 100%;
             }
+            
             form .svgContainer .mySVG {
                 position: absolute;
                 left: 0;
@@ -72,103 +90,146 @@
                 height: 100%;
                 pointer-events: none;
             }
+            
             form .inputGroup {
                 margin: 0 0 2em;
                 padding: 0;
                 position: relative;
             }
+            
             form .inputGroup:last-of-type {
                 margin-bottom: 0;
             }
+            
             form label {
                 margin: 0 0 12px;
                 display: block;
                 font-size: 1.25em;
-                color: #217093;
+                color: var(--primary-gold);
                 font-weight: 700;
                 font-family: inherit;
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
             }
+            
             form input[type='email'], form input[type="text"], form input[type='password'] {
                 display: block;
                 margin: 0;
                 padding: 0 1em 0;
-                background-color: #f3fafd;
-                border: solid 2px #217093;
+                background: rgba(0, 0, 0, 0.2);
+                border: solid 2px var(--primary-gold);
                 border-radius: 4px;
                 -webkit-appearance: none;
                 box-sizing: border-box;
                 width: 100%;
                 height: 65px;
                 font-size: 1.55em;
-                color: #353538;
+                color: var(--text-gold);
                 font-weight: 600;
                 font-family: inherit;
-                transition: box-shadow 0.2s linear, border-color 0.25s ease-out;
+                transition: all 0.3s ease;
             }
+            
             form input[type='email']:focus, form input[type="text"]:focus, form input[type='password']:focus {
                 outline: none;
-                box-shadow: 0px 2px 10px rgba(0, 0, 0, .1);
-                border: solid 2px #4eb8dd;
+                box-shadow: 0px 0px 10px rgba(255, 215, 0, 0.3);
+                border: solid 2px #FFD700;
+                background: rgba(0, 0, 0, 0.3);
             }
+            
             form input[type='email'], form input[type="text"] {
                 padding: 14px 1em 0px;
             }
+            
             form button {
                 display: block;
                 margin: 0;
                 padding: 0.65em 1em 1em;
-                background-color: #4eb8dd;
+                background: linear-gradient(145deg, var(--primary-gold), var(--secondary-gold));
                 border: none;
                 border-radius: 4px;
                 box-sizing: border-box;
-                box-shadow: none;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
                 width: 100%;
                 height: 65px;
                 font-size: 1.55em;
-                color: #fff;
+                color: var(--dark-black);
                 font-weight: 600;
                 font-family: inherit;
-                transition: background-color 0.2s ease-out;
+                transition: all 0.3s ease;
+                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
             }
+            
             form button:hover, form button:active {
-                background-color: #217093;
+                background: linear-gradient(145deg, #FFD700, #DAA520);
+                box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+                transform: translateY(-2px);
             }
+            
             form .inputGroup1 .helper {
                 position: absolute;
                 z-index: 1;
                 font-family: inherit;
             }
+            
             form .inputGroup1 .helper1 {
                 top: 0;
                 left: 0;
                 transform: translate(1.4em, 2.6em) scale(1);
                 transform-origin: 0 0;
-                color: #217093;
+                color: var(--primary-gold);
                 font-size: 1.25em;
                 font-weight: 400;
                 opacity: 0.65;
                 pointer-events: none;
                 transition: transform 0.2s ease-out, opacity 0.2s linear;
             }
+            
             form .inputGroup1.focusWithText .helper {
-                /*input[type='email']:focus + .helper {*/
                 transform: translate(1.4em, 2em) scale(0.65);
                 opacity: 1;
             }
-
-
-            /* boostrap layout */
+            
             .logo {
                 font-family: "Oswald", sans-serif;
                 font-weight: 500;
-                color: #050B20;
+                color: var(--primary-gold);
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+                transition: all 0.3s ease;
             }
+            
+            .logo:hover {
+                text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            }
+            
+            a {
+                color: var(--primary-gold);
+                transition: all 0.2s ease;
+                text-decoration: none;
+            }
+            
             a:hover {
-                color: inherit; /* Keep original color on hover */
+                text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+                color: var(--primary-gold);
             }
+            
+            h2 {
+                color: var(--primary-gold);
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+                margin-bottom: 1.5rem;
+            }
+            
+            .alert-danger {
+                background: rgba(220, 53, 69, 0.1);
+                border: 1px solid #dc3545;
+                color: #ff6b6b;
+            }
+            
             .btn-dark {
-                background-color: #050B20;
+                background-color: var(--dark-black);
             }
+            
             .container-fluid {
                 display: flex;
                 justify-content: center;
@@ -176,14 +237,14 @@
                 height: 100vh;
                 padding: 0;
             }
-
+            
             .row {
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 width: 100%;
             }
-
+            
             .col-lg-6 {
                 max-width: 400px; /* Set a max width to the form */
                 width: 100%;
@@ -298,7 +359,7 @@
                             <div class="inputGroup inputGroup1">
                                 <label for="email1">Email</label>
                                 <input type="text" id="email" class="email form-control" maxlength="256" name="email" required>
-                                <p class="helper helper1">email@domain.com</p>
+                                <p class="helper helper1" style="color: var(--primary-gold); opacity: 0.6;">email@domain.com</p>
                                 <span class="indicator"></span>
                             </div>
                             <div class="inputGroup inputGroup2">
@@ -310,8 +371,18 @@
                             </div>
                             <div class="text-center mt-3">
                                 <a href="/MotoVibe/forgotPassword.jsp">Forgot password?</a>
+                                <div class="mt-3">
+                                    New to MotoVibe? <a href="register.jsp">Create an account</a>
+                                </div>
                             </div>
                         </form>
+                    </div>
+                </div>
+                <div class="col-lg-6 d-none d-lg-block" style="background: url('images/login-bg.jpg') center/cover no-repeat; position: relative;">
+                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5);"></div>
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: white; z-index: 2;">
+                        <h2 style="font-size: 2.5rem; color: var(--primary-gold);">Experience Luxury</h2>
+                        <p style="font-size: 1.2rem; max-width: 400px;">Begin your journey with MotoVibe and discover our premium collection of motorbikes</p>
                     </div>
                 </div>
             </div>

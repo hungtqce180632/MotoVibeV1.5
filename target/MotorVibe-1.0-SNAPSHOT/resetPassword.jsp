@@ -17,28 +17,72 @@
         <script src="https://kit.fontawesome.com/a611f8fd5b.js" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <link rel="stylesheet" type="text/css" href="css/font.css"/>
-        <link rel="icon" href="${host}/ImageController/logo.png" type="image/x-icon">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.min.css">
-        <title>ResetPass</title>
-        <%
-            String host = request.getRequestURI();
-        %>
+        <link rel="stylesheet" href="css/luxury-theme.css">
+        <title>ResetPassword</title>
         <style>
-            .logo  {
+            .logo {
                 font-family: "Oswald", sans-serif;
-                font-optical-sizing: auto;
                 font-weight: 500;
-                font-style: normal;
                 color: #050B20;
             }
 
             a:hover {
-                color: inherit; /* Giữ nguyên màu */
+                color: inherit;
             }
 
             .btn-dark{
                 background-color: #050B20;
+            }
+            
+            .container-fluid {
+                height: 100vh;
+            }
+
+            .row {
+                height: 100%;
+            }
+
+            .col-lg-6 {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .form-container {
+                max-width: 400px;
+                width: 100%;
+            }
+
+            .d-flex {
+                display: flex;
+            }
+
+            .mb-3 {
+                margin-bottom: 1rem;
+            }
+
+            /* Centering the form elements */
+            .text-center {
+                text-align: center;
+            }
+
+            .alert {
+                display: none;
+            }
+
+            .alert.show {
+                display: block;
+            }
+
+            .reset-password-form {
+                background: var(--rich-black);
+                border: 1px solid var(--primary-gold);
+                border-radius: 10px;
+                padding: 2rem;
+                max-width: 500px;
+                margin: 2rem auto;
             }
         </style>
     </head>
@@ -215,10 +259,10 @@
             }
         </script>       
 
-        <div class="container-fluid vh-100 m-0 p-0">
-            <div class="row h-100">
+        <div class="container-fluid">
+            <div class="row">
                 <div class="col-lg-6 d-flex justify-content-center align-items-center">
-                    <div class="w-100" style="max-width: 400px;">
+                    <div class="form-container reset-password-form">
                         <a class="logo text-decoration-none" href="/"><h1 class="mb-5">MotoVibe</h1></a>   
                         <div class="alert alert-warning d-none" id="alertOTP">Please verify OTP.</div>
                         <c:if test="${not empty message}">
@@ -228,7 +272,7 @@
                             session.removeAttribute("message");
                         %>
                         <h2 class="mb-3">Reset Password</h2>
-                        <form onsubmit="return validateForm()" action="/ResetPasswordController" method="POST">
+                        <form onsubmit="return validateForm()" action="ResetPasswordServlet" method="POST">
                             <div class="form-group mb-3">
                                 <label for="email" class="form-label">Email address</label>
                                 <input name="emailTxt" required type="email" class="form-control" id="email" placeholder="Enter your email">
@@ -273,7 +317,6 @@
                         </form>
                     </div>
                 </div>
-                <div class="col-lg-6 d-none d-lg-block" style="background-image: url('${host}/ImageController/a/loginImage.jpg'); background-size: cover; background-position: center;"></div>
             </div>
         </div>
     </body>

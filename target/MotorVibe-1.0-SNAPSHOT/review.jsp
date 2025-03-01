@@ -19,6 +19,7 @@
     if (canReview == null) canReview = false;
 %>
 
+<link rel="stylesheet" href="css/luxury-theme.css">
 <style>
     :root {
         --primary-gold: #D4AF37;
@@ -147,7 +148,7 @@
     }
 
     .form-label {
-        color: var(--text-gold);
+        color: var (--text-gold);
     }
 
     .btn-primary {
@@ -166,6 +167,19 @@
     .text-muted {
         color: var(--text-gold) !important;
         opacity: 0.7;
+    }
+
+    .review-container {
+        background: var(--dark-black);
+        border: 1px solid var(--primary-gold);
+        border-radius: 10px;
+        padding: 2rem;
+        max-width: 700px;
+        margin: 2rem auto;
+    }
+
+    .review-container h2 {
+        color: var(--primary-gold);
     }
 </style>
 

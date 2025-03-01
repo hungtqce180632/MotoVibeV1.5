@@ -12,7 +12,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Create Order</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/luxury-theme.css">
     <style>
         :root {
             --primary-gold: #D4AF37;
@@ -34,6 +35,11 @@
             min-height: calc(100vh - 80px); /* Account for header */
         }
 
+        .order-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
         h1 {
             color: var(--primary-gold);
             text-transform: uppercase;
@@ -60,46 +66,61 @@
             opacity: 0.9;
         }
 
-        .card {
-            background: linear-gradient(145deg, var(--dark-black), var(--rich-black)) !important;
+        .motor-card {
+            background: linear-gradient(145deg, var(--dark-black), var(--rich-black));
             border: 1px solid var(--primary-gold);
+            border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
         }
-
+        
+        .motor-card img {
+            border-bottom: 1px solid var(--secondary-gold);
+            transition: transform 0.3s ease;
+            max-height: 250px;
+            object-fit: cover;
+            width: 100%;
+        }
+        
+        .motor-card:hover img {
+            transform: scale(1.05);
+        }
+        
         .card-title {
             color: var(--primary-gold);
             font-weight: 600;
+            letter-spacing: 1px;
         }
-
-        .card-text {
-            color: var(--text-gold);
+        
+        .form-section {
+            background: linear-gradient(145deg, var(--dark-black), var(--rich-black));
+            border: 1px solid var(--primary-gold);
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin-top: 2rem;
         }
-
+        
         .form-label {
             color: var(--primary-gold);
             font-weight: 500;
-            text-transform: uppercase;
             letter-spacing: 1px;
-            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
         }
-
-        .form-control,
-        .form-select,
-        textarea {
-            background: var(--rich-black) !important;
-            border: 1px solid var(--primary-gold) !important;
-            color: var(--text-gold) !important;
-            transition: all 0.3s ease;
+        
+        .form-control, .form-select {
+            background: rgba(0, 0, 0, 0.2) !important;
+            border: 1px solid var(--secondary-gold) !important;
+            color: white !important;
+            padding: 10px;
         }
-
-        .form-control:focus,
-        .form-select:focus,
-        textarea:focus {
-            background: var(--dark-black) !important;
-            border-color: var(--secondary-gold) !important;
-            box-shadow: 0 0 0 0.25rem rgba(212, 175, 55, 0.25) !important;
+        
+        .form-control:focus, .form-select:focus {
+            background: rgba(0, 0, 0, 0.3) !important;
+            border-color: var(--primary-gold) !important;
+            box-shadow: 0 0 0 0.25rem rgba(218, 165, 32, 0.25) !important;
         }
-
+        
         .btn {
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -112,17 +133,28 @@
             background: linear-gradient(145deg, var(--primary-gold), var(--secondary-gold));
             border: none;
             color: var(--dark-black);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            padding: 10px 25px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
         }
 
         .btn-secondary {
             background: transparent;
             border: 1px solid var(--primary-gold);
             color: var(--primary-gold);
+            transition: all 0.3s ease;
+            padding: 10px 25px;
         }
 
-        .btn:hover {
+        .btn-secondary:hover {
+            background: rgba(218, 165, 32, 0.1);
+            color: var(--primary-gold);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
         }
 
         .text-muted {
@@ -140,125 +172,173 @@
             font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 1px;
+            display: inline-block;
         }
 
         .out-of-stock {
             background: linear-gradient(145deg, #dc3545, #c82333);
             color: white;
         }
+
+        /* Warranty section */
+        .warranty-option {
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--secondary-gold);
+            border-radius: 5px;
+            padding: 1rem;
+        }
+        
+        .form-check-input {
+            background-color: var(--rich-black);
+            border: 1px solid var(--secondary-gold);
+        }
+        
+        .form-check-input:checked {
+            background-color: var(--primary-gold);
+            border-color: var(--primary-gold);
+        }
+
+        .create-order-container {
+            background: var(--dark-black);
+            border: 1px solid var(--primary-gold);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            margin: 2rem auto;
+        }
+        .btn-submit-order {
+            background: linear-gradient(145deg, var(--primary-gold), var(--secondary-gold));
+            color: var(--dark-black);
+            border: none;
+            margin-top: 1rem;
+        }
     </style>
 </head>
 <body>
     <jsp:include page="header.jsp"></jsp:include>
-    <div class="container mt-4">
-        <h1><i class="fas fa-shopping-cart"></i> Create Your Order</h1>
-        <p class="lead">Please fill in the form below to confirm your order.</p>
+    <div class="container my-5">
+        <div class="order-container">
+            <h1><i class="fas fa-shopping-cart me-2"></i> Create Your Order</h1>
+            <p class="lead">Please fill in the form below to confirm your order.</p>
 
-        <div class="card mb-4">
-            <div class="row g-0">
-                <div class="col-md-4">
-                    <img src="images/${motor.picture}" class="img-fluid rounded-start" alt="${motor.motorName}">
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title">${motor.motorName}</h5>
-                        <p class="card-text"><strong>Price:</strong> $${motor.price}</p>
-                        <p class="card-text">
-                            <span class="availability-badge ${motor.quantity > 0 ? '' : 'out-of-stock'}">
-                                <c:choose>
-                                    <c:when test="${motor.quantity > 0}">In Stock</c:when>
-                                    <c:otherwise>Out of Stock</c:otherwise>
-                                </c:choose>
-                            </span>
-                        </p>
+            <div class="motor-card mb-4">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="images/${motor.picture}" class="img-fluid" alt="${motor.motorName}">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">${motor.motorName}</h5>
+                            <p class="card-text"><strong>Price:</strong> <span style="color: var(--primary-gold); font-size: 1.2rem;">$${motor.price}</span></p>
+                            <p class="card-text">
+                                <span class="availability-badge ${motor.quantity > 0 ? '' : 'out-of-stock'}">
+                                    <i class="fas ${motor.quantity > 0 ? 'fa-check-circle' : 'fa-times-circle'} me-1"></i>
+                                    <c:choose>
+                                        <c:when test="${motor.quantity > 0}">In Stock</c:when>
+                                        <c:otherwise>Out of Stock</c:otherwise>
+                                    </c:choose>
+                                </span>
+                            </p>
+                        </div>
                     </div>
                 </div>
+            </div>
+
+            <div class="form-section">
+                <form action="confirmOrder" method="post" class="needs-validation" novalidate>
+                    <input type="hidden" name="motorId" value="${motor.motorId}">
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="customerName" class="form-label">Your Name</label>
+                            <input type="text" class="form-control" id="customerName" name="customerName" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="customerEmail" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="customerEmail" name="customerEmail" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="customerPhone" class="form-label">Phone Number (10 digits)</label>
+                            <input type="tel" 
+                                class="form-control" 
+                                id="customerPhone" 
+                                name="customerPhone" 
+                                pattern="[0-9]{10}"
+                                maxlength="10"
+                                title="Please enter a valid 10-digit phone number"
+                                required>
+                            <div class="invalid-feedback">
+                                Please enter a valid 10-digit phone number
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="customerIdNumber" class="form-label">ID Number (12 digits)</label>
+                            <input type="text" 
+                                class="form-control" 
+                                id="customerIdNumber" 
+                                name="customerIdNumber" 
+                                pattern="[0-9]{12}"
+                                maxlength="12"
+                                title="Please enter a valid 12-digit ID number"
+                                required>
+                            <div class="invalid-feedback">
+                                Please enter a valid 12-digit ID number
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="customerAddress" class="form-label">Shipping Address</label>
+                        <textarea class="form-control" id="customerAddress" name="customerAddress" rows="3" required></textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Warranty Options</label>
+                        <div class="warranty-option">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="hasWarranty" id="noWarranty" value="false" checked>
+                                <label class="form-check-label" for="noWarranty">
+                                    No Warranty
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="hasWarranty" id="withWarranty" value="true">
+                                <label class="form-check-label" for="withWarranty">
+                                    <span style="color: var(--primary-gold);">Include Warranty (Recommended)</span>
+                                    <small class="text-muted d-block">Protects your purchase for 12 months</small>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="depositStatus" name="depositStatus">
+                            <label class="form-check-label" for="depositStatus">
+                                Pay Deposit
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <a href="motorDetail?id=${motor.motorId}" class="btn btn-secondary me-2">
+                            <i class="fas fa-times me-1"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-check me-1"></i> Confirm Order
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
-
-        <form action="confirmOrder" method="post" class="needs-validation" novalidate>
-            <input type="hidden" name="motorId" value="${motor.motorId}">
-
-            <div class="mb-3">
-                <label for="customerName" class="form-label">Your Name</label>
-                <input type="text" class="form-control" id="customerName" name="customerName" required>
-            </div>
-            <div class="mb-3">
-                <label for="customerEmail" class="form-label">Email Address</label>
-                <input type="email" class="form-control" id="customerEmail" name="customerEmail" required>
-            </div>
-            <div class="mb-3">
-                <label for="customerPhone" class="form-label">Phone Number (10 digits)</label>
-                <input type="tel" 
-                       class="form-control" 
-                       id="customerPhone" 
-                       name="customerPhone" 
-                       pattern="[0-9]{10}"
-                       maxlength="10"
-                       title="Please enter a valid 10-digit phone number"
-                       required>
-                <div class="invalid-feedback">
-                    Please enter a valid 10-digit phone number
-                </div>
-            </div>
-            <div class="mb-3">
-                <label for="customerIdNumber" class="form-label">ID Number (12 digits)</label>
-                <input type="text" 
-                       class="form-control" 
-                       id="customerIdNumber" 
-                       name="customerIdNumber" 
-                       pattern="[0-9]{12}"
-                       maxlength="12"
-                       title="Please enter a valid 12-digit ID number"
-                       required>
-                <div class="invalid-feedback">
-                    Please enter a valid 12-digit ID number
-                </div>
-            </div>
-            <div class="mb-3">
-                <label for="customerAddress" class="form-label">Shipping Address</label>
-                <textarea class="form-control" id="customerAddress" name="customerAddress" rows="3" required></textarea>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Warranty Options</label>
-                <div class="card p-3">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="hasWarranty" id="noWarranty" value="false" checked>
-                        <label class="form-check-label" for="noWarranty">
-                            No Warranty
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="hasWarranty" id="withWarranty" value="true">
-                        <label class="form-check-label" for="withWarranty">
-                            Include Warranty (Recommended)
-                            <small class="text-muted d-block">Protects your purchase for 12 months</small>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="depositStatus" name="depositStatus">
-                    <label class="form-check-label" for="depositStatus">
-                        Pay Deposit
-                    </label>
-                </div>
-            </div>
-
-            <div class="mt-4">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-check"></i> Confirm Order
-                </button>
-                <a href="motorDetail?id=${motor.motorId}" class="btn btn-secondary">
-                    <i class="fas fa-times"></i> Cancel
-                </a>
-            </div>
-        </form>
     </div>
+    
     <jsp:include page="footer.jsp"></jsp:include>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Form validation

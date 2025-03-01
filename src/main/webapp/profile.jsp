@@ -275,6 +275,9 @@
                             <a href="wishlist" class="btn btn-outline-gold">
                                 <i class="fas fa-history"></i> <span>View My Wishlist</span>
                             </a>
+                            <a href="resetPassword" class="btn btn-outline-gold">
+                                <i class="fas fa-history"></i> <span>Reset Password</span>
+                            </a>
                         </div>
                         
                     </div>
