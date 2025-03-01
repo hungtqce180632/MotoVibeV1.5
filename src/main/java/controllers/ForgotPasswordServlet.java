@@ -22,7 +22,7 @@ public class ForgotPasswordServlet extends HttpServlet {
         String email = request.getParameter("emailTxt");
         
         UserAccountDAO accDAO = new UserAccountDAO();
-        if (accDAO.checkEmailExist(email)) {
+        if (accDAO.checkEmailExists(email)) {
             // Generate OTP
             String otp = generateOTP();
             

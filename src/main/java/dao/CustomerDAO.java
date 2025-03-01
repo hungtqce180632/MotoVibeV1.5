@@ -23,38 +23,24 @@ public class CustomerDAO {
      * Insert a row into customers table only. (user_account is NOT inserted
      * here).
      */
+    // Method to insert customer details into the database
     public boolean insertCustomer(Customer customer) {
-        String sql = "INSERT INTO [dbo].[customers] "
-                + "(user_id, name, phone_number, address) "
-                + "VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO customers (user_id, name, phone_number, address) VALUES (?, ?, ?, ?)";
+        
+        try (Connection conn = DBContext.getConnection(); 
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-        try ( Connection connection = DBContext.getConnection();  PreparedStatement ps = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-
-            if (customer.getUserId() != null) {
-                ps.setInt(1, customer.getUserId());
-            } else {
-                ps.setNull(1, java.sql.Types.INTEGER);
-            }
+            ps.setInt(1, customer.getUserId());
             ps.setString(2, customer.getName());
             ps.setString(3, customer.getPhoneNumber());
             ps.setString(4, customer.getAddress());
 
-            int affectedRows = ps.executeUpdate();
-            if (affectedRows > 0) {
-                // Retrieve the auto-generated PK (customer_id)
-                try ( ResultSet generatedKeys = ps.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        int customerId = generatedKeys.getInt(1);
-                        customer.setCustomerId(customerId);
-                        return true;
-                    }
-                }
-            }
-            return false;
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;  // Return true if insertion was successful
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
+        return false;  // Return false if insertion failed
     }
 
     /**

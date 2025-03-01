@@ -35,7 +35,7 @@
             .btn-dark{
                 background-color: #050B20;
             }
-            
+
             .container-fluid {
                 height: 100vh;
             }
@@ -293,25 +293,29 @@
                                 <small id="confirmError" class="text-danger"></small>
                             </div>
 
-                            <!-- Bắt đầu phần OTP -->
-                            <div class="alert alert-warning alert-dismissible fade d-none show" role="alert" id="alertOTP">
-                                You should enter your email.
+                            <!-- Start OTP Section -->
+                            <div class="alert alert-warning alert-dismissible fade d-none" role="alert" id="alertOTP">
+                                Please verify OTP before resetting your password.
                                 <button type="button" class="btn-close" aria-label="Close" onclick="hideAlert()"></button>
                             </div>
+                            <!-- Send OTP Section -->
                             <div class="d-flex mb-3 align-items-center" id="otpSend">
                                 <button type="button" class="btn btn-outline-primary me-3" id="sendOtpButton" onclick="sendOtp();">Send OTP</button>
-                                <p class="text-danger" hidden id="notificationOtp">Please wait a few seconds.</p>
+                                <p class="text-danger" hidden id="notificationOtp">Please wait a few seconds before sending another OTP.</p>
                             </div>
+                            <!-- OTP Input Section -->
                             <div id="otpInput" style="display: none;" class="mb-3">
-                                <label for="otp" class="form-label">Enter your code</label>
+                                <label for="otp" class="form-label">Enter OTP</label>
                                 <div class="mb-2">
                                     <input type="text" class="form-control" id="otp" name="otp" required>
                                 </div>
-                                <button type="button" class="btn btn-success" onclick="verifyOtp()">Verification</button>
+                                <button type="button" class="btn btn-success" onclick="verifyOtp()">Verify OTP</button>
                             </div>
+                            <!-- OTP Success Notification -->
                             <p style="display: none;" class="text-success mb-3 fw-bold" id="OTPSuccess">OTP authentication successful!</p>
+
                             <input hidden id="verificationResult" class="mt-3" name="OTPResult" value=""/>
-                            <!-- Kết thúc phần OTP -->
+                            <!-- End OTP Section -->
 
                             <button type="button" class="btn btn-dark" id="loginBtn" disabled onclick="redirectToLogin()">Login</button>
                         </form>
