@@ -188,5 +188,7 @@
                 </div>
             </div>
         </footer>
+                <%@ include file="contact.jsp" %>
+
     </body>
 </html>

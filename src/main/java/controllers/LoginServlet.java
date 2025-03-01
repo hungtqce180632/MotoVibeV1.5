@@ -31,7 +31,8 @@ public class LoginServlet extends HttpServlet {
         if (user != null && user.isStatus()) { // Check if account is active
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
-            
+            session.setAttribute("userRole", "admin");
+
             // Set role-specific attributes
             if ("customer".equals(user.getRole())) {
                 CustomerDAO customerDAO = new CustomerDAO();
