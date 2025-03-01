@@ -436,7 +436,7 @@
                 transform: translateX(-50%);
                 width: 100px;
                 height: 3px;
-                background: var(--primary-gold);
+                background: var (--primary-gold);
                 box-shadow: 0 0 10px var(--primary-gold);
             }
 
@@ -834,11 +834,11 @@
 
                         <div class="ready-to-ride-links">
                             <c:if test="${empty sessionScope.user}">
-                                <a href="login.jsp" class="btn-luxury">
-                                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                                <a href="login.jsp" class="btn-luxury" style="color: white !important;">
+                                    <i class="fas fa-sign-in-alt me-2" style="color: white !important;"></i>Login
                                 </a>
-                                <a href="register.jsp" class="btn-luxury">
-                                    <i class="fas fa-user-plus me-2"></i>Register
+                                <a href="register.jsp" class="btn-luxury" style="color: white !important;">
+                                    <i class="fas fa-user-plus me-2" style="color: white !important;"></i>Register
                                 </a>
                             </c:if>
                             <c:if test="${not empty sessionScope.user}">
