@@ -94,16 +94,6 @@
         </c:if>
     </div>
 
-    <!-- Add new motorbike to wishlist -->
-    <div class="add-motor">
-        <h2>Add a new motorbike to your wishlist</h2>
-        <form id="add-wishlist-form">
-            <label for="motorId">Motorbike ID:</label>
-            <input type="number" name="motorId" id="motorId" required>
-            <input type="hidden" name="action" value="add" />
-            <button type="submit">Add to Wishlist</button>
-        </form>
-    </div>
 
     <script>
         // Handle Add to Wishlist via AJAX

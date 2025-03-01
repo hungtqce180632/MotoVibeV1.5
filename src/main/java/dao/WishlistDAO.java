@@ -72,7 +72,7 @@ public class WishlistDAO {
         return wishlist;
     }
 
-    public boolean removeCarFromWishlist(int motorId, int customerId) {
+    public boolean removeMotorFromWishlist(int motorId, int customerId) {
         String sql = "DELETE FROM wishlist WHERE motor_id = ? AND customer_id = ?";
         try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, motorId);

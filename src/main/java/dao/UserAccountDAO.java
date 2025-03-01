@@ -122,6 +122,24 @@ public class UserAccountDAO {
         }
         return false;
     }
+    
+    public boolean resetPassword(String email, String newPassword) {
+        String sql = "UPDATE user_account SET password = ? WHERE email = ?";
+        
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setString(1, newPassword);  // Set the new password
+            stmt.setString(2, email);        // Set the email of the user to be updated
+
+            int rowsUpdated = stmt.executeUpdate();  // Execute the update query
+            return rowsUpdated > 0;  // If rowsUpdated is greater than 0, the update was successful
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return false;  // Return false if something goes wrong
+    }
 
     public boolean addNewCustomerAccount(int userId, String name, String phoneNumber, String address) {
         Connection conn = null;
