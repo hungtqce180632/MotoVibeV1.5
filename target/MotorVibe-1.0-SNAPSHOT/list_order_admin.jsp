@@ -98,7 +98,12 @@
         <div class="container">
             <div class="orders-section">
                 <h2 class="section-title"><i class="fas fa-shopping-cart me-2"></i>Order Management</h2>
-
+                <!-- Create Order Button -->
+                <div class="text-center mt-4">
+                    <a href="createOrderPage.jsp" class="btn btn-primary btn-lg">
+                        <i class="fas fa-plus me-2"></i> Create Order
+                    </a>
+                </div>
                 <c:if test="${sessionScope.user.role eq 'admin' ||sessionScope.user.role eq 'employee'}">
                     <c:if test="${empty orders}">
                         <div class="alert alert-info">
@@ -168,30 +173,23 @@
                                                                 </form>
                                                             </div>
                                                         </c:if>
-                                                        <c:if test="${order.depositStatus eq true && order.orderStatus eq 'Processing'}">
-
-                                                            <!-- Show Create Warranty Button only if Deposit Status is "Yes" and Order Status is "Processing" -->
-                                                            <c:if test="${order.hasWarranty eq true}">
-                                                                <div id="warranty-${order.orderId}" class="create-warranty-container">
-                                                                    <form action="createWarranty" method="post">
-                                                                        <input type="hidden" name="orderId" value="${order.orderId}">
-                                                                        <button type="submit" class="btn-create-warranty">Create Warranty</button>
-                                                                    </form>
-                                                                </div>
-                                                            </c:if>
-                                                            <c:if test="${order.hasWarranty eq false}">
-                                                                <div id="warranty-${order.orderId}" class="confirm-deposit-container">
-
-                                                                    <button type="submit" class="btn-confirm-deposit">DEO CÓ TIỀN MUA</button>
-
-                                                                </div>
-
-                                                            </c:if>
+                                                        <c:if test="${order.depositStatus eq true && order.hasWarranty eq true }">
+                                                            <div id="warranty-${order.orderId}" class="create-warranty-container">
+                                                                <form action="createWarranty" method="post">
+                                                                    <input type="hidden" name="orderId" value="${order.orderId}">
+                                                                    <button type="submit" class="btn-create-warranty">Detail Warranty</button>
+                                                                </form>
+                                                            </div>
+                                                        </c:if>
+                                                        <c:if test="${order.depositStatus eq true && order.hasWarranty eq false }">
+                                                            <div id="warranty-${order.orderId}" class="create-warranty-container">
+                                                                <button type="submit" class="btn-create-warranty">No Warranty</button>
+                                                            </div>
                                                         </c:if>
                                                     </c:if>
 
-                                                    <c:if test="${sessionScope.user.role eq 'employee'}">
 
+                                                    <c:if test="${sessionScope.user.role eq 'employee'}">
                                                         <c:if test="${order.depositStatus eq true && order.orderStatus eq 'Processing'}">
                                                             <div id="confirm-deposit-${order.orderId}" class="confirm-deposit-container">
                                                                 <form action="ConfirmOrderEmployeeServlet" method="post">
@@ -200,20 +198,22 @@
                                                                 </form>
                                                             </div>
                                                         </c:if>
-                                                        <c:if test="${order.depositStatus eq true && order.orderStatus eq 'Completed'}">
+                                                        <c:if test="${order.depositStatus eq true && order.orderStatus eq 'Completed' && order.hasWarranty eq true}">
                                                             <div id="warranty-${order.orderId}" class="create-warranty-container">
                                                                 <form action="createWarranty" method="post">
                                                                     <input type="hidden" name="orderId" value="${order.orderId}">
-                                                                    <button type="submit" class="btn-create-warranty">Detail Warranty</button>
+                                                                    <button type="submit" class="btn-create-warranty">Create Warranty</button>
                                                                 </form>
                                                             </div>
                                                         </c:if>
+                                                        <c:if test="${order.depositStatus eq true && order.orderStatus eq 'Completed' && order.hasWarranty eq false}">
+                                                            <div id="warranty-${order.orderId}" class="create-warranty-container">
+                                                                <input type="hidden" name="orderId" value="${order.orderId}">
+                                                                <button type="submit" class="btn-create-warranty">No Warranty</button>
+                                                            </div>
+                                                        </c:if>
                                                     </c:if>
-
                                                 </td>
-
-
-
                                             </tr>
                                         </c:forEach>
                                     </tbody>
