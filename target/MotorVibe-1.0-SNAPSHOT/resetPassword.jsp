@@ -35,11 +35,7 @@
             .btn-dark{
                 background-color: #050B20;
             }
-<<<<<<< HEAD
 
-=======
-            
->>>>>>> origin/main
             .container-fluid {
                 height: 100vh;
             }
@@ -178,7 +174,6 @@
                 }
             }
 
-<<<<<<< HEAD
             function sendOtp() {
                 var sendOtpButton = document.getElementById("sendOtpButton");
                 var countdown = 60; // 1 minute countdown
@@ -258,44 +253,16 @@
                                 icon: 'error',
                                 title: 'Verification Failed',
                                 text: 'The OTP entered is incorrect or expired. Please try again.'
-=======
-            function verifyOtp() {
-                const otp = $('#otp').val();
-                $.ajax({
-                    type: "POST",
-                    url: "/VerifyOtpServlet",
-                    data: {otp: otp},
-                    success: function (response) {
-                        if (response === true) {
-                            $('#verificationResult').val('Success');
-                            $('#otpInput').hide();
-                            $('#OTPSuccess').css('display', 'block');
-                            $('#loginBtn').prop('disabled', false); // Bật lại nút Login
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Authentication successful',
-                                text: 'OTP verified successfully!'
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Authentication failed',
-                                text: 'OTP is incorrect or expired. Please try again.'
->>>>>>> origin/main
                             });
                         }
                     },
                     error: function (xhr, status, error) {
-<<<<<<< HEAD
                         console.log("Error:", error);
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
                             text: 'An error occurred during OTP verification.'
                         });
-=======
-                        alert("Lỗi: " + error);
->>>>>>> origin/main
                     }
                 });
             }
@@ -388,7 +355,6 @@
                                 <small id="confirmError" class="text-danger"></small>
                             </div>
 
-<<<<<<< HEAD
                             <!-- Start OTP Section -->
                             <div class="alert alert-warning alert-dismissible fade d-none" role="alert" id="alertOTP">
                                 Please verify OTP before resetting your password.
@@ -412,27 +378,6 @@
 
                             <input hidden id="verificationResult" class="mt-3" name="OTPResult" value=""/>
                             <!-- End OTP Section -->
-=======
-                            <!-- Bắt đầu phần OTP -->
-                            <div class="alert alert-warning alert-dismissible fade d-none show" role="alert" id="alertOTP">
-                                You should enter your email.
-                                <button type="button" class="btn-close" aria-label="Close" onclick="hideAlert()"></button>
-                            </div>
-                            <div class="d-flex mb-3 align-items-center" id="otpSend">
-                                <button type="button" class="btn btn-outline-primary me-3" id="sendOtpButton" onclick="sendOtp();">Send OTP</button>
-                                <p class="text-danger" hidden id="notificationOtp">Please wait a few seconds.</p>
-                            </div>
-                            <div id="otpInput" style="display: none;" class="mb-3">
-                                <label for="otp" class="form-label">Enter your code</label>
-                                <div class="mb-2">
-                                    <input type="text" class="form-control" id="otp" name="otp" required>
-                                </div>
-                                <button type="button" class="btn btn-success" onclick="verifyOtp()">Verification</button>
-                            </div>
-                            <p style="display: none;" class="text-success mb-3 fw-bold" id="OTPSuccess">OTP authentication successful!</p>
-                            <input hidden id="verificationResult" class="mt-3" name="OTPResult" value=""/>
-                            <!-- Kết thúc phần OTP -->
->>>>>>> origin/main
 
                             <button type="button" class="btn btn-dark" id="loginBtn" disabled onclick="redirectToLogin()">Login</button>
                         </form>

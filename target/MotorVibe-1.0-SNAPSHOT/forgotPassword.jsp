@@ -372,14 +372,11 @@
                             <div class="inputGroup inputGroup3">
                                 <button type="submit" class="btn btn-primary w-100 mb-3" name="submit">Send OTP</button>
                             </div>
-<<<<<<< HEAD
                             
                             
                             <div class="inputGroup inputGroup3">
                                 <button type="submit" class="btn btn-primary w-100 mb-3" name="submit">Verify OTP</button>
                             </div>
-=======
->>>>>>> origin/main
 
                             <div class="text-center mt-3">
                                 <a href="/MotoVibe/login.jsp">Remember your password? Login</a>
@@ -393,12 +390,6 @@
                                 <span id="otpError" class="text-danger"></span> 
                             </div>
 
-<<<<<<< HEAD
-=======
-                            <div class="inputGroup inputGroup3">
-                                <button type="submit" class="btn btn-primary w-100 mb-3" name="submit">Verify OTP</button>
-                            </div>
->>>>>>> origin/main
                         </form>
                     </div>
                 </div>

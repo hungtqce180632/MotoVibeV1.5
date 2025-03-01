@@ -322,6 +322,28 @@ public class UserAccountDAO {
         return customers;
     }
 
+    public List<UserAccount> getEmployees() {
+        List<UserAccount> customers = new ArrayList<>();
+        String query = "SELECT * FROM user_account WHERE role = 'employee'";
+
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(query);  ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                UserAccount user = new UserAccount();
+                user.setUserId(rs.getInt("user_id"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setRole(rs.getString("role"));
+                user.setStatus(rs.getBoolean("status"));
+                user.setDateCreated(rs.getTimestamp("date_created"));
+
+                customers.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customers;
+    }
     public void toggleStatus(int userId) {
         String query = "UPDATE user_account SET status = CASE WHEN status = 1 THEN 0 ELSE 1 END WHERE user_id = ?";
 
