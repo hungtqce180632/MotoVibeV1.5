@@ -189,6 +189,73 @@
                 width: 100%;
                 margin: 0 auto; /* Center the form horizontally */
             }
+
+            /* OTP Verification Styles */
+            .otp-controls {
+                display: flex;
+                gap: 10px;
+                margin-top: 10px;
+            }
+            
+            .otp-container {
+                margin: 10px 0;
+                display: none; /* Hidden by default until Send OTP is clicked */
+            }
+            
+            .otp-input {
+                font-size: 1.2em;
+                letter-spacing: 0.5em;
+                text-align: center;
+                display: block;
+                margin: 0;
+                padding: 0 1em 0;
+                background-color: #f3fafd;
+                border: solid 2px #217093;
+                border-radius: 4px;
+                width: 100%;
+                height: 50px;
+                font-weight: 600;
+                color: #353538;
+            }
+            
+            .btn-otp {
+                display: inline-block;
+                padding: 8px 15px;
+                background-color: #4eb8dd;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                font-size: 0.9em;
+                cursor: pointer;
+                transition: background-color 0.2s;
+            }
+            
+            .btn-otp:hover {
+                background-color: #217093;
+            }
+            
+            .btn-otp:disabled {
+                background-color: #ccc;
+                cursor: not-allowed;
+            }
+            
+            .verification-message {
+                margin-top: 5px;
+                font-size: 0.9em;
+            }
+            
+            .verified {
+                color: green;
+            }
+            
+            .not-verified {
+                color: red;
+            }
+            
+            .countdown {
+                color: #217093;
+                margin-left: 10px;
+            }
         </style>
     </head>
     <body>
@@ -203,7 +270,7 @@
                             <div class="alert alert-danger">${error}</div>
                         </c:if>
 
-                        <form action="register" method="post"> <%-- Changed form action to "register" --%>
+                        <form action="register" method="post" id="registrationForm"> <%-- Changed form action to "register" --%>
                             <div class="svgContainer">
                                 <div>
                                     <svg class="mySVG" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 200">
@@ -299,6 +366,18 @@
                                 <label class="form-label" for="email">Email</label> <%-- Changed label --%>
                                 <input type="email" id="email" class="email form-control" maxlength="256" name="email" required>
                                 <p class="helper helper1">email@domain.com</p>
+                                <div class="otp-controls">
+                                    <button type="button" id="sendOtpBtn" class="btn-otp">Send OTP</button>
+                                    <span id="countdown" class="countdown"></span>
+                                </div>
+                                <div class="otp-container" id="otpContainer">
+                                    <label for="otp" class="form-label mt-3">Enter OTP</label>
+                                    <input type="text" id="otp" class="otp-input" maxlength="6" placeholder="______">
+                                    <div class="otp-controls mt-2">
+                                        <button type="button" id="verifyOtpBtn" class="btn-otp">Verify OTP</button>
+                                    </div>
+                                    <p id="verificationMessage" class="verification-message"></p>
+                                </div>
                                 <span class="indicator"></span>
                             </div>
                             <div class="inputGroup inputGroup2">
@@ -324,7 +403,7 @@
                                 <input type="text" name="address" class="form-control" required />
                             </div>
                             <div class="inputGroup inputGroup3">
-                                <button id="login" type="submit" class="btn btn-primary w-100">Register</button> <%-- Changed button text to "Register" --%>
+                                <button id="register" type="submit" class="btn btn-primary w-100" disabled>Register</button> <%-- Changed button text to "Register" --%>
                             </div>
                             <div class="text-center mt-3">
                                 <a href="/MotoVibe/login.jsp">Already have an account? Log in</a> <%-- Changed link to "Already have an account? Log in" --%>
@@ -537,6 +616,174 @@
             password.addEventListener('blur', onPasswordBlur);
             TweenMax.set(armL, {x: - 93, y: 220, rotation: 105, transformOrigin: "top left"});
             TweenMax.set(armR, {x: - 93, y: 220, rotation: - 105, transformOrigin: "top right"});
+
+            // OTP Verification Script
+            document.addEventListener('DOMContentLoaded', function() {
+                const emailInput = document.getElementById('email');
+                const sendOtpBtn = document.getElementById('sendOtpBtn');
+                const verifyOtpBtn = document.getElementById('verifyOtpBtn');
+                const otpInput = document.getElementById('otp');
+                const otpContainer = document.getElementById('otpContainer');
+                const verificationMessage = document.getElementById('verificationMessage');
+                const registerBtn = document.getElementById('register');
+                const countdownSpan = document.getElementById('countdown');
+                
+                let isEmailVerified = false;
+                let countdownTimer = null;
+                let secondsLeft = 0;
+                
+                // Email validation function
+                function isValidEmail(email) {
+                    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+                    return emailRegex.test(email);
+                }
+                
+                // Function to start countdown timer
+                function startCountdown(seconds) {
+                    secondsLeft = seconds;
+                    updateCountdown();
+                    
+                    countdownTimer = setInterval(() => {
+                        secondsLeft--;
+                        updateCountdown();
+                        
+                        if (secondsLeft <= 0) {
+                            clearInterval(countdownTimer);
+                            sendOtpBtn.disabled = false;
+                            countdownSpan.textContent = "";
+                        }
+                    }, 1000);
+                }
+                
+                // Update countdown display
+                function updateCountdown() {
+                    countdownSpan.textContent = `Resend in ${secondsLeft}s`;
+                }
+                
+                // Send OTP button click handler
+                sendOtpBtn.addEventListener('click', function() {
+                    const email = emailInput.value.trim();
+                    
+                    if (!isValidEmail(email)) {
+                        alert('Please enter a valid email address');
+                        return;
+                    }
+                    
+                    // Disable button during request
+                    sendOtpBtn.disabled = true;
+                    
+                    // AJAX call to send OTP
+                    fetch('sendOtp', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: 'email=' + encodeURIComponent(email)
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data === true) {
+                            // Show OTP input field
+                            otpContainer.style.display = 'block';
+                            verificationMessage.textContent = 'OTP sent to your email. Please check and enter below.';
+                            verificationMessage.className = 'verification-message';
+                            
+                            // Start countdown for resend (60 seconds)
+                            startCountdown(60);
+                        } else {
+                            alert('Failed to send OTP. Please try again.');
+                            sendOtpBtn.disabled = false;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred. Please try again later.');
+                        sendOtpBtn.disabled = false;
+                    });
+                });
+                
+                // Verify OTP button click handler
+                verifyOtpBtn.addEventListener('click', function() {
+                    const otp = otpInput.value.trim();
+                    
+                    if (otp.length !== 6 || !/^\d+$/.test(otp)) {
+                        alert('Please enter a valid 6-digit OTP');
+                        return;
+                    }
+                    
+                    // AJAX call to verify OTP
+                    fetch('verifyOtp', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: 'otp=' + encodeURIComponent(otp)
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(verified => {
+                        if (verified === true) {
+                            isEmailVerified = true;
+                            verificationMessage.textContent = 'Email verified successfully!';
+                            verificationMessage.className = 'verification-message verified';
+                            
+                            // Enable register button
+                            registerBtn.disabled = false;
+                            
+                            // Disable email field and OTP controls
+                            emailInput.readOnly = true;
+                            otpInput.readOnly = true;
+                            verifyOtpBtn.disabled = true;
+                            
+                            // Clear any active countdown
+                            if (countdownTimer) {
+                                clearInterval(countdownTimer);
+                                countdownSpan.textContent = "";
+                            }
+                            
+                            // Add hidden field to form to indicate verification
+                            const hiddenField = document.createElement('input');
+                            hiddenField.type = 'hidden';
+                            hiddenField.name = 'emailVerified';
+                            hiddenField.value = 'true';
+                            document.getElementById('registrationForm').appendChild(hiddenField);
+                            
+                        } else {
+                            verificationMessage.textContent = 'Invalid OTP. Please try again.';
+                            verificationMessage.className = 'verification-message not-verified';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred during verification. Please try again.');
+                    });
+                });
+                
+                // Form submission validation
+                document.getElementById('registrationForm').addEventListener('submit', function(event) {
+                    if (!isEmailVerified) {
+                        event.preventDefault();
+                        alert('Please verify your email before registering.');
+                    }
+                    
+                    // Check if passwords match
+                    const password = document.getElementById('password').value;
+                    const confirmPassword = document.getElementById('confirmPassword').value;
+                    if (password !== confirmPassword) {
+                        event.preventDefault();
+                        alert('Passwords do not match.');
+                    }
+                });
+            });
         </script>
     </body>
 </html>

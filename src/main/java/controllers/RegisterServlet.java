@@ -25,9 +25,20 @@ public class RegisterServlet extends HttpServlet {
 
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+        String confirmPassword = request.getParameter("confirmPassword");
+        String emailVerified = request.getParameter("emailVerified");
+
+        // Check if email is verified through OTP
+        HttpSession session = request.getSession();
+        String verifiedEmail = (String) session.getAttribute("emailSendOTP");
+        
+        if (!"true".equals(emailVerified) || verifiedEmail == null || !verifiedEmail.equals(email)) {
+            request.setAttribute("error", "Email verification failed. Please verify your email first.");
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+            return;
+        }
 
         // Automatically set the role based on the user's context
-        // You can adjust this logic to determine the role based on some conditions or inputs
         String role = "customer"; // Default role set to customer
 
         if (email == null || password == null || email.isEmpty() || password.isEmpty()) {
@@ -36,9 +47,16 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
+        // Check if passwords match
+        if (!password.equals(confirmPassword)) {
+            request.setAttribute("error", "Passwords do not match.");
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+            return;
+        }
+
         // Collect customer-specific details if the role is customer
         String name = request.getParameter("name");
-        String phoneNumber = request.getParameter("phoneNumber");
+        String phoneNumber = request.getParameter("phone_number");
         String address = request.getParameter("address");
 
         UserAccountDAO userDAO = new UserAccountDAO();
@@ -61,7 +79,6 @@ public class RegisterServlet extends HttpServlet {
 
         if (isUserCreated) {
             // Assign customer/employee roles after registration if needed
-            HttpSession session = request.getSession();
             if ("customer".equals(role)) {
                 // Create and insert customer details into the database
                 CustomerDAO customerDAO = new CustomerDAO();
@@ -95,6 +112,10 @@ public class RegisterServlet extends HttpServlet {
                 }
             }
 
+            // Clean up the verification attributes from session
+            session.removeAttribute("emailSendOTP");
+            session.removeAttribute("otp");
+            
             session.setAttribute("user", newUser);
             session.setAttribute("userRole", role);
 
@@ -105,7 +126,7 @@ public class RegisterServlet extends HttpServlet {
         }
     }
 
-      @Override
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.getRequestDispatcher("register.jsp").forward(request, response);
