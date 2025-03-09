@@ -12,7 +12,7 @@
         <style>
             body { 
                 background: var(--dark-black); 
-                color: var(--text-gold); 
+                color: #ffffff; /* Changed from var(--text-gold) to white */
                 font-family: 'Montserrat', sans-serif;
             }
             
@@ -77,7 +77,7 @@
             }
             
             h5 {
-                color: var(--primary-gold);
+                color: var(--primary-gold); /* Keep headings gold for emphasis */
                 font-weight: 600;
                 margin-bottom: 1rem;
                 border-bottom: 1px solid rgba(212, 175, 55, 0.3);
@@ -85,8 +85,16 @@
             }
             
             strong {
-                color: var(--primary-gold);
+                color: var(--primary-gold); /* Keep labels gold for emphasis */
                 font-weight: 600;
+            }
+            
+            p {
+                color: #ffffff; /* Ensure paragraphs are white */
+            }
+            
+            .review-card p {
+                color: #ffffff; /* Specifically target review text to be white */
             }
             
             .btn-group {
@@ -123,7 +131,7 @@
             }
             
             .text-center {
-                color: var(--text-gold);
+                color: #ffffff; /* Changed from var(--text-gold) to white */
                 margin-top: 2rem;
                 font-style: italic;
             }
@@ -175,14 +183,14 @@
                         </div>
                         <div class="col-md-4 d-flex align-items-center justify-content-end">
                             <div class="btn-group">
-                                <a href="motorDetail?id=<%= review.getMotorId() %>" class="btn btn-outline-gold">
+                                <a href="motorDetail?id=<%= review.getMotorId() %>" class="btn btn-outline-gold text-white">
                                     <i class="fas fa-eye me-1"></i> View Product
                                 </a>
-                                <a href="EditReviewServlet?reviewId=<%= review.getReviewId() %>" class="btn btn-outline-gold">
+                                <a href="EditReviewServlet?reviewId=<%= review.getReviewId() %>" class="btn btn-outline-gold text-white">
                                     <i class="fas fa-edit me-1"></i> Edit
                                 </a>
                                 <a href="DeleteReviewServlet?reviewId=<%= review.getReviewId() %>" 
-                                   class="btn btn-outline-danger"
+                                   class="btn btn-outline-danger text-white"
                                    onclick="return confirm('Are you sure you want to delete this review?');">
                                     <i class="fas fa-trash me-1"></i> Delete
                                 </a>
