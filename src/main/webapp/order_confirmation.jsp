@@ -197,12 +197,13 @@
             
             <div class="order-details animated delay-1">
                 <h5><i class="fas fa-file-invoice me-2"></i>Order Summary</h5>
+                <p><strong>Order Code:</strong> <span class="order-code">${orderCode != null ? orderCode : 'MV-XXXX'}</span></p>
                 <p><strong>Order Number:</strong> <span class="order-number">${orderId != null ? orderId : 'ORD-XXXX-XXXX'}</span></p>
                 <p><strong>Order Date:</strong> <span>${orderDate != null ? orderDate : java.time.LocalDate.now()}</span></p>
                 <p><strong>Estimated Delivery:</strong> <span>Within 3-5 business days</span></p>
                 
                 <c:if test="${hasWarranty}">
-                    <p><strong class="text-success"><i class="fas fa-shield-alt me-1"></i>Warranty:</strong> <span>Your purchase includes our Premium Protection Plan</span></p>
+                    <p><strong class="text-success"><i class="fas fa-shield-alt me-1"></i>Warranty:</strong> <span>Your purchase includes our Premium Protection Plan for 2 years</span></p>
                 </c:if>
             </div>
             

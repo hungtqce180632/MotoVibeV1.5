@@ -69,6 +69,32 @@ public class CustomerDAO {
     }
 
     /**
+     * Get customer by customer_id (not user_id)
+     */
+    public Customer getCustomerById(int customerId) {
+        // Similar to getCustomerByUserId but filtering by customer_id instead
+        String sql = "SELECT c.customer_id, c.user_id, c.name, c.phone_number, c.address, "
+                + "       u.email AS user_email, u.role AS user_role, u.status AS user_status "
+                + "FROM [dbo].[customers] c "
+                + "JOIN [dbo].[user_account] u ON c.user_id = u.user_id "
+                + "WHERE c.customer_id = ?";
+
+        try (Connection connection = DBContext.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, customerId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapCustomerJoined(rs);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // not found
+    }
+
+    /**
      * Update only the [customers] columns. (Does NOT update user_account.)
      */
     public boolean updateCustomer(Customer c) {

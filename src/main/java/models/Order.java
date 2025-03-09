@@ -27,11 +27,12 @@ public class Order {
     private boolean hasWarranty;
     private Integer warrantyId; // Nullable
     private Warranty warranty;
+    private String orderCode; // New field for tracking orders
 
     public Order() {
     }
 
-    public Order(int orderId, int customerId, Integer employeeId, int motorId, Timestamp createDate, String paymentMethod, Double totalAmount, boolean depositStatus, String orderStatus, Date dateStart, Date dateEnd, boolean hasWarranty, Integer warrantyId, Warranty warranty) {
+    public Order(int orderId, int customerId, Integer employeeId, int motorId, Timestamp createDate, String paymentMethod, Double totalAmount, boolean depositStatus, String orderStatus, Date dateStart, Date dateEnd, boolean hasWarranty, Integer warrantyId, Warranty warranty, String orderCode) {
         this.orderId = orderId;
         this.customerId = customerId;
         this.employeeId = employeeId;
@@ -46,6 +47,7 @@ public class Order {
         this.hasWarranty = hasWarranty;
         this.warrantyId = warrantyId;
         this.warranty = warranty;
+        this.orderCode = orderCode;
     }
 
     public int getOrderId() {
@@ -158,6 +160,14 @@ public class Order {
 
     public void setWarranty(Warranty warranty) {
         this.warranty = warranty;
+    }
+
+    public String getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
     }
 
 }

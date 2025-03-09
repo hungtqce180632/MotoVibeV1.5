@@ -116,6 +116,7 @@
                             <table class="table">
                                 <thead>
                                     <tr>
+                                        <th>Order Code</th>
                                         <th>Order ID</th>
                                         <th>Customer ID</th>
                                         <th>Employee ID</th>
@@ -131,6 +132,7 @@
                                 <tbody>
                                     <c:forEach var="order" items="${orders}">
                                         <tr>
+                                            <td><strong class="order-code">${order.orderCode}</strong></td>
                                             <td>#${order.orderId}</td>
                                             <td>${order.customerId != 0 ? order.customerId : 'N/A'}</td>
                                             <td>${order.employeeId != 0 ? order.employeeId : 'N/A'}</td>
