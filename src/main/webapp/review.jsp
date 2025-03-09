@@ -181,6 +181,34 @@
     .review-container h2 {
         color: var(--primary-gold);
     }
+
+    .star-rating {
+        display: inline-flex;
+        flex-direction: row-reverse;
+        font-size: 1.5rem;
+        justify-content: space-around;
+        padding: 0 0.2em;
+        text-align: center;
+        width: 5em;
+    }
+
+    .star-rating input {
+        display: none;
+    }
+
+    .star-rating label {
+        color: #ccc;
+        cursor: pointer;
+    }
+
+    .star-rating :checked ~ label {
+        color: var(--primary-gold);
+    }
+
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+        color: var(--secondary-gold);
+    }
 </style>
 
 <div class="container mt-4">
@@ -203,9 +231,20 @@
                     <c:forEach var="rev" items="${reviews}">
                         <tr>
                             <td>${rev.customerId}</td>
-                            <td>
+                            <td class="rating-display">
                                 <c:choose>
-                                    <c:when test="${rev.rating > 0}">${rev.rating}</c:when>
+                                    <c:when test="${rev.rating > 0}">
+                                        <c:forEach begin="1" end="5" var="star">
+                                            <c:choose>
+                                                <c:when test="${star <= rev.rating}">
+                                                    <i class="fas fa-star" style="color: var(--primary-gold);"></i>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <i class="far fa-star" style="color: #ccc;"></i>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:forEach>
+                                    </c:when>
                                     <c:otherwise>(none)</c:otherwise>
                                 </c:choose>
                             </td>
@@ -237,8 +276,14 @@
                 <!-- We need motorId to link the review to the motor -->
                 <input type="hidden" name="motorId" value="${motor.motorId}" />
                 <div class="mb-3">
-                    <label class="form-label">Rating (1-5, optional)</label>
-                    <input type="number" class="form-control" name="rating" min="1" max="5" />
+                    <label class="form-label">Rating</label>
+                    <div class="star-rating">
+                        <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 stars"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 stars"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 stars"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 stars"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star"><i class="fas fa-star"></i></label>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Review Text</label>
@@ -246,6 +291,24 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Submit Review</button>
             </form>
+        </div>
+    </c:if>
+
+    <!-- Show message if user has already submitted a review -->
+    <c:if test="${not empty reviewMessage}">
+        <div class="write-review-section">
+            <div class="alert alert-info" role="alert">
+                <i class="fas fa-info-circle me-2"></i> ${reviewMessage}
+            </div>
+        </div>
+    </c:if>
+    
+    <!-- Show error if review submission failed due to existing review -->
+    <c:if test="${param.reviewError eq 'alreadySubmitted'}">
+        <div class="write-review-section">
+            <div class="alert alert-danger" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i> You have already submitted a review for this motor.
+            </div>
         </div>
     </c:if>
 </div>

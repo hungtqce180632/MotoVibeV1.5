@@ -156,18 +156,17 @@ public class OrderDAO {
      * Check if a customer has purchased (Completed) a given motor.
      */
     public boolean hasPurchasedMotor(int customerId, int motorId) {
-        String sql = "SELECT COUNT(*) AS cnt "
-                + "FROM Orders "
-                + "WHERE customer_id = ? AND motor_id = ? AND order_status = 'Completed'";
-        try ( Connection connection = DBContext.getConnection();  PreparedStatement ps = connection.prepareStatement(sql)) {
-
+        String sql = "SELECT COUNT(*) FROM orders WHERE customer_id = ? AND motor_id = ? AND order_status = 'Completed'";
+        
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
             ps.setInt(1, customerId);
             ps.setInt(2, motorId);
-
-            try ( ResultSet rs = ps.executeQuery()) {
+            
+            try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    int count = rs.getInt("cnt");
-                    return count > 0;
+                    return rs.getInt(1) > 0;
                 }
             }
         } catch (SQLException e) {

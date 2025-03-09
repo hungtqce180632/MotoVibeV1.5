@@ -65,9 +65,11 @@ public class MotorDetailServlet extends HttpServlet {
             List<Review> reviews = reviewDAO.getAllReviewOfCar(motorId);
 
             // 6) Check if the logged-in user is a CUSTOMER who purchased the motor
-            boolean canReview = false;  // By default, can't
             HttpSession session = request.getSession(false);
             UserAccount user = (session != null) ? (UserAccount) session.getAttribute("user") : null;
+
+            // Initialize canReview as false
+            boolean canReview = false;
 
             if (user != null && "customer".equalsIgnoreCase(user.getRole())) {
                 // Find the customer's row
@@ -75,8 +77,14 @@ public class MotorDetailServlet extends HttpServlet {
                 if (c != null) {
                     // Check if they have purchased this motor (with Completed status)
                     boolean purchased = orderDAO.hasPurchasedMotor(c.getCustomerId(), motorId);
-                    if (purchased) {
-                        canReview = true;
+                    boolean alreadyReviewed = reviewDAO.hasAlreadyReviewed(c.getCustomerId(), motorId);
+                    
+                    // Customer can only review if they've purchased the motor AND haven't already reviewed it
+                    canReview = purchased && !alreadyReviewed;
+                    
+                    // If they've purchased but already reviewed, set a message
+                    if (purchased && alreadyReviewed) {
+                        request.setAttribute("reviewMessage", "You have already submitted a review for this motor.");
                     }
                 }
             }

@@ -167,7 +167,7 @@
                                         <i class="far fa-star"></i>
                                     <% } %>
                                 <% } %>
-                                <span class="ms-2"><%= review.getRating() %>/5</span>
+                                <span class="ms-2 d-none"><%= review.getRating() %>/5</span>
                             </div>
                             
                             <p><strong>Review:</strong> <%= review.getReviewText() %></p>
