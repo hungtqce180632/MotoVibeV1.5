@@ -127,7 +127,7 @@
                     </div>
 
                     <div class="text-center">
-                        <button type="submit" class="btn btn-success btn-luxury">Update Motor</button>
+                        <button type="submit" class="btn btn-success ">Update Motor</button>
                         <a href="motorDetail?id=${motor.motorId}" class="btn btn-secondary">Cancel</a>
                     </div>
                 </form>

@@ -202,6 +202,7 @@
                                         <li><a class="dropdown-item" href="motorbikeStatistics"><i class="fas fa-chart-line me-2"></i> MotoBike Statistics</a></li>
                                         <li><a class="dropdown-item" href="modelslist"><i class="fas fa-list me-2"></i> Model List</a></li>
                                         <li><a class="dropdown-item" href="adminOrders"><i class="fas fa-shopping-cart me-2"></i> List Order</a></li>
+                                        <li><a class="dropdown-item" href="accountManagement"><i class="fas fa-list me-2"></i> Account Management</a></li>
 
                                     </ul>
                                 </li>

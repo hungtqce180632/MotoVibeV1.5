@@ -12,6 +12,64 @@ import java.util.List;
 
 public class UserAccountDAO {
 
+    public boolean updateUserAccount(int userId, String email, String password) {
+        String sql = "UPDATE user_account SET email = ?, password = ? WHERE user_id = ?";
+
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, email);
+            stmt.setString(2, password);
+            stmt.setInt(3, userId);
+
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean updateEmployee(int userId, String name, String phoneNumber) {
+        String sql = "UPDATE employees SET name = ?, phone_number = ? WHERE user_id = ?";
+
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, name);
+            stmt.setString(2, phoneNumber);
+            stmt.setInt(3, userId);
+
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public UserAccount getUserById(int userId) {
+        String sql = "SELECT * FROM user_account WHERE user_id = ?";
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new UserAccount(
+                        rs.getInt("user_id"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("role"),
+                        rs.getBoolean("status"),
+                        rs.getTimestamp("date_created")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     // Method to authenticate user login
     public UserAccount login(String email, String password) {
         String sql = "SELECT * FROM user_account WHERE email = ? AND password = ? AND status = 1";
@@ -344,6 +402,7 @@ public class UserAccountDAO {
         }
         return customers;
     }
+
     public void toggleStatus(int userId) {
         String query = "UPDATE user_account SET status = CASE WHEN status = 1 THEN 0 ELSE 1 END WHERE user_id = ?";
 

@@ -2,6 +2,8 @@
 <%@ page import="models.UserAccount" %>
 <%@ page import="java.util.List" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -10,6 +12,12 @@
         <link rel="stylesheet" href="css/luxury-theme.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         <style>
+            .btn {
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                padding: 0.75rem 1.5rem;
+                transition: all 0.3s ease;
+            }
             :root {
                 --primary-gold: #D4AF37;
                 --secondary-gold: #C5A028;
@@ -32,6 +40,7 @@
                 border: 1px solid var(--primary-gold);
                 margin: 2rem auto;
                 max-width: 1200px;
+
             }
 
             .section-title {
@@ -148,47 +157,72 @@
     <body>
         <jsp:include page="header.jsp"/>
 
-        <div class="container">
-            <div class="users-section">
-                <h2 class="section-title"><i class="fas fa-users me-2"></i> User Management</h2>
-
-                <c:if test="${empty users}">
+        <div class="container" style="padding-top: 50px">
+            <div class="users-section" >
+                
+                <a href="accountManagement" class="btn btn-primary btn-sm me-1">
+                   <i class="fas fa-user me-1"></i> Customer
+                </a>
+                <a href="accountManagement?listOf=emp" class="btn btn-primary btn-sm me-1">
+                   <i class="fas fa-user me-1"></i> Employee
+                </a>      
+                <h2 class="section-title" ><i class="fas fa-users me-2"></i> ${listOf eq 'emp' ? 'Employee Management' : ' Customer Management'}</h2>
+                <c:if test="${listOf eq 'emp'}">
+                    <a href="createEmployee" class="btn btn-primary btn-sm me-1">
+                   <i class="fas fa-user-plus me-1"></i> Create Employee Account
+                </a>  
+                </c:if>
+                
+                <c:if test="${empty list}">
                     <div class="alert alert-info">
                         <i class="fas fa-info-circle me-2"></i> No users found.
                     </div>
                 </c:if>
 
-                <c:if test="${not empty users}">
+                <c:if test="${not empty list}">
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
                                 <tr>
                                     <th>User ID</th>
+                                    <th>Name</th>
                                     <th>Email</th>
-                                    <th>Role</th>
+                                    <th>Phone Number</th>
+                                    <th>Create Date</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <c:forEach var="user" items="${users}">
+                                <c:forEach var="user" items="${list}">
                                     <tr>
                                         <td>#${user.userId}</td>
+                                        <td>${map[user.userId].name}</td>
                                         <td>${user.email}</td>
-                                        <td>${user.role}</td>
+                                        <td>${map[user.userId].phoneNumber}</td>
+                                        <td><fmt:formatDate value="${user.dateCreated}" pattern="yyyy-MM-dd"/></td>
                                         <td>
-                                            <span class="${user.status ? 'status-active' : 'status-inactive'}">
-                                                <i class="fas ${user.status ? 'fa-check-circle' : 'fa-times-circle'} me-1"></i>
-                                                ${user.status ? 'Active' : 'Inactive'}
-                                            </span>
+                                            <div style="display: flex">
+                                                <span class="${user.status ? 'status-active' : 'status-inactive'}">
+                                                    <i class="fas ${user.status ? 'fa-check-circle' : 'fa-times-circle'} me-1"></i>
+                                                    ${user.status ? 'Active' : 'Inactive'}
+                                                </span>
+                                            </div>
                                         </td>
                                         <td>
-                                            <a href="editUser?id=${user.userId}" class="btn btn-primary btn-sm me-1">
-                                                <i class="fas fa-edit me-1"></i> Edit
-                                            </a>
-                                            <a href="deleteUser?id=${user.userId}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">
-                                                <i class="fas fa-trash me-1"></i> Delete
-                                            </a>
+                                            <div style="display: flex">
+                                                <c:if test="${listOf eq 'emp'}">
+                                                    <a href="editEmployee?id=${user.userId}" class="btn btn-warning">
+                                                        <i class="fas fa-edit me-1"></i> Edit
+                                                    </a>
+                                                </c:if>
+                                                <form action="accountManagement?changeStatusId=${user.userId}" method="POST" class="btn ${user.status ? 'btn-danger' : 'btn-success'} btn-sm">
+                                                    <button type="submit"  class="btn ${user.status ? 'btn-danger' : 'btn-success'} btn-sm">
+                                                        <i class="fas ${user.status ? 'fa-ban' : 'fa-check'} me-1"></i> 
+                                                        ${user.status ? 'Disable' : 'Enable'} 
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                 </c:forEach>

@@ -141,8 +141,10 @@ public class CustomerDAO {
             while (rs.next()) {
                 Customer customer = new Customer();
                 customer.setCustomerId(rs.getInt("customer_id"));
+                customer.setUserId(rs.getInt("user_id"));
                 customer.setName(rs.getString("name"));
                 customer.setPhoneNumber(rs.getString("phone_number"));
+                customer.setAddress(rs.getString("address"));
                 customers.add(customer);
             }
         } catch (SQLException e) {

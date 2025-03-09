@@ -65,13 +65,15 @@ public class EmployeeDAO {
 
     public List<Employee> getAllEmployees() {
         List<Employee> employees = new ArrayList<>();
-        String sql = "SELECT employee_id, name FROM employees"; // Assuming employees table has these columns
+        String sql = "SELECT * FROM employees"; // Assuming employees table has these columns
 
         try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql);  ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {
                 Employee employee = new Employee();
                 employee.setEmployeeId(resultSet.getInt("employee_id"));
+                employee.setUserId(resultSet.getInt("user_id"));
+                employee.setPhoneNumber(resultSet.getString("phone_number"));
                 employee.setName(resultSet.getString("name"));
                 employees.add(employee);
             }
