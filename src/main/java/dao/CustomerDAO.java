@@ -177,41 +177,6 @@ public class CustomerDAO {
         return customers;
     }
 
-    public Customer getCustomerById(int customerId) {
-        String sql = "SELECT c.customer_id, c.user_id, c.name, c.phone_number, c.address, c.email, c.status, "
-                + "u.role "
-                + "FROM customers c "
-                + "JOIN user_account u ON c.user_id = u.user_id "
-                + "WHERE c.customer_id = ?";
-
-        try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            // Set the customerId parameter for the query
-            preparedStatement.setInt(1, customerId);
-
-            try ( ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    // Mapping result set to the Customer object
-                    Customer customer = new Customer();
-                    customer.setCustomerId(resultSet.getInt("customer_id"));
-                    customer.setUserId(resultSet.getInt("user_id"));
-                    customer.setName(resultSet.getString("name"));
-                    customer.setPhoneNumber(resultSet.getString("phone_number"));
-                    customer.setAddress(resultSet.getString("address"));
-                    customer.setEmail(resultSet.getString("email"));
-                    customer.setRole(resultSet.getString("role"));
-                    customer.setStatus(resultSet.getBoolean("status"));
-
-                    return customer;
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return null; // Return null if customer not found
-    }
-
     // Method to fetch all customers (for dropdown)
     public List<Customer> getAllCustomersFD() throws SQLException {
         List<Customer> customers = new ArrayList<>();
@@ -231,5 +196,26 @@ public class CustomerDAO {
             }
         }
         return customers;
+    }
+    
+    /**
+     * Delete a customer by customer_id
+     * @param customerId The ID of the customer to delete
+     * @return true if deletion was successful, false otherwise
+     */
+    public boolean deleteCustomer(int customerId) {
+        String sql = "DELETE FROM customers WHERE customer_id = ?";
+        
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setInt(1, customerId);
+            int rowsDeleted = ps.executeUpdate();
+            return rowsDeleted > 0;
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

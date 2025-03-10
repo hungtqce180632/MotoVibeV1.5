@@ -86,8 +86,6 @@ public class EmployeeDAO {
         return employees;
     }
 
-<<<<<<< HEAD
-=======
     public boolean addEmployee(Employee employee) {
         String sqlUserAccount = "INSERT INTO user_account (email, password, role, status) VALUES (?, ?, ?, ?)";
         String sqlEmployee = "INSERT INTO employees (user_id, name, phone_number) VALUES (?, ?, ?)";
@@ -137,5 +135,4 @@ public class EmployeeDAO {
 
         return false; // Return false if insertion fails
     }
->>>>>>> origin/main
 }
