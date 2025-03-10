@@ -35,7 +35,7 @@
             .btn-dark{
                 background-color: #050B20;
             }
-            
+
             .container-fluid {
                 height: 100vh;
             }
@@ -174,33 +174,95 @@
                 }
             }
 
-            function verifyOtp() {
-                const otp = $('#otp').val();
+            function sendOtp() {
+                var sendOtpButton = document.getElementById("sendOtpButton");
+                var countdown = 60; // 1 minute countdown
+
+                // Disable the Send OTP button
+                sendOtpButton.disabled = true;
+
+                // Show the countdown on the button
+                sendOtpButton.innerText = `Wait ${countdown} seconds`;
+
+                // Set up the countdown timer
+                var interval = setInterval(function () {
+                    countdown--;
+                    sendOtpButton.innerText = `Wait ${countdown} seconds`;
+
+                    // If countdown reaches zero, re-enable the button
+                    if (countdown <= 0) {
+                        clearInterval(interval);
+                        sendOtpButton.disabled = false;
+                        sendOtpButton.innerText = "Send OTP"; // Reset button text
+                    }
+                }, 1000); // Update every second
+
+                // Send OTP request to the server (use your actual AJAX endpoint here)
                 $.ajax({
                     type: "POST",
-                    url: "/VerifyOtpServlet",
-                    data: {otp: otp},
+                    url: "sendOtp", // replace with your server-side logic
                     success: function (response) {
-                        if (response === true) {
-                            $('#verificationResult').val('Success');
-                            $('#otpInput').hide();
-                            $('#OTPSuccess').css('display', 'block');
-                            $('#loginBtn').prop('disabled', false); // Bật lại nút Login
+                        // Handle the server's response to OTP request
+                        console.log(response);
+                        if (response.success) {
                             Swal.fire({
                                 icon: 'success',
-                                title: 'Authentication successful',
-                                text: 'OTP verified successfully!'
+                                title: 'OTP Sent',
+                                text: 'An OTP has been sent to your email.'
                             });
+                            document.getElementById("otpInput").style.display = "block"; // Show OTP input field
                         } else {
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Authentication failed',
-                                text: 'OTP is incorrect or expired. Please try again.'
+                                title: 'OTP Error',
+                                text: 'Failed to send OTP. Please try again.'
                             });
                         }
                     },
                     error: function (xhr, status, error) {
-                        alert("Lỗi: " + error);
+                        console.log("Error:", error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'An error occurred while sending OTP.'
+                        });
+                    }
+                });
+            }
+
+            function verifyOtp() {
+                var otp = document.getElementById("otp").value;
+                var verificationResult = document.getElementById("verificationResult");
+
+                $.ajax({
+                    type: "POST",
+                    url: "verifyOtp", // replace with your verification endpoint
+                    data: {otp: otp},
+                    success: function (response) {
+                        if (response.success) {
+                            verificationResult.value = "Success";
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'OTP Verified',
+                                text: 'OTP verification successful.'
+                            });
+                            document.getElementById("OTPSuccess").style.display = "block";
+                            document.getElementById("loginBtn").disabled = false; // Enable Login button
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Verification Failed',
+                                text: 'The OTP entered is incorrect or expired. Please try again.'
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log("Error:", error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'An error occurred during OTP verification.'
+                        });
                     }
                 });
             }
@@ -293,25 +355,29 @@
                                 <small id="confirmError" class="text-danger"></small>
                             </div>
 
-                            <!-- Bắt đầu phần OTP -->
-                            <div class="alert alert-warning alert-dismissible fade d-none show" role="alert" id="alertOTP">
-                                You should enter your email.
+                            <!-- Start OTP Section -->
+                            <div class="alert alert-warning alert-dismissible fade d-none" role="alert" id="alertOTP">
+                                Please verify OTP before resetting your password.
                                 <button type="button" class="btn-close" aria-label="Close" onclick="hideAlert()"></button>
                             </div>
+                            <!-- Send OTP Section -->
                             <div class="d-flex mb-3 align-items-center" id="otpSend">
                                 <button type="button" class="btn btn-outline-primary me-3" id="sendOtpButton" onclick="sendOtp();">Send OTP</button>
-                                <p class="text-danger" hidden id="notificationOtp">Please wait a few seconds.</p>
+                                <p class="text-danger" hidden id="notificationOtp">Please wait a few seconds before sending another OTP.</p>
                             </div>
+                            <!-- OTP Input Section -->
                             <div id="otpInput" style="display: none;" class="mb-3">
-                                <label for="otp" class="form-label">Enter your code</label>
+                                <label for="otp" class="form-label">Enter OTP</label>
                                 <div class="mb-2">
                                     <input type="text" class="form-control" id="otp" name="otp" required>
                                 </div>
-                                <button type="button" class="btn btn-success" onclick="verifyOtp()">Verification</button>
+                                <button type="button" class="btn btn-success" onclick="verifyOtp()">Verify OTP</button>
                             </div>
+                            <!-- OTP Success Notification -->
                             <p style="display: none;" class="text-success mb-3 fw-bold" id="OTPSuccess">OTP authentication successful!</p>
+
                             <input hidden id="verificationResult" class="mt-3" name="OTPResult" value=""/>
-                            <!-- Kết thúc phần OTP -->
+                            <!-- End OTP Section -->
 
                             <button type="button" class="btn btn-dark" id="loginBtn" disabled onclick="redirectToLogin()">Login</button>
                         </form>

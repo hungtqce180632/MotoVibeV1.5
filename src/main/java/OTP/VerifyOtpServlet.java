@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author thaii
  */
-@WebServlet(name = "VerifyOtpServlet", urlPatterns = {"/VerifyOtpServlet"})
+@WebServlet("/verifyOtp")
 public class VerifyOtpServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)

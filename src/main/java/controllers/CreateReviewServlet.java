@@ -79,6 +79,14 @@ public class CreateReviewServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "You haven't purchased this motor, so you can't review it.");
             return;
         }
+        
+        // Double check if customer has already reviewed this motor
+        boolean alreadyReviewed = reviewDAO.hasAlreadyReviewed(c.getCustomerId(), motorId);
+        if (alreadyReviewed) {
+            // Redirect back to motor detail page with error
+            response.sendRedirect("motorDetail?id=" + motorId + "&reviewError=alreadySubmitted");
+            return;
+        }
 
         // Build the new review object
         Review review = new Review();

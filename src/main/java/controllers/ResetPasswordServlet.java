@@ -41,7 +41,7 @@ public class ResetPasswordServlet extends HttpServlet {
             return;
         }
 
-        // Check if email and passwords are not null
+        // Check if email and passwords are not null or empty
         if (email == null || newPassword == null || confirmPassword == null || email.isEmpty() || newPassword.isEmpty() || confirmPassword.isEmpty()) {
             request.setAttribute("error", "All fields are required.");
             request.getRequestDispatcher("resetPassword.jsp").forward(request, response);
@@ -55,7 +55,7 @@ public class ResetPasswordServlet extends HttpServlet {
             return;
         }
 
-        // Check if the user exists
+        // Check if the user exists in the database
         UserAccountDAO userDao = new UserAccountDAO();
         UserAccount user = userDao.getUserByEmail(email);
 
@@ -87,12 +87,13 @@ public class ResetPasswordServlet extends HttpServlet {
 
     // Method to send OTP via email (You'll need to implement this using your email service)
     private void sendOtpEmail(String email, String otp) {
-        // You can use JavaMail or another service to send the OTP to the user's email
-        // Example code to send OTP
+        // Use JavaMail or another service to send the OTP to the user's email
+        // Example code to send OTP (This is a simple placeholder)
         String subject = "Your OTP for Password Reset";
         String message = "Your OTP for resetting your password is: " + otp;
 
-        // Send email (using your email sending mechanism, e.g., JavaMail)
-        // Use an appropriate method from your email sending service here to send the OTP
+        // Use an email sending service to send the OTP
+        // Example: JavaMail API or any other email service that supports SMTP
+        // Here you can implement the actual email sending code
     }
 }

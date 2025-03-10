@@ -16,6 +16,8 @@ public class Motor {
     private int brandId;
     private int modelId;
     private String motorName;
+    private String brandName;
+    private String modelName;
     private String color;
     private double price;
     private int fuelId;
@@ -124,6 +126,18 @@ public class Motor {
 
     public void setMotorName(String motorName) {
         this.motorName = motorName;
+    }
+    
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
+    }
+
+    public String getModelName() {
+        return modelName;
+    }
+    
+    public String getBrandName() {
+        return brandName;
     }
 
     public String getColor() {

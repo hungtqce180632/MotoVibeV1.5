@@ -1,112 +1,96 @@
 package controllers;
 
-import dao.WishlistDAO;
 import dao.CustomerDAO;
+import dao.WishlistDAO;
 import models.Motor;
+import models.Customer;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.util.List;
+import models.UserAccount;
 
-@WebServlet("/wishlist")
+@WebServlet(name = "WishlistServlet", urlPatterns = {"/wishlist"})
 public class WishlistServlet extends HttpServlet {
 
-    private WishlistDAO wishlistDAO;
-    private CustomerDAO customerDAO;
+    private static final long serialVersionUID = 1L;
 
-    @Override
-    public void init() throws ServletException {
-        super.init();
-        wishlistDAO = new WishlistDAO();
-        customerDAO = new CustomerDAO();
-    }
-
-    // Method to handle GET requests and display the user's wishlist
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Get the current session
         HttpSession session = request.getSession();
-        Integer userId = (Integer) session.getAttribute("userId");  // Cast to Integer, which is the type stored in session
+        UserAccount user = (UserAccount) session.getAttribute("user");
 
-        if (userId == null) {
+        // If user is not logged in, redirect to the login page
+        if (user == null) {
             response.sendRedirect("login.jsp");
             return;
         }
 
-        int customerId = customerDAO.getCustomerIdByUserId(userId); // Get customerId from userId
-        List<Motor> wishlist = wishlistDAO.getWishlistForUser(customerId);  // Fetch wishlist from DB
+        // Get customer information based on logged-in user
+        CustomerDAO customerDAO = new CustomerDAO();
+        Customer customer = customerDAO.getCustomerByUserId(user.getUserId());
 
-        request.setAttribute("wishlist", wishlist);  // Set wishlist in request for the JSP page
-        request.getRequestDispatcher("/wishlist.jsp").forward(request, response);  // Forward to wishlist.jsp
+        // Get the wishlist for the customer
+        WishlistDAO wishlistDAO = new WishlistDAO();
+        List<Motor> wishlist = wishlistDAO.getWishlistForUser(customer.getCustomerId());
+
+        // Set the wishlist as an attribute for the JSP page
+        request.setAttribute("wishlist", wishlist);
+
+        // Forward the request to wishlist.jsp
+        request.getRequestDispatcher("wishlist.jsp").forward(request, response);
     }
 
-    // Method to handle POST requests for adding/removing items from the wishlist
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getParameter("action");
+        // Get the current session
         HttpSession session = request.getSession();
-        Integer userId = (Integer) session.getAttribute("userId");
+        UserAccount user = (UserAccount) session.getAttribute("user");
 
-        if (userId == null) {
+        // If user is not logged in, redirect to the login page
+        if (user == null) {
             response.sendRedirect("login.jsp");
             return;
         }
 
-        int customerId = customerDAO.getCustomerIdByUserId(userId); // Get customerId based on userId
+        String action = request.getParameter("action");
 
-        // Handling the "add" action to add an item to the wishlist
+        // Get customer information based on logged-in user
+        CustomerDAO customerDAO = new CustomerDAO();
+        Customer customer = customerDAO.getCustomerByUserId(user.getUserId());
+
+        // Get WishlistDAO to manage the wishlist
+        WishlistDAO wishlistDAO = new WishlistDAO();
+
         if ("add".equals(action)) {
-            String motorIdStr = request.getParameter("motorId");
+            int motorId = Integer.parseInt(request.getParameter("motorId"));
 
-            // Check if motorId is valid
-            if (motorIdStr == null || motorIdStr.isEmpty()) {
-                response.getWriter().write("Invalid motorId.");
-                return;
+            // Add motor to wishlist
+            boolean isAdded = wishlistDAO.addToWishlist(motorId, customer.getCustomerId());
+
+            if (isAdded) {
+                response.getWriter().write("success");
+            } else {
+                response.getWriter().write("error");
             }
 
-            try {
-                int motorId = Integer.parseInt(motorIdStr);  // Parse the motorId as integer
+        } else if ("remove".equals(action)) {
+            int motorId = Integer.parseInt(request.getParameter("motorId"));
 
-                // Check if the motor is already in the wishlist
-                if (!wishlistDAO.checkHaveWish(motorId, customerId)) {
-                    boolean added = wishlistDAO.addToWishlist(motorId, customerId);
-                    if (added) {
-                        response.getWriter().write("success");  // Return success message for AJAX
-                    } else {
-                        response.getWriter().write("error");  // Return error if add failed
-                    }
-                } else {
-                    response.getWriter().write("This motorbike is already in your wishlist.");
-                }
-            } catch (NumberFormatException e) {
-                response.getWriter().write("Invalid motorId format.");
+            // Remove motor from wishlist
+            boolean isRemoved = wishlistDAO.removeMotorFromWishlist(motorId, customer.getCustomerId());
+
+            if (isRemoved) {
+                response.getWriter().write("success");
+            } else {
+                response.getWriter().write("error");
             }
-        } 
-        // Handling the "remove" action to remove an item from the wishlist
-        else if ("remove".equals(action)) {
-            String motorIdStr = request.getParameter("motorId");
-
-            if (motorIdStr == null || motorIdStr.isEmpty()) {
-                response.getWriter().write("Invalid motorId.");
-                return;
-            }
-
-            try {
-                int motorId = Integer.parseInt(motorIdStr);  // Parse the motorId as integer
-
-                boolean removed = wishlistDAO.removeCarFromWishlist(motorId, customerId);
-                if (removed) {
-                    response.getWriter().write("success");  // Return success message for AJAX
-                } else {
-                    response.getWriter().write("error");  // Return error if remove failed
-                }
-            } catch (NumberFormatException e) {
-                response.getWriter().write("Invalid motorId format.");
-            }
-        } 
-        else {
-            response.getWriter().write("Invalid action.");
         }
     }
 }

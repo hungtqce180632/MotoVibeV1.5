@@ -130,4 +130,29 @@ public class ReviewDAO {
         }
         return list;
     }
+
+    /**
+     * Check if a customer has already reviewed a specific motor
+     * @param customerId The customer ID
+     * @param motorId The motor ID
+     * @return true if the customer has already submitted a review for this motor
+     */
+    public boolean hasAlreadyReviewed(int customerId, int motorId) {
+        String sql = "SELECT COUNT(*) FROM reviews WHERE customer_id = ? AND motor_id = ?";
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setInt(1, customerId);
+            ps.setInt(2, motorId);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

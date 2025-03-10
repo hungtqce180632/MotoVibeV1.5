@@ -224,6 +224,7 @@
                     <table class="table">
                         <thead>
                             <tr>
+                                <th>Order Code</th>
                                 <th>Order ID</th>
                                 <th>Motor</th>
                                 <th>Status</th>
@@ -235,6 +236,7 @@
                         <tbody>
                             <c:forEach var="o" items="${orders}">
                                 <tr>
+                                    <td><strong class="order-code">${o.orderCode}</strong></td>
                                     <td>#${o.orderId}</td>
                                     <td>${o.motorId}</td>
                                     <td>

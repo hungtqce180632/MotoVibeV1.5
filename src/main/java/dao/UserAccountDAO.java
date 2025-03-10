@@ -7,8 +7,68 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserAccountDAO {
+
+    public boolean updateUserAccount(int userId, String email, String password) {
+        String sql = "UPDATE user_account SET email = ?, password = ? WHERE user_id = ?";
+
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, email);
+            stmt.setString(2, password);
+            stmt.setInt(3, userId);
+
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean updateEmployee(int userId, String name, String phoneNumber) {
+        String sql = "UPDATE employees SET name = ?, phone_number = ? WHERE user_id = ?";
+
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, name);
+            stmt.setString(2, phoneNumber);
+            stmt.setInt(3, userId);
+
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public UserAccount getUserById(int userId) {
+        String sql = "SELECT * FROM user_account WHERE user_id = ?";
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new UserAccount(
+                        rs.getInt("user_id"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("role"),
+                        rs.getBoolean("status"),
+                        rs.getTimestamp("date_created")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     // Method to authenticate user login
     public UserAccount login(String email, String password) {
@@ -24,7 +84,8 @@ public class UserAccountDAO {
                         rs.getString("email"),
                         rs.getString("password"),
                         rs.getString("role"),
-                        rs.getBoolean("status")
+                        rs.getBoolean("status"),
+                        rs.getTimestamp("date_created")
                 );
             }
         } catch (SQLException e) {
@@ -85,47 +146,7 @@ public class UserAccountDAO {
         return false;
     }
 
-    // Method to register a new user
-    public boolean registerUser(UserAccount newUser) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-        try {
-            conn = DBContext.getConnection();
-
-            // Assuming 'role' is a required field, and defaulting it to 'user'
-            String sql = "INSERT INTO user_account (email, password, status, role, date_created) VALUES (?, ?, ?, ?, ?)";
-
-            ps = conn.prepareStatement(sql);
-            ps.setString(1, newUser.getEmail());
-            ps.setString(2, newUser.getPassword());
-            ps.setBoolean(3, true);
-            ps.setString(4, "customer");
-            ps.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
-
-            int rowsAffected = ps.executeUpdate();
-            return rowsAffected > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }
-
-    public boolean checkEmailExist(String email) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    public void sendOTPToEmail(String email, String otp) {
+    public void SendOTPToEmail(String email, String otp) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
@@ -141,7 +162,8 @@ public class UserAccountDAO {
                         rs.getString("email"),
                         rs.getString("password"),
                         rs.getString("role"),
-                        rs.getBoolean("status")
+                        rs.getBoolean("status"),
+                        rs.getTimestamp("date_created")
                 );
             }
         } catch (SQLException e) {
@@ -163,76 +185,49 @@ public class UserAccountDAO {
         return false;
     }
 
-    public boolean registerNewCustomerAccount(UserAccount newUser, String name, String phoneNumber, String address) {
+    public boolean resetPassword(String email, String newPassword) {
+        String sql = "UPDATE user_account SET password = ? WHERE email = ?";
+
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, newPassword);  // Set the new password
+            stmt.setString(2, email);        // Set the email of the user to be updated
+
+            int rowsUpdated = stmt.executeUpdate();  // Execute the update query
+            return rowsUpdated > 0;  // If rowsUpdated is greater than 0, the update was successful
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;  // Return false if something goes wrong
+    }
+
+    public boolean addNewCustomerAccount(int userId, String name, String phoneNumber, String address) {
         Connection conn = null;
-        PreparedStatement psUser = null;
         PreparedStatement psCustomer = null;
-        ResultSet generatedKeys = null;
 
         try {
             conn = DBContext.getConnection();
 
-            // Start a transaction by disabling auto-commit
-            conn.setAutoCommit(false);
+            String sqlCustomer = "INSERT INTO customers (user_id, name, phone_number, address) VALUES (?, ?, ?, ?)";
+            psCustomer = conn.prepareStatement(sqlCustomer);
+            psCustomer.setInt(1, userId);
+            psCustomer.setString(2, name);
+            psCustomer.setString(3, phoneNumber);
+            psCustomer.setString(4, address);
 
-            // Step 1: Insert into the user_account table
-            String sqlUser = "INSERT INTO user_account (email, password, status, role) VALUES (?, ?, ?, ?)";
-            psUser = conn.prepareStatement(sqlUser, PreparedStatement.RETURN_GENERATED_KEYS);
-            psUser.setString(1, newUser.getEmail());
-            psUser.setString(2, newUser.getPassword());
-            psUser.setBoolean(3, true); // Assume status is active when registering
-            psUser.setString(4, newUser.getRole() != null ? newUser.getRole() : "customer"); // Default role is customer
-
-            int rowsAffected = psUser.executeUpdate();
-            if (rowsAffected == 0) {
-                conn.rollback();
+            int customerRowsAffected = psCustomer.executeUpdate();
+            if (customerRowsAffected == 0) {
+                System.out.println("Failed to insert into customers table.");
                 return false;
             }
 
-            // Retrieve the generated user_id from the user_account table
-            generatedKeys = psUser.getGeneratedKeys();
-            int userId = 0;
-            if (generatedKeys.next()) {
-                userId = generatedKeys.getInt(1);
-            } else {
-                conn.rollback();
-                return false;
-            }
-
-            // Step 2: Insert into the customer table
-            if ("customer".equals(newUser.getRole())) {
-                String sqlCustomer = "INSERT INTO customers (user_id, name, phone_number, address) VALUES (?, ?, ?, ?)";
-                psCustomer = conn.prepareStatement(sqlCustomer);
-                psCustomer.setInt(1, userId);
-                psCustomer.setString(2, name);
-                psCustomer.setString(3, phoneNumber);
-                psCustomer.setString(4, address);
-
-                int customerRowsAffected = psCustomer.executeUpdate();
-                if (customerRowsAffected == 0) {
-                    conn.rollback();
-                    return false;
-                }
-            }
-
-            // Step 3: Commit the transaction
-            conn.commit();
             return true;
 
         } catch (SQLException e) {
             e.printStackTrace();
-            try {
-                if (conn != null) {
-                    conn.rollback();
-                }
-            } catch (SQLException rollbackEx) {
-                rollbackEx.printStackTrace();
-            }
         } finally {
             try {
-                if (psUser != null) {
-                    psUser.close();
-                }
                 if (psCustomer != null) {
                     psCustomer.close();
                 }
@@ -245,4 +240,178 @@ public class UserAccountDAO {
         }
         return false;
     }
+
+    public boolean registerUser(UserAccount newUser, String name, String phoneNumber, String address) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = DBContext.getConnection();
+
+            // Assuming 'role' is a required field, and defaulting it to 'user'
+            String sql = "INSERT INTO user_account (email, password, status, role, date_created) VALUES (?, ?, ?, ?, ?)";
+
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, newUser.getEmail());
+            ps.setString(2, newUser.getPassword());
+            ps.setBoolean(3, true);
+            ps.setString(4, newUser.getRole() != null ? newUser.getRole() : "customer");
+            ps.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
+
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public boolean registerUser(UserAccount newUser) {
+        String sql = "INSERT INTO user_account (email, password, status, role, date_created) VALUES (?, ?, ?, ?, ?)";
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, newUser.getEmail());
+            stmt.setString(2, newUser.getPassword());
+            stmt.setBoolean(3, newUser.isStatus());
+            stmt.setString(4, newUser.getRole());
+            stmt.setTimestamp(5, new Timestamp(System.currentTimeMillis()));
+
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0) {
+                // Retrieve the generated user_id from the user_account table
+                try ( ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        int userId = generatedKeys.getInt(1);
+                        newUser.setUserId(userId);  // Set the userId to the newUser object
+                        return true; // User created successfully
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false; // Return false if registration failed
+    }
+
+    // Method to add customer details after registration
+    public boolean addCustomerDetails(UserAccount user, String name, String phoneNumber, String address) {
+        String sql = "INSERT INTO customers (user_id, name, phone_number, address) VALUES (?, ?, ?, ?)";
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, user.getUserId());
+            stmt.setString(2, name);
+            stmt.setString(3, phoneNumber);
+            stmt.setString(4, address);
+
+            int affectedRows = stmt.executeUpdate();
+            return affectedRows > 0; // Return true if customer details were added successfully
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false; // Return false if adding customer details failed
+    }
+
+    // Method to add employee details after registration
+    public boolean addEmployeeDetails(UserAccount user, String name, String phoneNumber) {
+        String sql = "INSERT INTO employees (user_id, name, phone_number) VALUES (?, ?, ?)";
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, user.getUserId());
+            stmt.setString(2, name);
+            stmt.setString(3, phoneNumber);
+
+            int affectedRows = stmt.executeUpdate();
+            return affectedRows > 0; // Return true if employee details were added successfully
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false; // Return false if adding employee details failed
+    }
+
+    public List<UserAccount> getAllUsers() {
+        List<UserAccount> users = new ArrayList<>();
+        String sql = "SELECT user_id, email, password, role, status, date_created FROM user_account";
+
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql);  ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                users.add(new UserAccount(
+                        rs.getInt("user_id"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("role"),
+                        rs.getBoolean("status"),
+                        rs.getTimestamp("date_created")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
+    public List<UserAccount> getCustomers() {
+        List<UserAccount> customers = new ArrayList<>();
+        String query = "SELECT * FROM user_account WHERE role = 'customer'";
+
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(query);  ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                UserAccount user = new UserAccount();
+                user.setUserId(rs.getInt("user_id"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setRole(rs.getString("role"));
+                user.setStatus(rs.getBoolean("status"));
+                user.setDateCreated(rs.getTimestamp("date_created"));
+
+                customers.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customers;
+    }
+
+    public List<UserAccount> getEmployees() {
+        List<UserAccount> customers = new ArrayList<>();
+        String query = "SELECT * FROM user_account WHERE role = 'employee'";
+
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(query);  ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                UserAccount user = new UserAccount();
+                user.setUserId(rs.getInt("user_id"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setRole(rs.getString("role"));
+                user.setStatus(rs.getBoolean("status"));
+                user.setDateCreated(rs.getTimestamp("date_created"));
+
+                customers.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customers;
+    }
+
+    public void toggleStatus(int userId) {
+        String query = "UPDATE user_account SET status = CASE WHEN status = 1 THEN 0 ELSE 1 END WHERE user_id = ?";
+
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, userId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

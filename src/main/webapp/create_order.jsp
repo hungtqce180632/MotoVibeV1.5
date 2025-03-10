@@ -6,6 +6,40 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import="models.UserAccount" %>
+<%@ page import="models.Customer" %>
+<%@ page import="dao.CustomerDAO" %>
+<%@ page import="models.Motor" %>
+
+<%
+    // Get the logged-in user
+    UserAccount user = (UserAccount) session.getAttribute("user");
+    
+    // Get motor from request attribute (set by OrderMotorServlet)
+    Motor motor = (Motor) request.getAttribute("motor");
+    
+    // Default values
+    String customerName = "";
+    String customerEmail = "";
+    String customerPhone = "";
+    String customerAddress = "";
+    
+    // Auto-fill if user is logged in
+    if (user != null && "customer".equalsIgnoreCase(user.getRole())) {
+        CustomerDAO customerDAO = new CustomerDAO();
+        Customer customer = customerDAO.getCustomerByUserId(user.getUserId());
+        if (customer != null) {
+            customerName = customer.getName();
+            customerEmail = user.getEmail();
+            customerPhone = customer.getPhoneNumber();
+            customerAddress = customer.getAddress();
+        }
+    }
+    
+    // Generate order code
+    String orderCode = "MV-" + System.currentTimeMillis() % 100000;
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -62,7 +96,7 @@
         }
 
         .lead {
-            color: var(--text-gold);
+            color: var (--text-gold);
             opacity: 0.9;
         }
 
@@ -248,15 +282,21 @@
             <div class="form-section">
                 <form action="confirmOrder" method="post" class="needs-validation" novalidate>
                     <input type="hidden" name="motorId" value="${motor.motorId}">
-
+                    <input type="hidden" name="orderCode" value="<%= orderCode %>">
+                    
+                    <!-- Display order code for reference -->
+                    <div class="mb-3">
+                        <p><strong>Order Code:</strong> <span class="badge bg-warning"><%= orderCode %></span></p>
+                    </div>
+                    
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="customerName" class="form-label">Your Name</label>
-                            <input type="text" class="form-control" id="customerName" name="customerName" required>
+                            <input type="text" class="form-control" id="customerName" name="customerName" value="<%= customerName %>" required>
                         </div>
                         <div class="col-md-6">
                             <label for="customerEmail" class="form-label">Email Address</label>
-                            <input type="email" class="form-control" id="customerEmail" name="customerEmail" required>
+                            <input type="email" class="form-control" id="customerEmail" name="customerEmail" value="<%= customerEmail %>" required>
                         </div>
                     </div>
                     
@@ -270,6 +310,7 @@
                                 pattern="[0-9]{10}"
                                 maxlength="10"
                                 title="Please enter a valid 10-digit phone number"
+                                value="<%= customerPhone %>"
                                 required>
                             <div class="invalid-feedback">
                                 Please enter a valid 10-digit phone number
@@ -293,7 +334,18 @@
                     
                     <div class="mb-3">
                         <label for="customerAddress" class="form-label">Shipping Address</label>
-                        <textarea class="form-control" id="customerAddress" name="customerAddress" rows="3" required></textarea>
+                        <textarea class="form-control" id="customerAddress" name="customerAddress" rows="3" required><%= customerAddress %></textarea>
+                    </div>
+
+                    <!-- Add the missing payment method dropdown -->
+                    <div class="mb-3">
+                        <label for="paymentMethod" class="form-label">Payment Method</label>
+                        <select class="form-select" id="paymentMethod" name="paymentMethod" required>
+                            <option value="Credit Card">Credit Card</option>
+                            <option value="Bank Transfer">Bank Transfer</option>
+                            <option value="Cash on Delivery">Cash on Delivery</option>
+                            <option value="Finance">Financing</option>
+                        </select>
                     </div>
 
                     <div class="mb-4">
