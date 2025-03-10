@@ -24,8 +24,8 @@ public class Motor {
     private int quantity;
     private String picture;
     private Date dateStart;
-    private Brand brand; 
-    private Model model; 
+    private Brand brand;
+    private Model model;
     private Fuel fuel;
     private boolean featured; //field for "featured"
 
@@ -51,6 +51,8 @@ public class Motor {
         this.featured = featured;
     }
 
+
+
     public boolean isFeatured() {
         return featured;
     }
@@ -58,9 +60,7 @@ public class Motor {
     public void setFeatured(boolean featured) {
         this.featured = featured;
     }
-    
-    
-    
+
     public Motor(int motorId, int brandId, int modelId, String motorName, Date dateStart, String color, double price, int fuelId, boolean present, String description, int quantity, String picture) {
         this.motorId = motorId;
         this.brandId = brandId;
@@ -214,5 +214,4 @@ public class Motor {
         this.fuel = fuel;
     }
 
-    
 }

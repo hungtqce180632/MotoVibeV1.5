@@ -14,14 +14,14 @@ public class Event {
     public Event() {
     }
 
-    public Event(String event_name, String event_details, String image, String date_start, String date_end, boolean event_status) {
-        this.event_name = event_name;
-        this.event_details = event_details;
-        this.image = image;
-        this.date_start = date_start;
-        this.date_end = date_end;
-        this.event_status = event_status;
-    }
+//    public Event(String event_name, String event_details, String image, String date_start, String date_end, boolean event_status) {
+//        this.event_name = event_name;
+//        this.event_details = event_details;
+//        this.image = image;
+//        this.date_start = date_start;
+//        this.date_end = date_end;
+//        this.event_status = event_status;
+//    }
 
     public Event(String event_name, String event_details, String image, String date_start, String date_end, boolean event_status, int user_id) {
         this.event_name = event_name;

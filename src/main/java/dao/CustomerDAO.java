@@ -148,9 +148,7 @@ public class CustomerDAO {
         List<Customer> customers = new ArrayList<>();
         String sql = "SELECT customer_id, name, phone_number FROM customers";
 
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        try ( Connection connection = DBContext.getConnection();  PreparedStatement ps = connection.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 Customer customer = new Customer();
@@ -161,6 +159,62 @@ public class CustomerDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        return customers;
+    }
+
+    public Customer getCustomerById(int customerId) {
+        String sql = "SELECT c.customer_id, c.user_id, c.name, c.phone_number, c.address, c.email, c.status, "
+                + "u.role "
+                + "FROM customers c "
+                + "JOIN user_account u ON c.user_id = u.user_id "
+                + "WHERE c.customer_id = ?";
+
+        try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            // Set the customerId parameter for the query
+            preparedStatement.setInt(1, customerId);
+
+            try ( ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    // Mapping result set to the Customer object
+                    Customer customer = new Customer();
+                    customer.setCustomerId(resultSet.getInt("customer_id"));
+                    customer.setUserId(resultSet.getInt("user_id"));
+                    customer.setName(resultSet.getString("name"));
+                    customer.setPhoneNumber(resultSet.getString("phone_number"));
+                    customer.setAddress(resultSet.getString("address"));
+                    customer.setEmail(resultSet.getString("email"));
+                    customer.setRole(resultSet.getString("role"));
+                    customer.setStatus(resultSet.getBoolean("status"));
+
+                    return customer;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null; // Return null if customer not found
+    }
+
+    // Method to fetch all customers (for dropdown)
+    public List<Customer> getAllCustomersFD() throws SQLException {
+        List<Customer> customers = new ArrayList<>();
+        String sql = "SELECT customer_id, user_id, name, phone_number, address FROM customers";
+
+        try ( Connection connection = DBContext.getConnection();  PreparedStatement pstmt = connection.prepareStatement(sql);  ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                Customer cus = new Customer();
+                cus.setCustomerId(rs.getInt("customer_id"));
+                cus.setUserId(rs.getInt("user_id"));
+                cus.setName(rs.getString("name"));
+                cus.setPhoneNumber(rs.getString("phone_number"));
+                cus.setAddress(rs.getString("address"));
+
+                customers.add(cus);
+            }
         }
         return customers;
     }

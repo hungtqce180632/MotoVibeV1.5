@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import models.Motor;
 
 /**
  *
@@ -62,14 +63,12 @@ public class EmployeeDAO {
 
         return emp;
     }
-    
+
     public List<Employee> getAllEmployees() {
         List<Employee> employees = new ArrayList<>();
         String sql = "SELECT employee_id, name FROM employees"; // Assuming employees table has these columns
 
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
+        try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql);  ResultSet resultSet = preparedStatement.executeQuery()) {
 
             while (resultSet.next()) {
                 Employee employee = new Employee();
@@ -84,4 +83,5 @@ public class EmployeeDAO {
 
         return employees;
     }
+
 }

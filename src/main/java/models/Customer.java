@@ -35,6 +35,15 @@ public class Customer {
         this.status = status;
     }
 
+    public Customer(int customerId, String name, String phoneNumber, String address, String email) {
+        this.customerId = customerId;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.email = email;    }
+
+
+
     public Integer getCustomerId() {
         return customerId;
     }
