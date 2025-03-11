@@ -171,7 +171,7 @@
 
 
 
-            @keyframes slide-out {
+/*            @keyframes slide-out {
                 from {
                     transform: translateX(-28%);
                 }
@@ -180,13 +180,13 @@
                 }
             }
 
-            /* Định nghĩa animation cho phần tử đầu tiên */
+             Định nghĩa animation cho phần tử đầu tiên 
             .collapse {
    
                 animation:
-                    /*3s linear 1s slide-in infinite alternate,  animation đầu tiên chạy qua lại liên tục */
-                    3s ease-out 5s slide-out infinite alternate; /* animation thứ hai chạy qua lại liên tục */
-            }
+                    3s linear 1s slide-in infinite alternate,  animation đầu tiên chạy qua lại liên tục 
+                    3s ease-out 5s slide-out infinite alternate;  animation thứ hai chạy qua lại liên tục 
+            }*/
 
         </style>
     </head>
