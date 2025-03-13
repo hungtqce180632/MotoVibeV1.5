@@ -98,12 +98,21 @@
         <div class="container">
             <div class="orders-section">
                 <h2 class="section-title"><i class="fas fa-shopping-cart me-2"></i>Order Management</h2>
-                
+
                 <c:if test="${sessionScope.user.role eq 'employee'}">
                     <!-- Create Order Button -->
                     <div class="text-center mt-4">
                         <a href="MotorOfEmployeeCreateServlet" class="btn btn-primary btn-lg">
                             <i class="fas fa-plus me-2"></i> Create Order
+                        </a>
+                    </div>
+                </c:if>
+                    
+                <c:if test="${sessionScope.user.role eq 'employee'}">
+                    <!-- Create Order Button -->
+                    <div class="text-center mt-4">
+                        <a href="orderNewCustomer" class="btn btn-primary btn-lg">
+                            <i class="fas fa-plus me-2"></i> Create Order New Customer
                         </a>
                     </div>
                 </c:if>
