@@ -95,7 +95,17 @@ public class ConfirmOrderServlet extends HttpServlet {
         order.setCustomerId(customerToUse.getCustomerId());
         order.setMotorId(motorId);
         order.setPaymentMethod(paymentMethod);
-        order.setTotalAmount(motor.getPrice());
+        
+        // Calculate total amount including warranty if selected
+        double basePrice = motor.getPrice();
+        double totalAmount = basePrice;
+        
+        if (hasWarranty) {
+            // Add 10% for warranty
+            totalAmount = basePrice * 1.1;
+        }
+        
+        order.setTotalAmount(totalAmount);
         order.setDepositStatus(false); // Default to false - admin will confirm deposit later
         order.setOrderStatus("Pending");
         order.setHasWarranty(hasWarranty);
@@ -109,6 +119,7 @@ public class ConfirmOrderServlet extends HttpServlet {
             request.setAttribute("orderCode", order.getOrderCode());
             request.setAttribute("orderDate", new java.util.Date());
             request.setAttribute("hasWarranty", hasWarranty);
+            request.setAttribute("totalAmount", totalAmount);
             
             request.getRequestDispatcher("order_confirmation.jsp").forward(request, response);
         } else {

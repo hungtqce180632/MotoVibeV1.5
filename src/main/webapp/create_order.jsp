@@ -341,10 +341,10 @@
                     <div class="mb-3">
                         <label for="paymentMethod" class="form-label">Payment Method</label>
                         <select class="form-select" id="paymentMethod" name="paymentMethod" required>
-                            <option value="Credit Card">Credit Card</option>
                             <option value="Bank Transfer">Bank Transfer</option>
-                            <option value="Cash on Delivery">Cash on Delivery</option>
-                            <option value="Finance">Financing</option>
+                            <option value="Credit Card" disabled>Credit Card - Coming Soon</option>
+                            <option value="Cash on Delivery" disabled>Cash on Delivery - Coming Soon</option>
+                            <option value="Finance" disabled>Financing - Coming Soon</option>
                         </select>
                     </div>
 
@@ -352,13 +352,13 @@
                         <label class="form-label">Warranty Options</label>
                         <div class="warranty-option">
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="radio" name="hasWarranty" id="noWarranty" value="false" checked>
+                                <input class="form-check-input" type="radio" name="hasWarranty" id="noWarranty" value="false" checked onchange="updatePrice()">
                                 <label class="form-check-label" for="noWarranty">
                                     No Warranty
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="hasWarranty" id="withWarranty" value="true">
+                                <input class="form-check-input" type="radio" name="hasWarranty" id="withWarranty" value="true" onchange="updatePrice()">
                                 <label class="form-check-label" for="withWarranty">
                                     <span style="color: var(--primary-gold);">Include Warranty (Recommended)</span>
                                     <small class="text-muted d-block">Protects your purchase for 12 months</small>
@@ -367,7 +367,7 @@
                         </div>
                     </div>
 
-                    <div class="mb-4">
+                    <div class="mb-4" style="display: none;">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="depositStatus" name="depositStatus">
                             <label class="form-check-label" for="depositStatus">
@@ -376,12 +376,29 @@
                         </div>
                     </div>
 
+                    <!-- Display the price information -->
+                    <div class="price-info mb-4 p-3" style="background: rgba(0,0,0,0.2); border-left: 3px solid var(--primary-gold); border-radius: 5px;">
+                        <h5>Order Summary</h5>
+                        <div class="d-flex justify-content-between">
+                            <div>Base Price:</div>
+                            <div>$<span id="basePrice">${motor.price}</span></div>
+                        </div>
+                        <div class="d-flex justify-content-between" id="warrantyRow" style="display: none !important;">
+                            <div>Warranty (10%):</div>
+                            <div>$<span id="warrantyPrice">0.00</span></div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-2 pt-2" style="border-top: 1px solid rgba(212, 175, 55, 0.3);">
+                            <div><strong>Total Price:</strong></div>
+                            <div><strong>$<span id="totalPrice">${motor.price}</span></strong></div>
+                        </div>
+                    </div>
+
                     <div class="text-center mt-4">
                         <a href="motorDetail?id=${motor.motorId}" class="btn btn-secondary me-2">
                             <i class="fas fa-times me-1"></i> Cancel
                         </a>
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-check me-1"></i> Confirm Order
+                            <i class="fas fa-check me-1"></i> Proceed to Payment
                         </button>
                     </div>
                 </form>
@@ -438,6 +455,36 @@
                 }, false)
             })
         })()
+        
+        // Price update calculation for warranty
+        function updatePrice() {
+            const basePrice = parseFloat(${motor.price});
+            const hasWarranty = document.getElementById('withWarranty').checked;
+            const warrantyRow = document.getElementById('warrantyRow');
+            const warrantyPrice = document.getElementById('warrantyPrice');
+            const totalPrice = document.getElementById('totalPrice');
+            
+            if (hasWarranty) {
+                const warrantyAmount = basePrice * 0.1; // 10% of base price
+                warrantyRow.style.display = 'flex';
+                warrantyPrice.textContent = warrantyAmount.toFixed(2);
+                totalPrice.textContent = (basePrice + warrantyAmount).toFixed(2);
+            } else {
+                warrantyRow.style.display = 'none';
+                totalPrice.textContent = basePrice.toFixed(2);
+            }
+        }
+        
+        // Initialize price
+        document.addEventListener('DOMContentLoaded', function() {
+            updatePrice();
+            
+            // Update form action to go through payment confirmation step
+            const form = document.querySelector('form[action="confirmOrder"]');
+            if (form) {
+                form.action = "paymentConfirmation";
+            }
+        });
     </script>
 </body>
 </html>
