@@ -4,20 +4,17 @@
  */
 package controllers;
 
-import com.google.gson.Gson;
-import dao.EventDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.List;
+
+import dao.EventDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import models.Event;
-import org.checkerframework.checker.units.qual.A;
 
 /**
  *
@@ -37,19 +34,7 @@ public class ListEventsServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ListEventsServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ListEventsServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        // Removed redundant processRequest method
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -64,15 +49,35 @@ public class ListEventsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        // Check if event_id parameter is present for direct detail view
+        String eventIdParam = request.getParameter("event_id");
+        
+        if (eventIdParam != null && !eventIdParam.isEmpty()) {
+            // If event_id is provided, show event detail
+            try {
+                int eventId = Integer.parseInt(eventIdParam);
+                EventDAO eventDAO = new EventDAO();
+                Event event = eventDAO.getEventById(eventId);
+                
+                if (event == null) {
+                    request.setAttribute("error", "Event not found!");
+                } else {
+                    request.setAttribute("event", event);
+                }
+                request.getRequestDispatcher("event_detail.jsp").forward(request, response);
+                return;
+            } catch (SQLException e) {
+                throw new ServletException("Database access error", e);
+            }
+        }
+        
+        // Otherwise show list of events
         try {
             EventDAO eventDAO = new EventDAO();
             List<Event> events = eventDAO.getAllEventsAvailable();
 
             request.setAttribute("events", events);
-
             request.getRequestDispatcher("list_event.jsp").forward(request, response);
-
         } catch (SQLException e) {
             throw new ServletException("Database access error", e);
         }
@@ -116,7 +121,6 @@ public class ListEventsServlet extends HttpServlet {
         } catch (SQLException e) {
             throw new ServletException("Error retrieving event details", e);
         }
-        
     }
 
     /**
@@ -128,5 +132,4 @@ public class ListEventsServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }

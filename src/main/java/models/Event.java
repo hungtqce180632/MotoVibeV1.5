@@ -10,6 +10,7 @@ public class Event {
     private String date_end;
     private boolean event_status;
     private int user_id;
+    private byte[] imageBytes;
 
     public Event() {
     }
@@ -109,6 +110,13 @@ public class Event {
         this.user_id = user_id;
     }
 
+    public byte[] getImageBytes() {
+        return imageBytes;
+    }
+
+    public void setImageBytes(byte[] imageBytes) {
+        this.imageBytes = imageBytes;
+    }
 
     @Override
     public String toString() {

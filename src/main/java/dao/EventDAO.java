@@ -1,6 +1,5 @@
 package dao;
 
-import utils.DBContext;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,7 +8,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
 import models.Event;
+import utils.DBContext;
 
 public class EventDAO {
 
@@ -75,9 +76,19 @@ public class EventDAO {
                     event.setEvent_id(rs.getInt("event_id"));
                     event.setEvent_name(rs.getString("event_name"));
                     event.setEvent_details(rs.getString("event_details"));
-                    event.setImage(rs.getString("image"));
-                    event.setDate_start(rs.getString("date_start"));
-                    event.setDate_end(rs.getString("date_end"));
+                    
+                    // Handle the image data
+                    byte[] imageBytes = rs.getBytes("image");
+                    if (imageBytes != null) {
+                        // Store the actual bytes in a custom attribute
+                        event.setImageBytes(imageBytes);
+                        event.setImage("data:image/jpeg;base64," + java.util.Base64.getEncoder().encodeToString(imageBytes));
+                    } else {
+                        event.setImage(null);
+                    }
+                    
+                    event.setDate_start(rs.getDate("date_start") != null ? rs.getDate("date_start").toString() : null);
+                    event.setDate_end(rs.getDate("date_end") != null ? rs.getDate("date_end").toString() : null);
                     event.setEvent_status(rs.getBoolean("event_status"));  // Assuming event_status is a boolean
                     event.setUser_id(rs.getInt("user_id"));
                 }
