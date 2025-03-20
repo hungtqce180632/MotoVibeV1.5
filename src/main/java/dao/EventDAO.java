@@ -192,17 +192,96 @@ public class EventDAO {
     public boolean changeEventStatus(int eventId) throws SQLException {
         String sql = "UPDATE events SET event_status = NOT event_status WHERE event_id = ?";
 
-        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DBContext.getConnection()) {
+            if (conn == null) {
+                System.err.println("Database connection is null - check DBContext configuration");
+                return false;
+            }
+            
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                // Set the event_id parameter
+                stmt.setInt(1, eventId);
 
-            // Set the event_id parameter
-            stmt.setInt(1, eventId);
+                // Execute the update query
+                int rowsAffected = stmt.executeUpdate();
 
-            // Execute the update query
-            int rowsAffected = stmt.executeUpdate();
-
-            // Return true if the status was successfully updated
-            return rowsAffected > 0;
+                // Return true if the status was successfully updated
+                return rowsAffected > 0;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error changing event status: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
         }
     }
     
+    /**
+     * Explicitly disable an event by setting event_status to false
+     * @param eventId the ID of the event to disable
+     * @return true if successful, false otherwise
+     * @throws SQLException if a database error occurs
+     */
+    public boolean disEvent(int eventId) throws SQLException {
+        String sql = "UPDATE events SET event_status = 0 WHERE event_id = ?";
+        System.out.println("Attempting to disable event ID: " + eventId);
+
+        try (Connection conn = DBContext.getConnection()) {
+            if (conn == null) {
+                System.err.println("Database connection is null - check DBContext configuration");
+                return false;
+            }
+            
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                // Set the event_id parameter
+                stmt.setInt(1, eventId);
+                System.out.println("Executing SQL: " + sql + " with parameter: " + eventId);
+
+                // Execute the update query
+                int rowsAffected = stmt.executeUpdate();
+                System.out.println("Rows affected by disabling event: " + rowsAffected);
+
+                // Return true if the status was successfully updated
+                return rowsAffected > 0;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error disabling event: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /**
+     * Explicitly activate an event by setting event_status to true
+     * @param eventId the ID of the event to activate
+     * @return true if successful, false otherwise
+     * @throws SQLException if a database error occurs
+     */
+    public boolean actEvent(int eventId) throws SQLException {
+        String sql = "UPDATE events SET event_status = 1 WHERE event_id = ?";
+        System.out.println("Attempting to activate event ID: " + eventId);
+
+        try (Connection conn = DBContext.getConnection()) {
+            if (conn == null) {
+                System.err.println("Database connection is null - check DBContext configuration");
+                return false;
+            }
+            
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                // Set the event_id parameter
+                stmt.setInt(1, eventId);
+                System.out.println("Executing SQL: " + sql + " with parameter: " + eventId);
+
+                // Execute the update query
+                int rowsAffected = stmt.executeUpdate();
+                System.out.println("Rows affected by activating event: " + rowsAffected);
+
+                // Return true if the status was successfully updated
+                return rowsAffected > 0;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error activating event: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }

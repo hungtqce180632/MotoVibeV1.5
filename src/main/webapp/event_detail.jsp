@@ -257,11 +257,6 @@
                                 </div>
 
                                 <div class="action-buttons">
-                                    <c:if test="${sessionScope.user.role eq 'admin'}">
-                                        <a href="EditEventServlet?id=${event.event_id}" class="btn btn-gold">
-                                            <i class="fas fa-edit me-2"></i> Edit Event
-                                        </a>
-                                    </c:if>
                                     <a href="listevents" class="btn btn-outline-gold">
                                         <i class="fas fa-arrow-left me-2"></i> Back to Events
                                     </a>
