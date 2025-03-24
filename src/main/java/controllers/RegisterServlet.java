@@ -94,6 +94,13 @@ public class RegisterServlet extends HttpServlet {
         String phoneNumber = request.getParameter("phone_number");
         String address = request.getParameter("address");
 
+        // Validate phone number: must be exactly 10 digits
+        if (phoneNumber == null || !phoneNumber.matches("\\d{10}")) {
+            request.setAttribute("error", "Phone number must be exactly 10 digits.");
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+            return;
+        }
+
         UserAccountDAO userDAO = new UserAccountDAO();
 
         // Check if email already exists
