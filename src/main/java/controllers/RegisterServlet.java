@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import models.Customer;
 import models.Employee;
 
@@ -18,6 +20,22 @@ import models.Employee;
 public class RegisterServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+
+    // Method to hash password using MD5
+    private String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] hashedBytes = md.digest(password.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashedBytes) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -31,7 +49,7 @@ public class RegisterServlet extends HttpServlet {
         // Check if email is verified through OTP
         HttpSession session = request.getSession();
         String verifiedEmail = (String) session.getAttribute("emailSendOTP");
-        
+
         if (!"true".equals(emailVerified) || verifiedEmail == null || !verifiedEmail.equals(email)) {
             request.setAttribute("error", "Email verification failed. Please verify your email first.");
             request.getRequestDispatcher("register.jsp").forward(request, response);
@@ -54,6 +72,23 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
+        // Check password format: at least 1 uppercase, 1 digit, 1 special character
+        String passwordPattern = "^(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$";
+        if (!password.matches(passwordPattern)) {
+            request.setAttribute("error", "Password must contain at least 1 uppercase letter, 1 number and 1 special character.");
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+            return;
+        }
+
+        // Hash the password using MD5 before saving it
+        String hashedPassword = hashPassword(password);
+
+        if (hashedPassword == null) {
+            request.setAttribute("error", "Error hashing password.");
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+            return;
+        }
+
         // Collect customer-specific details if the role is customer
         String name = request.getParameter("name");
         String phoneNumber = request.getParameter("phone_number");
@@ -71,7 +106,7 @@ public class RegisterServlet extends HttpServlet {
         // Create new user account with the automatically assigned role
         UserAccount newUser = new UserAccount();
         newUser.setEmail(email);
-        newUser.setPassword(password);
+        newUser.setPassword(hashedPassword); // Use the hashed password
         newUser.setRole(role);  // Set the role automatically
         newUser.setStatus(true); // Assuming the account is active upon registration
 
@@ -88,7 +123,7 @@ public class RegisterServlet extends HttpServlet {
                 customer.setPhoneNumber(phoneNumber);
                 customer.setAddress(address);
                 boolean isCustomerAdded = customerDAO.insertCustomer(customer); // Add customer to the database
-                
+
                 if (isCustomerAdded) {
                     session.setAttribute("customer", customer);
                 } else {
@@ -115,7 +150,7 @@ public class RegisterServlet extends HttpServlet {
             // Clean up the verification attributes from session
             session.removeAttribute("emailSendOTP");
             session.removeAttribute("otp");
-            
+
             session.setAttribute("user", newUser);
             session.setAttribute("userRole", role);
 

@@ -1,7 +1,7 @@
 <%-- 
     Document   : register
     Created on : Feb 25, 2025, 1:44:14 PM
-    Author     : truon
+    Author     : sang
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
