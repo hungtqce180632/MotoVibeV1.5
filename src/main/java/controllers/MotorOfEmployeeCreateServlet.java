@@ -135,20 +135,22 @@ public class MotorOfEmployeeCreateServlet extends HttpServlet {
             // Save order to database
             OrderDAO orderDAO = new OrderDAO();
             orderDAO.createOrder(order);
+            response.sendRedirect("adminOrders");
+
 
         } catch (NumberFormatException e) {
             // Log the error
             Logger.getLogger(MotorOfEmployeeCreateServlet.class.getName())
-                  .log(Level.SEVERE, "Invalid number format in order creation", e);
-                  
+                    .log(Level.SEVERE, "Invalid number format in order creation", e);
+
             // Set error message and redirect back
             request.getSession().setAttribute("errorMessage", "Invalid numeric input: " + e.getMessage());
             response.sendRedirect("MotorOfEmployeeCreateServlet");
         } catch (Exception e) {
             // Log the error
             Logger.getLogger(MotorOfEmployeeCreateServlet.class.getName())
-                  .log(Level.SEVERE, "Error creating order", e);
-                  
+                    .log(Level.SEVERE, "Error creating order", e);
+
             // Set error message and redirect back
             request.getSession().setAttribute("errorMessage", "Error creating order: " + e.getMessage());
             response.sendRedirect("MotorOfEmployeeCreateServlet");

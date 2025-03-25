@@ -202,8 +202,8 @@ public class OrderNewCustomerServlet extends HttpServlet {
             // Save order
             OrderDAO orderDAO = new OrderDAO();
             orderDAO.createOrder(order);
+            response.sendRedirect("adminOrders");
 
-            
 
         } catch (NumberFormatException e) {
             LOGGER.log(Level.SEVERE, "Invalid number format", e);
