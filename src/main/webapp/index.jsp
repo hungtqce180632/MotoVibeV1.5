@@ -526,13 +526,13 @@
             .brand-logo {
                 max-width: 120px;
                 height: auto;
-                filter: brightness(0) invert(0.8) sepia(1) saturate(5) hue-rotate(20deg);
+                filter: brightness(0) invert(0.8) sepia(0.5) saturate(5) hue-rotate(40deg);
                 opacity: 0.8;
                 transition: all 0.3s ease;
             }
 
             .brand-logo:hover {
-                filter: brightness(0) invert(0.9) sepia(1) saturate(10) hue-rotate(20deg);
+                filter: brightness(0) invert(0.9) sepia(0.7) saturate(8) hue-rotate(25deg);
                 transform: scale(1.05);
                 opacity: 1;
             }
@@ -694,7 +694,7 @@
 
             #create-appointment-button {
                 background: linear-gradient(145deg, var(--primary-gold), var(--secondary-gold));
-                color: var(--dark-black);
+                color: var (--dark-black);
                 border: none;
                 border-radius: 30px;
                 padding: 10px 20px;
@@ -873,11 +873,11 @@
                 <div class="container">
                     <h3>Premium Brands We Carry</h3>
                     <div class="brand-logos">
-                        <img src="images/brands/ducati.png" alt="Ducati" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x60/111111/FFD700?text=DUCATI';">
-                        <img src="images/brands/bmw.png" alt="BMW" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x60/111111/FFD700?text=BMW';">
-                        <img src="images/brands/harley.png" alt="Harley-Davidson" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x60/111111/FFD700?text=HARLEY';">
-                        <img src="images/brands/triumph.png" alt="Triumph" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x60/111111/FFD700?text=TRIUMPH';">
-                        <img src="images/brands/honda.png" alt="Honda" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x60/111111/FFD700?text=HONDA';">
+                        <img src="images/brands/ducati.png" alt="Ducati" class="brand-logo" onerror="this.onerror=null; this.src='images/default-logo.png';">
+                        <img src="images/brands/bmw.png" alt="BMW" class="brand-logo" onerror="this.onerror=null; this.src='images/default-logo.png';">
+                        <img src="images/brands/harley.png" alt="Harley-Davidson" class="brand-logo" onerror="this.onerror=null; this.src='images/default-logo.png';">
+                        <img src="images/brands/triumph.png" alt="Triumph" class="brand-logo" onerror="this.onerror=null; this.src='images/default-logo.png';">
+                        <img src="images/brands/honda.png" alt="Honda" class="brand-logo" onerror="this.onerror=null; this.src='images/default-logo.png';">
                     </div>
                 </div>
             </div>
