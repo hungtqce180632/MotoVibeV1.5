@@ -53,13 +53,6 @@ public class ConfirmOrderServlet extends HttpServlet {
             return;
         }
 
-        // Check if motor is in stock
-        if (motor.getQuantity() <= 0) {
-            request.setAttribute("errorMessage", "Sorry, this motor is out of stock");
-            request.getRequestDispatcher("create_order.jsp").forward(request, response);
-            return;
-        }
-
         // 3. Basic Validation
         if (customerName == null || customerName.trim().isEmpty() ||
             customerEmail == null || customerEmail.trim().isEmpty() ||
@@ -120,16 +113,7 @@ public class ConfirmOrderServlet extends HttpServlet {
 
         // 6. Insert Order into database
         OrderDAO orderDAO = new OrderDAO();
-        boolean orderCreated = orderDAO.createOrder(order);
-        
-        if (orderCreated) {
-            // Decrease the motor quantity after successful order creation
-            boolean quantityUpdated = motorDAO.decreaseMotorQuantity(motorId, 1);
-            if (!quantityUpdated) {
-                // Log the error but don't stop the process
-                System.err.println("Failed to update motor quantity for motorId: " + motorId);
-            }
-            
+        if (orderDAO.createOrder(order)) {
             // Store some order details for the confirmation page
             request.setAttribute("orderId", order.getOrderId());
             request.setAttribute("orderCode", order.getOrderCode());

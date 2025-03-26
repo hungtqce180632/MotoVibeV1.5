@@ -39,14 +39,6 @@ public class OrderMotorServlet extends HttpServlet {
             response.sendRedirect("motorList"); // Redirect to motor list if motor not found
             return;
         }
-        
-        // Check if motor is in stock before allowing the order
-        if (motor.getQuantity() <= 0) {
-            request.setAttribute("errorMessage", "This motor is currently out of stock.");
-            request.setAttribute("motor", motor);
-            request.getRequestDispatcher("motorDetail?id=" + motorId).forward(request, response);
-            return;
-        }
 
         request.setAttribute("motor", motor);
         request.getRequestDispatcher("create_order.jsp").forward(request, response);
