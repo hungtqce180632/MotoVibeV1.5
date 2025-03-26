@@ -213,14 +213,6 @@
                                                                 </form>
                                                             </div>
                                                         </c:if>
-                                                        <c:if test="${order.depositStatus eq true && order.orderStatus eq 'Completed' && order.hasWarranty eq true}">
-                                                            <div id="warranty-${order.orderId}" class="create-warranty-container">
-                                                                <form action="CreateWarrantyServlet" method="post">
-                                                                    <input type="hidden" name="orderId" value="${order.orderId}">
-                                                                    <button type="submit" class="btn-create-warranty">Create Warranty</button>
-                                                                </form>
-                                                            </div>
-                                                        </c:if>
                                                         <c:if test="${order.depositStatus eq true && order.orderStatus eq 'Completed' && order.hasWarranty eq false}">
                                                             <div id="warranty-${order.orderId}" class="create-warranty-container">
                                                                 <input type="hidden" name="orderId" value="${order.orderId}">
