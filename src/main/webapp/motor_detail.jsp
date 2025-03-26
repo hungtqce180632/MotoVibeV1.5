@@ -289,16 +289,10 @@
                                 <span class="detail-value">
                                     <c:choose>
                                         <c:when test="${motor.quantity > 0}">
-                                            <span class="availability-badge in-stock">
-                                                <i class="fas fa-check-circle me-1"></i>
-                                                In Stock (${motor.quantity} units available)
-                                            </span>
+                                            <span class="availability-badge in-stock"><i class="fas fa-check-circle me-1"></i>In Stock</span>
                                         </c:when>
                                         <c:otherwise>
-                                            <span class="availability-badge out-of-stock">
-                                                <i class="fas fa-times-circle me-1"></i>
-                                                Out of Stock
-                                            </span>
+                                            <span class="availability-badge out-of-stock"><i class="fas fa-times-circle me-1"></i>Out of Stock</span>
                                         </c:otherwise>
                                     </c:choose>
                                 </span>
@@ -316,18 +310,9 @@
                                 </a>
                             </c:when>
                             <c:otherwise>
-                                <c:choose>
-                                    <c:when test="${motor.quantity > 0}">
-                                        <a href="orderMotor?id=${motor.motorId}" class="btn btn-success">
-                                            <i class="fas fa-shopping-cart me-1"></i> Order Motor
-                                        </a>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <button class="btn btn-success" disabled style="opacity:0.6;">
-                                            <i class="fas fa-shopping-cart me-1"></i> Out of Stock
-                                        </button>
-                                    </c:otherwise>
-                                </c:choose>
+                                <a href="orderMotor?id=${motor.motorId}" class="btn btn-success">
+                                    <i class="fas fa-shopping-cart me-1"></i> Order Motor
+                                </a>
                                 <button class="btn btn-primary" onclick="addToWishlist(event, ${motor.motorId})">
                                     <i class="fas fa-heart me-1"></i> Add to Wishlist
                                 </button>

@@ -280,144 +280,128 @@
             </div>
 
             <div class="form-section">
-                <c:if test="${not empty errorMessage}">
-                    <div class="alert alert-danger" role="alert">
-                        ${errorMessage}
+                <form action="confirmOrder" method="post" class="needs-validation" novalidate>
+                    <input type="hidden" name="motorId" value="${motor.motorId}">
+                    <input type="hidden" name="orderCode" value="<%= orderCode %>">
+                    
+                    <!-- Display order code for reference -->
+                    <div class="mb-3">
+                        <p><strong>Order Code:</strong> <span class="badge bg-warning"><%= orderCode %></span></p>
                     </div>
-                </c:if>
-                
-                <c:choose>
-                    <c:when test="${motor.quantity > 0}">
-                        <form action="confirmOrder" method="post" class="needs-validation" novalidate>
-                            <input type="hidden" name="motorId" value="${motor.motorId}">
-                            <input type="hidden" name="orderCode" value="<%= orderCode %>">
-                            <!-- Display order code for reference -->
-                            <div class="mb-3">
-                                <p><strong>Order Code:</strong> <span class="badge bg-warning"><%= orderCode %></span></p>
-                            </div>
-                            
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="customerName" class="form-label">Your Name</label>
-                                    <input type="text" class="form-control" id="customerName" name="customerName" value="<%= customerName %>" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="customerEmail" class="form-label">Email Address</label>
-                                    <input type="email" class="form-control" id="customerEmail" name="customerEmail" value="<%= customerEmail %>" required>
-                                </div>
-                            </div>
-                            
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="customerPhone" class="form-label">Phone Number (10 digits)</label>
-                                    <input type="tel" 
-                                        class="form-control" 
-                                        id="customerPhone" 
-                                        name="customerPhone" 
-                                        pattern="[0-9]{10}"
-                                        maxlength="10"
-                                        title="Please enter a valid 10-digit phone number"
-                                        value="<%= customerPhone %>"
-                                        required>
-                                    <div class="invalid-feedback">
-                                        Please enter a valid 10-digit phone number
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="customerIdNumber" class="form-label">ID Number (12 digits)</label>
-                                    <input type="text" 
-                                        class="form-control" 
-                                        id="customerIdNumber" 
-                                        name="customerIdNumber" 
-                                        pattern="[0-9]{12}"
-                                        maxlength="12"
-                                        title="Please enter a valid 12-digit ID number"
-                                        required>
-                                    <div class="invalid-feedback">
-                                        Please enter a valid 12-digit ID number
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="customerAddress" class="form-label">Shipping Address</label>
-                                <textarea class="form-control" id="customerAddress" name="customerAddress" rows="3" required><%= customerAddress %></textarea>
-                            </div>
-
-                            <!-- Add the missing payment method dropdown -->
-                            <div class="mb-3">
-                                <label for="paymentMethod" class="form-label">Payment Method</label>
-                                <select class="form-select" id="paymentMethod" name="paymentMethod" required>
-                                    <option value="Bank Transfer">Bank Transfer</option>
-                                    <option value="Credit Card" disabled>Credit Card - Coming Soon</option>
-                                    <option value="Cash on Delivery" disabled>Cash on Delivery - Coming Soon</option>
-                                    <option value="Finance" disabled>Financing - Coming Soon</option>
-                                </select>
-                            </div>
-
-                            <div class="mb-4">
-                                <label class="form-label">Warranty Options</label>
-                                <div class="warranty-option">
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="hasWarranty" id="noWarranty" value="false" checked onchange="updatePrice()">
-                                        <label class="form-check-label" for="noWarranty">
-                                            No Warranty
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="hasWarranty" id="withWarranty" value="true" onchange="updatePrice()">
-                                        <label class="form-check-label" for="withWarranty">
-                                            <span style="color: var(--primary-gold);">Include Warranty (Recommended)</span>
-                                            <small class="text-muted d-block">Protects your purchase for 12 months</small>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="mb-4" style="display: none;">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="depositStatus" name="depositStatus">
-                                    <label class="form-check-label" for="depositStatus">
-                                        Pay Deposit
-                                    </label>
-                                </div>
-                            </div>
-
-                            <!-- Display the price information -->
-                            <div class="price-info mb-4 p-3" style="background: rgba(0,0,0,0.2); border-left: 3px solid var(--primary-gold); border-radius: 5px;">
-                                <h5>Order Summary</h5>
-                                <div class="d-flex justify-content-between">
-                                    <div>Base Price:</div>
-                                    <div>$<span id="basePrice">${motor.price}</span></div>
-                                </div>
-                                <div class="d-flex justify-content-between" id="warrantyRow" style="display: none !important;">
-                                    <div>Warranty (10%):</div>
-                                    <div>$<span id="warrantyPrice">0.00</span></div>
-                                </div>
-                                <div class="d-flex justify-content-between mt-2 pt-2" style="border-top: 1px solid rgba(212, 175, 55, 0.3);">
-                                    <div><strong>Total Price:</strong></div>
-                                    <div><strong>$<span id="totalPrice">${motor.price}</span></strong></div>
-                                </div>
-                            </div>
-
-                            <div class="text-center mt-4">
-                                <a href="motorDetail?id=${motor.motorId}" class="btn btn-secondary me-2">
-                                    <i class="fas fa-times me-1"></i> Cancel
-                                </a>
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-check me-1"></i> Proceed to Payment
-                                </button>
-                            </div>
-                        </form>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="alert alert-warning">
-                            <h4><i class="fas fa-exclamation-triangle"></i> Out of Stock</h4>
-                            <p>This motorcycle is currently out of stock. Please check back later or browse our other available models.</p>
-                            <a href="motorList" class="btn btn-primary mt-3">Browse Other Models</a>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="customerName" class="form-label">Your Name</label>
+                            <input type="text" class="form-control" id="customerName" name="customerName" value="<%= customerName %>" required>
                         </div>
-                    </c:otherwise>
-                </c:choose>
+                        <div class="col-md-6">
+                            <label for="customerEmail" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="customerEmail" name="customerEmail" value="<%= customerEmail %>" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="customerPhone" class="form-label">Phone Number (10 digits)</label>
+                            <input type="tel" 
+                                class="form-control" 
+                                id="customerPhone" 
+                                name="customerPhone" 
+                                pattern="[0-9]{10}"
+                                maxlength="10"
+                                title="Please enter a valid 10-digit phone number"
+                                value="<%= customerPhone %>"
+                                required>
+                            <div class="invalid-feedback">
+                                Please enter a valid 10-digit phone number
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="customerIdNumber" class="form-label">ID Number (12 digits)</label>
+                            <input type="text" 
+                                class="form-control" 
+                                id="customerIdNumber" 
+                                name="customerIdNumber" 
+                                pattern="[0-9]{12}"
+                                maxlength="12"
+                                title="Please enter a valid 12-digit ID number"
+                                required>
+                            <div class="invalid-feedback">
+                                Please enter a valid 12-digit ID number
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="customerAddress" class="form-label">Shipping Address</label>
+                        <textarea class="form-control" id="customerAddress" name="customerAddress" rows="3" required><%= customerAddress %></textarea>
+                    </div>
+
+                    <!-- Add the missing payment method dropdown -->
+                    <div class="mb-3">
+                        <label for="paymentMethod" class="form-label">Payment Method</label>
+                        <select class="form-select" id="paymentMethod" name="paymentMethod" required>
+                            <option value="Bank Transfer">Bank Transfer</option>
+                            <option value="Credit Card" disabled>Credit Card - Coming Soon</option>
+                            <option value="Cash on Delivery" disabled>Cash on Delivery - Coming Soon</option>
+                            <option value="Finance" disabled>Financing - Coming Soon</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Warranty Options</label>
+                        <div class="warranty-option">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="hasWarranty" id="noWarranty" value="false" checked onchange="updatePrice()">
+                                <label class="form-check-label" for="noWarranty">
+                                    No Warranty
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="hasWarranty" id="withWarranty" value="true" onchange="updatePrice()">
+                                <label class="form-check-label" for="withWarranty">
+                                    <span style="color: var(--primary-gold);">Include Warranty (Recommended)</span>
+                                    <small class="text-muted d-block">Protects your purchase for 12 months</small>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4" style="display: none;">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="depositStatus" name="depositStatus">
+                            <label class="form-check-label" for="depositStatus">
+                                Pay Deposit
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Display the price information -->
+                    <div class="price-info mb-4 p-3" style="background: rgba(0,0,0,0.2); border-left: 3px solid var(--primary-gold); border-radius: 5px;">
+                        <h5>Order Summary</h5>
+                        <div class="d-flex justify-content-between">
+                            <div>Base Price:</div>
+                            <div>$<span id="basePrice">${motor.price}</span></div>
+                        </div>
+                        <div class="d-flex justify-content-between" id="warrantyRow" style="display: none !important;">
+                            <div>Warranty (10%):</div>
+                            <div>$<span id="warrantyPrice">0.00</span></div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-2 pt-2" style="border-top: 1px solid rgba(212, 175, 55, 0.3);">
+                            <div><strong>Total Price:</strong></div>
+                            <div><strong>$<span id="totalPrice">${motor.price}</span></strong></div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <a href="motorDetail?id=${motor.motorId}" class="btn btn-secondary me-2">
+                            <i class="fas fa-times me-1"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-check me-1"></i> Proceed to Payment
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
