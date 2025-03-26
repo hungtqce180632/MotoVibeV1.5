@@ -25,30 +25,34 @@ public class SendOtpServlet extends HttpServlet {
 
         String emailSendOTP = request.getParameter("email");
 
-        // Kiểm tra email có tồn tại trong database không (nếu cần)
+        // Example: your DAO usage, if you need to check something about the user
         UserAccountDAO accDao = new UserAccountDAO();
-        // boolean userExists = accDao.checkUserByEmail(emailSendOTP);
+        // boolean userExists = accDao.checkUserByEmail(emailSendOTP); // your code, if needed
 
-        // Tạo OTP 6 chữ số
-        int otp = 100000 + new Random().nextInt(900000);
+        // Generate random 6-digit OTP
+        int otp = new Random().nextInt(999999); // range 0-999999
+        if (otp < 100000) {
+            otp += 100000; // ensure it's always 6 digits (e.g., 012345 -> 12345)
+        }
 
-        // Gửi email OTP
+        // Attempt to send email
         boolean sendSuccess = sendEmail(emailSendOTP, otp);
 
-        // Chuẩn bị phản hồi JSON
+        // JSON response setup
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         Gson gson = new Gson();
 
+        // If successful, store OTP in session and return success = true
         if (sendSuccess) {
             request.getSession().setAttribute("otp", otp);
             request.getSession().setAttribute("emailSendOTP", emailSendOTP);
 
             response.setStatus(HttpServletResponse.SC_OK);
-            response.getWriter().write(gson.toJson(Map.of("success", true, "message", "OTP đã gửi thành công")));
+            response.getWriter().write(gson.toJson(true));
         } else {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write(gson.toJson(Map.of("success", false, "message", "Gửi email thất bại")));
+            response.getWriter().write(gson.toJson(false));
         }
     }
 
