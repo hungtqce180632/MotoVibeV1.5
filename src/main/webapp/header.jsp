@@ -202,7 +202,7 @@
                     <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="index.jsp"><i class="fas fa-home me-1"></i> Home</a>
+                                <a class="nav-link active" aria-current="page" href="home"><i class="fas fa-home me-1"></i> Home</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="motorList"><i class="fas fa-motorcycle me-1"></i> Motorbikes</a>

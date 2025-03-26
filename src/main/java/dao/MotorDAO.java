@@ -16,7 +16,6 @@ import models.Fuel;
 import models.Model;
 import utils.DBContext;
 
-
 /**
  *
  * @author tiend - upgrade hưng
@@ -51,6 +50,34 @@ public class MotorDAO {
         return motors;
     }
 
+    public List<Motor> getTopMotors() throws SQLException {
+        List<Motor> motors = new ArrayList<>();
+        String sql = "SELECT TOP 6 motor_id, brand_id, model_id, motor_name, date_start, color, price, fuel_id, present, description, quantity, picture FROM motors ORDER BY quantity DESC";
+
+        try ( Connection connection = DBContext.getConnection();  PreparedStatement pstmt = connection.prepareStatement(sql);  ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                Motor motor = new Motor();
+                motor.setMotorId(rs.getInt("motor_id"));
+                motor.setBrandId(rs.getInt("brand_id"));
+                motor.setModelId(rs.getInt("model_id"));
+                motor.setMotorName(rs.getString("motor_name"));
+                motor.setDateStart(rs.getDate("date_start"));
+                motor.setColor(rs.getString("color"));
+                motor.setPrice(rs.getDouble("price"));
+                motor.setFuelId(rs.getInt("fuel_id"));
+                motor.setPresent(rs.getBoolean("present"));
+                motor.setDescription(rs.getString("description"));
+                motor.setQuantity(rs.getInt("quantity"));
+                motor.setPicture(rs.getString("picture"));
+
+                motors.add(motor);
+            }
+        }
+
+        return motors;
+    }
+
     public Motor getMotorById(int motorId) {
         // Corrected table name to "motors" (lowercase)
         String sql = "SELECT m.*, b.brand_name, b.country_of_origin, b.description as brand_description, "
@@ -60,7 +87,7 @@ public class MotorDAO {
                 + "JOIN Models mod ON m.model_id = mod.model_id "
                 + "JOIN Fuels f ON m.fuel_id = f.fuel_id "
                 + "WHERE m.motor_id = ?";
-        try (Connection connection = DBContext.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sql)) { // Corrected - connection obtained here
+        try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql)) { // Corrected - connection obtained here
             preparedStatement.setInt(1, motorId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -76,8 +103,8 @@ public class MotorDAO {
         String sql = "INSERT INTO motors (brand_id, model_id, motor_name, date_start, color, price, fuel_id, present, description, quantity, picture) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; // Include 'picture' in INSERT
 
         // Get connection within the try-with-resources block
-        try (Connection connection = DBContext.getConnection(); // Corrected - connection obtained here
-             PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        try ( Connection connection = DBContext.getConnection(); // Corrected - connection obtained here
+                  PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, motor.getBrandId());
             pstmt.setInt(2, motor.getModelId());
             pstmt.setString(3, motor.getMotorName());
@@ -97,13 +124,13 @@ public class MotorDAO {
 
     public void updateMotor(Motor motor) throws SQLException {
         // Get connection within the try-with-resources block
-        try (Connection conn = DBContext.getConnection(); // Corrected - connection obtained here
-             // (lowercase)
-             PreparedStatement pstmt = conn.prepareStatement("UPDATE motors SET brand_id = ?, model_id = ?, motor_name = ?, date_start = ?, color = ?, price = ?, fuel_id = ?, present = ?, description = ?, quantity = ?, picture = ? WHERE motor_id = ?")) { // Changed "Motorbikes" to "motors"
+        try ( Connection conn = DBContext.getConnection(); // Corrected - connection obtained here
+                // (lowercase)
+                  PreparedStatement pstmt = conn.prepareStatement("UPDATE motors SET brand_id = ?, model_id = ?, motor_name = ?, date_start = ?, color = ?, price = ?, fuel_id = ?, present = ?, description = ?, quantity = ?, picture = ? WHERE motor_id = ?")) { // Changed "Motorbikes" to "motors"
             pstmt.setInt(1, motor.getBrandId());
             pstmt.setInt(2, motor.getModelId());
             pstmt.setString(3, motor.getMotorName());
-            pstmt.setDate(4, motor.getDateStart()); 
+            pstmt.setDate(4, motor.getDateStart());
             pstmt.setString(5, motor.getColor());
             pstmt.setDouble(6, motor.getPrice());
             pstmt.setInt(7, motor.getFuelId());
@@ -118,9 +145,9 @@ public class MotorDAO {
 
     public void deleteMotor(int motorId) throws SQLException {
         // Get connection within the try-with-resources block
-        try (Connection conn = DBContext.getConnection(); // Corrected - connection obtained here
-             // (lowercase)
-             PreparedStatement pstmt = conn.prepareStatement("DELETE FROM motors WHERE motor_id = ?")) { // Changed "Motorbikes" to "motors"
+        try ( Connection conn = DBContext.getConnection(); // Corrected - connection obtained here
+                // (lowercase)
+                  PreparedStatement pstmt = conn.prepareStatement("DELETE FROM motors WHERE motor_id = ?")) { // Changed "Motorbikes" to "motors"
             pstmt.setInt(1, motorId);
             pstmt.executeUpdate();
         }
@@ -148,7 +175,7 @@ public class MotorDAO {
             sql += " AND m.model_id = ? ";
         }
 
-        try (Connection connection = DBContext.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sql)) { // Corrected - connection obtained here
+        try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql)) { // Corrected - connection obtained here
 
             int paramIndex = 1; // Parameter index counter
             if (brandId != null) {
@@ -182,7 +209,7 @@ public class MotorDAO {
                 + "JOIN Models mod ON m.model_id = mod.model_id "
                 + "JOIN Fuels f ON m.fuel_id = f.fuel_id "
                 + "WHERE m.motor_name LIKE ?";
-        try (Connection connection = DBContext.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sql)) { // Corrected - connection obtained here
+        try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql)) { // Corrected - connection obtained here
             preparedStatement.setString(1, "%" + searchTerm + "%");
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -197,7 +224,7 @@ public class MotorDAO {
     public boolean decreaseMotorQuantity(int motorId, int quantity) {
         // (lowercase)
         String sql = "UPDATE motors SET quantity = quantity - ? WHERE motor_id = ? AND quantity >= ?"; // Changed "Motorbikes" to "motors"
-        try (Connection connection = DBContext.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(sql)) { // Corrected - connection obtained here
+        try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql)) { // Corrected - connection obtained here
             preparedStatement.setInt(1, quantity);
             preparedStatement.setInt(2, motorId);
             preparedStatement.setInt(3, quantity); // Ensure quantity is sufficient to decrease

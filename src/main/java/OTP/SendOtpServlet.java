@@ -1,63 +1,24 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package OTP;
-
 
 import dao.UserAccountDAO;
 import com.google.gson.Gson;
-import jakarta.mail.Message;
-import jakarta.mail.MessagingException;
-import jakarta.mail.PasswordAuthentication;
-import jakarta.mail.Session;
-import jakarta.mail.Transport;
+import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Properties;
 import java.util.Random;
+import java.util.Map;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author thaii
- */
 @WebServlet("/sendOtp")
 public class SendOtpServlet extends HttpServlet {
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet SendOtpServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet SendOtpServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Receives an email address from the client, generates a random OTP, and
-     * sends it via Gmail SMTP for free. The OTP is stored in the session for
-     * verification.
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -95,31 +56,22 @@ public class SendOtpServlet extends HttpServlet {
         }
     }
 
-    @Override
-    public String getServletInfo() {
-        return "SendOtpServlet - sends an email OTP using Gmail SMTP";
-    }
-
     /**
-     * Sends the OTP email via Gmail SMTP. For this to be free, you must use
-     * your own Gmail + either an app password (recommended) or enable
-     * appropriate access in your Google account settings.
+     * Gửi OTP qua Gmail SMTP
      */
     private boolean sendEmail(String toEmail, int otp) {
-        // Replace with your Gmail address:
         final String fromEmail = "motovibe132@gmail.com";
-        // Replace with your app password or account password (see notes below):
         final String password = "hcgl qqmf orzz nlcz";
 
-        // Gmail SMTP properties
+        // Cấu hình Gmail SMTP
         Properties props = new Properties();
-        props.put("mail.smtp.auth", "true"); 
-        props.put("mail.smtp.starttls.enable", "true"); 
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
 
-        // Create mail session with credentials
-            Session session = Session.getInstance(props, new jakarta.mail.Authenticator() {
+        // Tạo session gửi email
+        Session session = Session.getInstance(props, new jakarta.mail.Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(fromEmail, password);
@@ -127,18 +79,13 @@ public class SendOtpServlet extends HttpServlet {
         });
 
         try {
-            // Build the message
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(fromEmail));
-            message.setRecipients(
-                    Message.RecipientType.TO,
-                    InternetAddress.parse(toEmail)
-            );
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
             message.setSubject("Your OTP code from MotoVibe");
             message.setText("Hello,\n\nYour OTP code is: " + otp
                           + "\n\nPlease enter this code to verify.\n\nThank you!");
 
-            // Send
             Transport.send(message);
             return true;
 

@@ -38,7 +38,7 @@ public class ForgotPasswordServlet extends HttpServlet {
             response.sendRedirect("/MotoVibe/verifyOtp");
         } else {
             request.getSession().setAttribute("message", "Email does not exist. Please try again.");
-            response.sendRedirect("/MotoVibe/forgotPassword");
+            response.sendRedirect("/MotoVibe/forgotPassword,jsp");
         }
     }
 

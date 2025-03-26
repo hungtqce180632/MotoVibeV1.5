@@ -85,15 +85,4 @@ public class ResetPasswordServlet extends HttpServlet {
         return String.format("%06d", otp); // Pad with leading zeros if necessary
     }
 
-    // Method to send OTP via email (You'll need to implement this using your email service)
-    private void sendOtpEmail(String email, String otp) {
-        // Use JavaMail or another service to send the OTP to the user's email
-        // Example code to send OTP (This is a simple placeholder)
-        String subject = "Your OTP for Password Reset";
-        String message = "Your OTP for resetting your password is: " + otp;
-
-        // Use an email sending service to send the OTP
-        // Example: JavaMail API or any other email service that supports SMTP
-        // Here you can implement the actual email sending code
-    }
 }

@@ -20,32 +20,32 @@
         flex-direction: column;
         position: relative;
     }
-    
+
     .motor-card:hover {
         transform: translateY(-8px);
         box-shadow: 0 15px 35px rgba(212, 175, 55, 0.3);
         border-color: var(--primary-gold);
     }
-    
+
     .product-img {
         position: relative;
         height: 200px;
         overflow: hidden;
         border-bottom: 1px solid var(--secondary-gold);
     }
-    
+
     .product-img img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         transition: all 0.5s ease;
     }
-    
+
     .motor-card:hover .product-img img {
         transform: scale(1.1);
         filter: brightness(1.1);
     }
-    
+
     .product-img::after {
         content: '';
         position: absolute;
@@ -55,7 +55,7 @@
         height: 100%;
         background: linear-gradient(0deg, rgba(17, 17, 17, 0.8) 0%, rgba(26, 26, 26, 0) 50%);
     }
-    
+
     .motor-card .card-body {
         padding: 1.25rem;
         color: var(--text-gold);
@@ -64,7 +64,7 @@
         display: flex;
         flex-direction: column;
     }
-    
+
     .motor-card .card-title {
         color: var(--primary-gold);
         font-size: 1.5rem;
@@ -74,19 +74,19 @@
         border-bottom: 1px solid rgba(212, 175, 55, 0.2);
         text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
-    
+
     .motor-card .card-text {
         margin-bottom: 1.5rem;
         flex-grow: 1;
         line-height: 1.6;
     }
-    
+
     .motor-card .card-text strong {
         color: var(--primary-gold);
         font-weight: 600;
         margin-right: 5px;
     }
-    
+
     .motor-card .btn-info {
         background: linear-gradient(145deg, var(--primary-gold), var(--secondary-gold));
         border: none;
@@ -101,12 +101,12 @@
         position: relative;
         z-index: 2; /* Ensure button is above other elements */
     }
-    
+
     .motor-card .btn-info:hover {
         transform: translateY(-2px);
         box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
     }
-    
+
     .price-tag {
         position: absolute;
         top: 10px;
@@ -120,7 +120,7 @@
         z-index: 2;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     }
-    
+
     .badge-status {
         position: absolute;
         top: 10px;
@@ -133,17 +133,17 @@
         letter-spacing: 1px;
         z-index: 2;
     }
-    
+
     .badge-available {
         background: rgba(40, 167, 69, 0.8);
         color: white;
     }
-    
+
     .badge-unavailable {
         background: rgba(220, 53, 69, 0.8);
         color: white;
     }
-    
+
     /* Add beautiful hover effects */
     .motor-card::before {
         content: '';
@@ -159,21 +159,25 @@
         transition: all 0.6s ease;
         pointer-events: none; /* Add this line to make the overlay non-blocking */
     }
-    
+
     .motor-card:hover::before {
         opacity: 1;
         animation: shimmer 1.5s infinite;
     }
-    
+
     @keyframes shimmer {
-        0% { background-position: -200% 0; }
-        100% { background-position: 200% 0; }
+        0% {
+            background-position: -200% 0;
+        }
+        100% {
+            background-position: 200% 0;
+        }
     }
-    
+
     .card-text .detail-row {
         margin-bottom: 0.25rem;
     }
-    
+
     .no-results {
         background: linear-gradient(145deg, var(--rich-black), var(--dark-black));
         border: 1px dashed var(--secondary-gold);
@@ -184,7 +188,7 @@
         width: 100%;
         margin: 2rem 0;
     }
-    
+
     .no-results i {
         font-size: 3rem;
         color: var(--primary-gold);
@@ -192,6 +196,7 @@
         margin-bottom: 1rem;
     }
 </style>
+
 
 <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
     <c:choose>
@@ -204,46 +209,48 @@
         </c:when>
         <c:otherwise>
             <c:forEach var="motor" items="${motors}">
-                <div class="col">
-                    <div class="motor-card">
-                        <div class="price-tag">$${motor.price}</div>
-                        <c:choose>
-                            <c:when test="${motor.present eq true}">
-                                <div class="badge-status badge-available">
-                                    <i class="fas fa-check-circle me-1"></i>Available
-                                </div>
-                            </c:when>
-                            <c:otherwise>
-                                <div class="badge-status badge-unavailable">
-                                    <i class="fas fa-times-circle me-1"></i>Unavailable
-                                </div>
-                            </c:otherwise>
-                        </c:choose>
-                        <div class="product-img">
-                            <img src="images/${motor.picture}" alt="${motor.motorName}" onerror="this.src='images/default-motorcycle.jpg'">
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">${motor.motorName}</h5>
-                            <div class="card-text">
-                                <div class="detail-row">
-                                    <strong><i class="fas fa-industry me-1"></i>Brand:</strong> ${brandMap[motor.brandId]}
-                                </div>
-                                <div class="detail-row">
-                                    <strong><i class="fas fa-tag me-1"></i>Model:</strong> ${modelMap[motor.modelId]}
-                                </div>
-                                <div class="detail-row">
-                                    <strong><i class="fas fa-gas-pump me-1"></i>Fuel:</strong> ${fuelMap[motor.fuelId]}
-                                </div>
-                                <div class="detail-row">
-                                    <strong><i class="fas fa-palette me-1"></i>Color:</strong> ${motor.color}
-                                </div>
+                <c:if test="${motor.present eq true}">
+                    <div class="col">
+                        <div class="motor-card">
+                            <div class="price-tag">$${motor.price}</div>
+                            <c:choose>
+                                <c:when test="${motor.present eq true}">
+                                    <div class="badge-status badge-available">
+                                        <i class="fas fa-check-circle me-1"></i>Available
+                                    </div>
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="badge-status badge-unavailable">
+                                        <i class="fas fa-times-circle me-1"></i>Unavailable
+                                    </div>
+                                </c:otherwise>
+                            </c:choose>
+                            <div class="product-img">
+                                <img src="images/${motor.picture}" alt="${motor.motorName}" onerror="this.src='images/default-motorcycle.jpg'">
                             </div>
-                            <a href="motorDetail?id=${motor.motorId}" class="btn btn-info">
-                                <i class="fas fa-eye me-1"></i> View Details
-                            </a>
+                            <div class="card-body">
+                                <h5 class="card-title">${motor.motorName}</h5>
+                                <div class="card-text">
+                                    <div class="detail-row">
+                                        <strong><i class="fas fa-industry me-1"></i>Brand:</strong> ${brandMap[motor.brandId]}
+                                    </div>
+                                    <div class="detail-row">
+                                        <strong><i class="fas fa-tag me-1"></i>Model:</strong> ${modelMap[motor.modelId]}
+                                    </div>
+                                    <div class="detail-row">
+                                        <strong><i class="fas fa-gas-pump me-1"></i>Fuel:</strong> ${fuelMap[motor.fuelId]}
+                                    </div>
+                                    <div class="detail-row">
+                                        <strong><i class="fas fa-palette me-1"></i>Color:</strong> ${motor.color}
+                                    </div>
+                                </div>
+                                <a href="motorDetail?id=${motor.motorId}" class="btn btn-info">
+                                    <i class="fas fa-eye me-1"></i> View Details
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </c:if>
             </c:forEach>
         </c:otherwise>
     </c:choose>

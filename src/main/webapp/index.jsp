@@ -7,9 +7,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import="dao.MotorDAO, java.util.List, models.Motor" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Welcome to MotoVibe - Experience the Ride</title>
@@ -526,13 +528,13 @@
             .brand-logo {
                 max-width: 120px;
                 height: auto;
-                filter: brightness(0) invert(0.8) sepia(1) saturate(5) hue-rotate(20deg);
+                filter: brightness(0) invert(0.8) sepia(0.5) saturate(5) hue-rotate(40deg);
                 opacity: 0.8;
                 transition: all 0.3s ease;
             }
 
             .brand-logo:hover {
-                filter: brightness(0) invert(0.9) sepia(1) saturate(10) hue-rotate(20deg);
+                filter: brightness(0) invert(0.9) sepia(0.7) saturate(8) hue-rotate(25deg);
                 transform: scale(1.05);
                 opacity: 1;
             }
@@ -694,7 +696,7 @@
 
             #create-appointment-button {
                 background: linear-gradient(145deg, var(--primary-gold), var(--secondary-gold));
-                color: var(--dark-black);
+                color: var (--dark-black);
                 border: none;
                 border-radius: 30px;
                 padding: 10px 20px;
@@ -736,10 +738,196 @@
                     bottom: 70px;
                 }
             }
+            .motor-card {
+        background: linear-gradient(145deg, var(--dark-black), var(--rich-black));
+        border: 1px solid var(--secondary-gold);
+        border-radius: 10px;
+        overflow: hidden;
+        transition: all 0.4s ease;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+
+    .motor-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px rgba(212, 175, 55, 0.3);
+        border-color: var(--primary-gold);
+    }
+
+    .product-img {
+        position: relative;
+        height: 200px;
+        overflow: hidden;
+        border-bottom: 1px solid var(--secondary-gold);
+    }
+
+    .product-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: all 0.5s ease;
+    }
+
+    .motor-card:hover .product-img img {
+        transform: scale(1.1);
+        filter: brightness(1.1);
+    }
+
+    .product-img::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(0deg, rgba(17, 17, 17, 0.8) 0%, rgba(26, 26, 26, 0) 50%);
+    }
+
+    .motor-card .card-body {
+        padding: 1.25rem;
+        color: var(--text-gold);
+        background: transparent;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .motor-card .card-title {
+        color: var(--primary-gold);
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .motor-card .card-text {
+        margin-bottom: 1.5rem;
+        flex-grow: 1;
+        line-height: 1.6;
+    }
+
+    .motor-card .card-text strong {
+        color: var(--primary-gold);
+        font-weight: 600;
+        margin-right: 5px;
+    }
+
+    .motor-card .btn-info {
+        background: linear-gradient(145deg, var(--primary-gold), var(--secondary-gold));
+        border: none;
+        color: var(--dark-black);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding: 0.75rem 1.25rem;
+        transition: all 0.3s ease;
+        margin-top: auto;
+        width: 100%;
+        position: relative;
+        z-index: 2; /* Ensure button is above other elements */
+    }
+
+    .motor-card .btn-info:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+    }
+
+    .price-tag {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: linear-gradient(145deg, var(--primary-gold), var(--secondary-gold));
+        color: var(--dark-black);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 1rem;
+        z-index: 2;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .badge-status {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        font-size: 0.8rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 20px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        z-index: 2;
+    }
+
+    .badge-available {
+        background: rgba(40, 167, 69, 0.8);
+        color: white;
+    }
+
+    .badge-unavailable {
+        background: rgba(220, 53, 69, 0.8);
+        color: white;
+    }
+
+    /* Add beautiful hover effects */
+    .motor-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+        background-size: 200% 200%;
+        z-index: 1;
+        opacity: 0;
+        transition: all 0.6s ease;
+        pointer-events: none; /* Add this line to make the overlay non-blocking */
+    }
+
+    .motor-card:hover::before {
+        opacity: 1;
+        animation: shimmer 1.5s infinite;
+    }
+
+    @keyframes shimmer {
+        0% {
+            background-position: -200% 0;
+        }
+        100% {
+            background-position: 200% 0;
+        }
+    }
+
+    .card-text .detail-row {
+        margin-bottom: 0.25rem;
+    }
+
+    .no-results {
+        background: linear-gradient(145deg, var(--rich-black), var(--dark-black));
+        border: 1px dashed var(--secondary-gold);
+        border-radius: 10px;
+        padding: 3rem;
+        text-align: center;
+        color: var(--text-gold);
+        width: 100%;
+        margin: 2rem 0;
+    }
+
+    .no-results i {
+        font-size: 3rem;
+        color: var(--primary-gold);
+        opacity: 0.7;
+        margin-bottom: 1rem;
+    }
         </style>
     </head>
     <body>
-
         <jsp:include page="header.jsp"></jsp:include>
 
             <!-- Hero Section with Gold Particles -->
@@ -762,17 +950,50 @@
                     <div class="container featured-motorbikes">
                         <h2 class="text-center mb-5">Featured Motorbikes</h2>
                         <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
-                        <c:forEach var="i" begin="1" end="6"> <%-- Example: Display 6 featured motorbikes (can be dynamic later) --%>
-                            <div class="col">
-                                <div class="card h-100 motorbike-card">
-                                    <img src="images/motor_pictures/featured_motorbike_${i}.jpg" class="card-img-top" alt="Featured Motorbike ${i}" onerror="this.onerror=null;this.src='images/placeholder.png';" > <!- Placeholder image on error -->
-                                    <div class="card-body">
-                                        <h5 class="card-title">Motorbike Model ${i}</h5> <!- Replace with actual motorbike name -->
-                                        <p class="card-text">Discover the thrill of riding with this amazing model. Perfect for city and adventure.</p> <!- Replace with actual description -->
-                                        <a href="motorDetail?id=1" class="btn btn-outline-primary btn-sm">View Details</a> <!- Example link, replace with dynamic links -->
+                        
+                        <c:forEach var="motor" items="${motors}">
+                            <c:if test="${motor.present eq true}">
+                                <div class="col">
+                                    <div class="motor-card">
+                                        <div class="price-tag">$${motor.price}</div>
+                                        <c:choose>
+                                            <c:when test="${motor.present eq true}">
+                                                <div class="badge-status badge-available">
+                                                    <i class="fas fa-check-circle me-1"></i>Available
+                                                </div>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div class="badge-status badge-unavailable">
+                                                    <i class="fas fa-times-circle me-1"></i>Unavailable
+                                                </div>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <div class="product-img">
+                                            <img src="images/${motor.picture}" alt="${motor.motorName}" onerror="this.src='images/default-motorcycle.jpg'">
+                                        </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title">${motor.motorName}</h5>
+                                            <div class="card-text">
+                                                <div class="detail-row">
+                                                    <strong><i class="fas fa-industry me-1"></i>Brand:</strong> ${brandMap[motor.brandId]}
+                                                </div>
+                                                <div class="detail-row">
+                                                    <strong><i class="fas fa-tag me-1"></i>Model:</strong> ${modelMap[motor.modelId]}
+                                                </div>
+                                                <div class="detail-row">
+                                                    <strong><i class="fas fa-gas-pump me-1"></i>Fuel:</strong> ${fuelMap[motor.fuelId]}
+                                                </div>
+                                                <div class="detail-row">
+                                                    <strong><i class="fas fa-palette me-1"></i>Color:</strong> ${motor.color}
+                                                </div>
+                                            </div>
+                                            <a href="motorDetail?id=${motor.motorId}" class="btn btn-info">
+                                                <i class="fas fa-eye me-1"></i> View Details
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </c:if>
                         </c:forEach>
                     </div>
                 </div>
@@ -873,11 +1094,11 @@
                 <div class="container">
                     <h3>Premium Brands We Carry</h3>
                     <div class="brand-logos">
-                        <img src="images/brands/ducati.png" alt="Ducati" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x60/111111/FFD700?text=DUCATI';">
-                        <img src="images/brands/bmw.png" alt="BMW" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x60/111111/FFD700?text=BMW';">
-                        <img src="images/brands/harley.png" alt="Harley-Davidson" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x60/111111/FFD700?text=HARLEY';">
-                        <img src="images/brands/triumph.png" alt="Triumph" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x60/111111/FFD700?text=TRIUMPH';">
-                        <img src="images/brands/honda.png" alt="Honda" class="brand-logo" onerror="this.src='https://via.placeholder.com/120x60/111111/FFD700?text=HONDA';">
+                        <img src="images/brands/ducati.png" alt="Ducati" class="brand-logo" onerror="this.onerror=null; this.src='images/default-logo.png';">
+                        <img src="images/brands/bmw.png" alt="BMW" class="brand-logo" onerror="this.onerror=null; this.src='images/default-logo.png';">
+                        <img src="images/brands/harley.png" alt="Harley-Davidson" class="brand-logo" onerror="this.onerror=null; this.src='images/default-logo.png';">
+                        <img src="images/brands/triumph.png" alt="Triumph" class="brand-logo" onerror="this.onerror=null; this.src='images/default-logo.png';">
+                        <img src="images/brands/honda.png" alt="Honda" class="brand-logo" onerror="this.onerror=null; this.src='images/default-logo.png';">
                     </div>
                 </div>
             </div>
@@ -956,22 +1177,22 @@
                     const chatSendButton = document.getElementById('chat-send-button');
                     const appointmentButtonContainer = document.getElementById('appointment-button-container');
                     const createAppointmentButton = document.getElementById('create-appointment-button');
-                    
+
                     let questionCount = 0;
                     let isChatOpen = false;
-                    
+
                     // Toggle chat popup visibility
                     chatButton.addEventListener('click', () => {
                         chatPopup.style.display = 'flex';
                         isChatOpen = true;
                         chatInput.focus();
                     });
-                    
+
                     chatCloseButton.addEventListener('click', () => {
                         chatPopup.style.display = 'none';
                         isChatOpen = false;
                     });
-                    
+
                     // Close chat when clicking outside of it
                     document.addEventListener('click', function (event) {
                         if (isChatOpen && !chatPopup.contains(event.target) && !chatButton.contains(event.target)) {
@@ -979,17 +1200,17 @@
                             isChatOpen = false;
                         }
                     });
-                    
+
                     // Send message functionality
                     chatSendButton.addEventListener('click', sendMessage);
-                    
+
                     chatInput.addEventListener('keypress', function (event) {
                         if (event.key === 'Enter') {
                             sendMessage();
                             event.preventDefault();
                         }
                     });
-                    
+
                     // Appointment button functionality
                     createAppointmentButton.addEventListener('click', function () {
                         var isLoggedIn = <%= session.getAttribute("user") != null %>;
@@ -999,7 +1220,7 @@
                             window.location.href = 'register.jsp';
                         }
                     });
-                    
+
                     // Function to send message to server and handle response
                     function sendMessage() {
                         const messageText = chatInput.value.trim();
@@ -1007,10 +1228,10 @@
                             // Add user message to chat
                             appendMessage(messageText, 'user-message');
                             chatInput.value = '';
-                            
+
                             // Show loading indicator
                             const loadingMessage = appendMessage('Thinking...', 'ai-message');
-                            
+
                             // Send to server
                             fetch('ChatServlet', {
                                 method: 'POST',
@@ -1019,33 +1240,33 @@
                                 },
                                 body: 'message=' + encodeURIComponent(messageText)
                             })
-                            .then(response => {
-                                if (!response.ok) {
-                                    throw new Error('Server response was not ok');
-                                }
-                                return response.text();
-                            })
-                            .then(aiResponse => {
-                                // Remove loading indicator
-                                chatBody.removeChild(loadingMessage);
-                                
-                                // Add AI response
-                                appendMessage(aiResponse, 'ai-message');
-                                
-                                // Show appointment button after 2 questions
-                                questionCount++;
-                                if (questionCount >= 2) {
-                                    appointmentButtonContainer.style.display = 'block';
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error sending message:', error);
-                                chatBody.removeChild(loadingMessage);
-                                appendMessage('I apologize, but I\'m having trouble connecting right now. Please try again or visit one of our stores for assistance.', 'ai-message');
-                            });
+                                    .then(response => {
+                                        if (!response.ok) {
+                                            throw new Error('Server response was not ok');
+                                        }
+                                        return response.text();
+                                    })
+                                    .then(aiResponse => {
+                                        // Remove loading indicator
+                                        chatBody.removeChild(loadingMessage);
+
+                                        // Add AI response
+                                        appendMessage(aiResponse, 'ai-message');
+
+                                        // Show appointment button after 2 questions
+                                        questionCount++;
+                                        if (questionCount >= 2) {
+                                            appointmentButtonContainer.style.display = 'block';
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error('Error sending message:', error);
+                                        chatBody.removeChild(loadingMessage);
+                                        appendMessage('I apologize, but I\'m having trouble connecting right now. Please try again or visit one of our stores for assistance.', 'ai-message');
+                                    });
                         }
                     }
-                    
+
                     // Function to append messages to chat
                     function appendMessage(message, messageClass) {
                         const messageDiv = document.createElement('div');
@@ -1053,22 +1274,22 @@
                         messageDiv.textContent = message;
                         chatBody.appendChild(messageDiv);
                         chatBody.scrollTop = chatBody.scrollHeight;
-                        
+
                         // Add subtle animation to new messages
                         messageDiv.style.opacity = '0';
                         messageDiv.style.transform = 'translateY(10px)';
                         messageDiv.style.transition = 'all 0.3s ease';
-                        
+
                         setTimeout(() => {
                             messageDiv.style.opacity = '1';
                             messageDiv.style.transform = 'translateY(0)';
                         }, 10);
-                        
+
                         return messageDiv; // Return for potential removal (loading indicator)
                     }
                 });
-            </script>
+        </script>
 
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        </body>
-        </html>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>
