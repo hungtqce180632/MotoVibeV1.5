@@ -92,7 +92,71 @@
                 window.location.href = "login.jsp";
             }
         </script>
-        <script>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6 d-flex justify-content-center align-items-center">
+                    <div class="form-container reset-password-form">
+                        <a class="logo text-decoration-none" href="/"><h1 class="mb-5">MotoVibe</h1></a>   
+                        <div class="alert alert-warning d-none" id="alertOTP">Please verify OTP.</div>
+                        <c:if test="${not empty message}">
+                            <div class="alert alert-warning">${message}</div>
+                        </c:if>
+                        <%
+                            session.removeAttribute("message");
+                        %>
+                        <h2 class="mb-3">Reset Password</h2>
+                        <form onsubmit="return validateForm()" action="ResetPassword" method="POST">
+                            <div class="form-group mb-3">
+                                <label for="email" class="form-label">Email address</label>
+                                <input name="emailTxt" required type="email" class="form-control" id="email" placeholder="Enter your email">
+                                <span id="emailError" class="text-danger"></span> <!-- Thêm thẻ này để hiển thị lỗi -->
+                            </div>
+                            <label for="password" class="form-label">New Password</label>
+                            <div class="mb-3 d-flex form-group">
+                                <input required type="password" class="form-control" id="password" name="pwdTxt" placeholder="Enter your password">
+                                <button type="button" class="form-control btn btn-outline-dark" id="showPassword" onclick="togglePassword()" style="width: 50px;">
+                                    <i class="fa-solid fa-eye p-0 m-0" id="icon"></i>                                    
+                                </button>                               
+                            </div>
+                            <span id="passwordError" class="text-danger mb-3"></span> <!-- Thêm thẻ này để hiển thị lỗi -->                           
+
+                            <div class="form-group mb-3">
+                                <label for="confirmPassword">Confirm Password:</label>
+                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required oninput="checkPasswordsMatch()">
+                                <small id="confirmError" class="text-danger"></small>
+                            </div>
+
+                            <!-- Start OTP Section -->
+                            <div class="alert alert-warning alert-dismissible fade d-none" role="alert" id="alertOTP">
+                                Please verify OTP before resetting your password.
+                                <button type="button" class="btn-close" aria-label="Close" onclick="hideAlert()"></button>
+                            </div>
+                            <!-- Send OTP Section -->
+                            <div class="d-flex mb-3 align-items-center" id="otpSend">
+                                <button type="button" class="btn btn-outline-primary me-3" id="sendOtpButton" onclick="sendOtp();">Send OTP</button>
+                                <p class="text-danger" hidden id="notificationOtp">Please wait a few seconds before sending another OTP.</p>
+                            </div>
+                            <!-- OTP Input Section -->
+                            <div id="otpInput" style="display: none;" class="mb-3">
+                                <label for="otp" class="form-label">Enter OTP</label>
+                                <div class="mb-2">
+                                    <input type="text" class="form-control" id="otp" name="otp" required>
+                                </div>
+                                <button type="button" class="btn btn-success" onclick="verifyOtp()">Verify OTP</button>
+                            </div>
+                            <!-- OTP Success Notification -->
+                            <p style="display: none;" class="text-success mb-3 fw-bold" id="OTPSuccess">OTP authentication successful!</p>
+
+                            <input hidden id="verificationResult" class="mt-3" name="OTPResult" value=""/>
+                            <!-- End OTP Section -->
+
+                            <button type="button" class="btn btn-dark" id="loginBtn" disabled onclick="redirectToLogin()">Login</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+                        <script>
             function validateForm() {
                 var OTPResult = document.getElementById('verificationResult').value; // Lấy giá trị của input hidden
                 if (OTPResult !== 'Success') { // Kiểm tra nếu giá trị không phải 'Success'                 
@@ -319,71 +383,6 @@
             function offNoti() {
                 document.getElementById('notificationOtp').hidden;
             }
-        </script>       
-
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-6 d-flex justify-content-center align-items-center">
-                    <div class="form-container reset-password-form">
-                        <a class="logo text-decoration-none" href="/"><h1 class="mb-5">MotoVibe</h1></a>   
-                        <div class="alert alert-warning d-none" id="alertOTP">Please verify OTP.</div>
-                        <c:if test="${not empty message}">
-                            <div class="alert alert-warning">${message}</div>
-                        </c:if>
-                        <%
-                            session.removeAttribute("message");
-                        %>
-                        <h2 class="mb-3">Reset Password</h2>
-                        <form onsubmit="return validateForm()" action="ResetPasswordServlet" method="POST">
-                            <div class="form-group mb-3">
-                                <label for="email" class="form-label">Email address</label>
-                                <input name="emailTxt" required type="email" class="form-control" id="email" placeholder="Enter your email">
-                                <span id="emailError" class="text-danger"></span> <!-- Thêm thẻ này để hiển thị lỗi -->
-                            </div>
-                            <label for="password" class="form-label">New Password</label>
-                            <div class="mb-3 d-flex form-group">
-                                <input required type="password" class="form-control" id="password" name="pwdTxt" placeholder="Enter your password">
-                                <button type="button" class="form-control btn btn-outline-dark" id="showPassword" onclick="togglePassword()" style="width: 50px;">
-                                    <i class="fa-solid fa-eye p-0 m-0" id="icon"></i>                                    
-                                </button>                               
-                            </div>
-                            <span id="passwordError" class="text-danger mb-3"></span> <!-- Thêm thẻ này để hiển thị lỗi -->                           
-
-                            <div class="form-group mb-3">
-                                <label for="confirmPassword">Confirm Password:</label>
-                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required oninput="checkPasswordsMatch()">
-                                <small id="confirmError" class="text-danger"></small>
-                            </div>
-
-                            <!-- Start OTP Section -->
-                            <div class="alert alert-warning alert-dismissible fade d-none" role="alert" id="alertOTP">
-                                Please verify OTP before resetting your password.
-                                <button type="button" class="btn-close" aria-label="Close" onclick="hideAlert()"></button>
-                            </div>
-                            <!-- Send OTP Section -->
-                            <div class="d-flex mb-3 align-items-center" id="otpSend">
-                                <button type="button" class="btn btn-outline-primary me-3" id="sendOtpButton" onclick="sendOtp();">Send OTP</button>
-                                <p class="text-danger" hidden id="notificationOtp">Please wait a few seconds before sending another OTP.</p>
-                            </div>
-                            <!-- OTP Input Section -->
-                            <div id="otpInput" style="display: none;" class="mb-3">
-                                <label for="otp" class="form-label">Enter OTP</label>
-                                <div class="mb-2">
-                                    <input type="text" class="form-control" id="otp" name="otp" required>
-                                </div>
-                                <button type="button" class="btn btn-success" onclick="verifyOtp()">Verify OTP</button>
-                            </div>
-                            <!-- OTP Success Notification -->
-                            <p style="display: none;" class="text-success mb-3 fw-bold" id="OTPSuccess">OTP authentication successful!</p>
-
-                            <input hidden id="verificationResult" class="mt-3" name="OTPResult" value=""/>
-                            <!-- End OTP Section -->
-
-                            <button type="button" class="btn btn-dark" id="loginBtn" disabled onclick="redirectToLogin()">Login</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </script>  
     </body>
 </html>

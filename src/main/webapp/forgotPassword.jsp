@@ -20,12 +20,12 @@
                 --rich-black: #1A1A1A;
                 --text-gold: #F8D231;
             }
-            
+
             html {
                 width: 100%;
                 height: 100%;
             }
-            
+
             body {
                 background: linear-gradient(145deg, var(--dark-black), var(--rich-black));
                 position: relative;
@@ -37,7 +37,7 @@
                 -webkit-font-smoothing: antialiased;
                 color: var(--text-gold);
             }
-            
+
             form {
                 position: relative;
                 display: block;
@@ -55,7 +55,7 @@
                 transform: none;
                 box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
             }
-            
+
             /* SVG Container styling with gold border */
             form .svgContainer {
                 position: relative;
@@ -68,9 +68,9 @@
                 overflow: hidden;
                 pointer-events: none;
                 box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3),
-                            inset 0 0 15px rgba(212, 175, 55, 0.2);
+                    inset 0 0 15px rgba(212, 175, 55, 0.2);
             }
-            
+
             form .svgContainer div {
                 position: relative;
                 width: 100%;
@@ -266,7 +266,7 @@
                         <a class="logo text-decoration-none" href="/"><h1 class="mb-5">MotoVibe</h1></a>
                         <h2 class="fw-bold mb-3">Forgot Password</h2>
 
-                        <form action="sendOtp" method="POST">
+                        <form id="emailForm">
                             <div class="svgContainer">
                                 <div>
                                     <svg class="mySVG" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 200">
@@ -372,17 +372,12 @@
                             <div class="inputGroup inputGroup3">
                                 <button type="submit" class="btn btn-primary w-100 mb-3" name="submit">Send OTP</button>
                             </div>
-                            
-                            
-                            <div class="inputGroup inputGroup3">
-                                <button type="submit" class="btn btn-primary w-100 mb-3" name="submit">Verify OTP</button>
-                            </div>
 
                             <div class="text-center mt-3">
                                 <a href="/MotoVibe/login.jsp">Remember your password? Login</a>
                             </div>
                         </form>
-                        <form action="verifyOtp" method="POST" id="otpForm" style="display: none;">
+                        <form id="otpForm" style="display: none;">
                             <div class="inputGroup inputGroup1">
                                 <label for="otp" class="form-label">Enter OTP</label>
                                 <input name="otp" required type="text" class="form-control" id="otp" placeholder="Enter OTP sent to your email">
@@ -390,7 +385,12 @@
                                 <span id="otpError" class="text-danger"></span> 
                             </div>
 
+                            <div class="inputGroup inputGroup3">
+                                <button type="submit" class="btn btn-primary w-100 mb-3">Verify OTP</button>
+                            </div>
                         </form>
+
+                        <div id="message" class="mt-3 text-center"></div>
                     </div>
                 </div>
             </div>
@@ -401,7 +401,122 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.4/dist/sweetalert2.all.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/plugins/MorphSVGPlugin.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
+            $(document).ready(function () {
+                // Handle email form submission
+                $("#emailForm").submit(function (event) {
+                    event.preventDefault();
+
+                    if (!validateEmail()) {
+                        return;
+                    }
+
+                    $.ajax({
+                        url: "sendOtp",
+                        type: "POST",
+                        data: $(this).serialize(),
+                        success: function (response) {
+                            if (response.success) {
+                                // Hide email form and show OTP form
+                                $("#emailForm").hide();
+                                $("#otpForm").show();
+                                $("#message").html('<div class="alert alert-success">OTP sent successfully! Check your email.</div>');
+                            } else {
+                                $("#message").html('<div class="alert alert-danger">' + response.message + '</div>');
+                            }
+                        },
+                        error: function () {
+                            $("#message").html('<div class="alert alert-danger">Error sending OTP. Please try again.</div>');
+                        }
+                    });
+                });
+
+                // Handle OTP form submission
+                $("#otpForm").submit(function (event) {
+                    event.preventDefault();
+
+                    // Clear previous errors
+                    $("#otpError").text("");
+
+                    // Get form data
+                    var otp = $("#otp").val().trim();
+                    var email = $("#email").val();
+
+                    // Validate OTP format (6 digits)
+                    if (!/^\d{6}$/.test(otp)) {
+                        $("#otpError").text("OTP phải gồm 6 chữ số");
+                        return;
+                    }
+
+                    // Show loading state
+                    var submitBtn = $(this).find("button[type='submit']");
+                    var originalBtnText = submitBtn.html();
+                    submitBtn.prop("disabled", true).html(
+                            '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Đang xác thực...'
+                            );
+
+                    // Prepare data
+                    var formData = {
+                        email: email,
+                        otp: otp
+                    };
+
+                    // AJAX call
+                    $.ajax({
+                        url: "verifyOtp",
+                        type: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify(formData),
+                        dataType: "json",
+                        success: function (response) {
+                            if (response.success) {
+                                // Show success message before redirect
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Xác thực thành công',
+                                    text: 'Bạn sẽ được chuyển đến trang đặt lại mật khẩu',
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                }).then(() => {
+                                    window.location.href = "resetPassword.jsp?email=" + encodeURIComponent(email) +
+                                            "&token=" + encodeURIComponent(response.token || "");
+                                });
+                            } else {
+                                // Show error message
+                                $("#otpError").text(response.message || "Mã OTP không hợp lệ hoặc đã hết hạn");
+
+                                // Shake animation for error feedback
+                                $("#otpForm").effect("shake", {times: 2, distance: 5}, 300);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            var errorMsg = "Lỗi kết nối máy chủ";
+                            if (xhr.responseJSON && xhr.responseJSON.message) {
+                                errorMsg = xhr.responseJSON.message;
+                            }
+                            $("#otpError").text(errorMsg);
+                        },
+                        complete: function () {
+                            // Restore button state
+                            submitBtn.prop("disabled", false).html(originalBtnText);
+                        }
+                    });
+                });
+
+                function validateEmail() {
+                    var email = $("#email").val();
+                    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                    if (!emailRegex.test(email)) {
+                        $("#emailError").text("Invalid email format.");
+                        return false;
+                    }
+
+                    $("#emailError").text("");
+                    return true;
+                }
+            });
             // Javascript code from login.jsp (no changes needed for forgotPassword.jsp)
             var email = document.querySelector('#email'), password = document.querySelector('#password'), mySVG = document.querySelector('.svgContainer'), armL = document.querySelector('.armL'), armR = document.querySelector('.armR'), eyeL = document.querySelector('.eyeL'), eyeR = document.querySelector('.eyeR'), nose = document.querySelector('.nose'), mouth = document.querySelector('.mouth'), mouthBG = document.querySelector('.mouthBG'), mouthSmallBG = document.querySelector('.mouthSmallBG'), mouthMediumBG = document.querySelector('.mouthMediumBG'), mouthLargeBG = document.querySelector('.mouthLargeBG'), mouthMaskPath = document.querySelector('#mouthMaskPath'), mouthOutline = document.querySelector('.mouthOutline'), tooth = document.querySelector('.tooth'), tongue = document.querySelector('.tongue'), chin = document.querySelector('.chin'), face = document.querySelector('.face'), eyebrow = document.querySelector('.eyebrow'), outerEarL = document.querySelector('.earL .outerEar'), outerEarR = document.querySelector('.earR .outerEar'), earHairL = document.querySelector('.earL .earHair'), earHairR = document.querySelector('.earR .earHair'), hair = document.querySelector('.hair');
             var caretPos, curEmailIndex, screenCenter, svgCoords, eyeMaxHorizD = 20, eyeMaxVertD = 10, noseMaxHorizD = 23, noseMaxVertD = 10, dFromC, eyeDistH, eyeLDistV, eyeRDistV, eyeDistR, mouthStatus = "small";
@@ -608,29 +723,6 @@
             // password field is not present in forgotPassword.jsp, no event listeners needed for password
             TweenMax.set(armL, {x: -93, y: 220, rotation: 105, transformOrigin: "top left"});
             TweenMax.set(armR, {x: -93, y: 220, rotation: -105, transformOrigin: "top right"});
-        </script>
-
-        <script>
-            function validateForm() {
-                var email = document.getElementById("email").value;
-                var emailError = document.getElementById("emailError");
-                emailError.textContent = "";
-
-                // Regular expression to check email format
-                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(email)) {
-                    emailError.textContent = "Invalid email format.";
-                    return false; // Prevent form submission
-                }
-                return true;
-            }
-
-            // Form submission prevention and validation
-            document.querySelector("form").addEventListener("submit", function (event) {
-                if (!validateForm()) {
-                    event.preventDefault();
-                }
-            });
-        </script>
+        </script>   
     </body>
 </html>
