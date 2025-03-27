@@ -91,7 +91,7 @@ public class MotorOfEmployeeCreateServlet extends HttpServlet {
             int motorId = Integer.parseInt(request.getParameter("motorId"));
             int customerId = Integer.parseInt(request.getParameter("customerId"));
             String paymentMethod = request.getParameter("paymentMethod");
-            boolean hasWarranty = "on".equals(request.getParameter("hasWarranty"));
+            boolean hasWarranty = "true".equals(request.getParameter("hasWarranty"));
             boolean depositStatus = "on".equals(request.getParameter("depositStatus"));
 
             // Validate that required fields are present
@@ -123,7 +123,15 @@ public class MotorOfEmployeeCreateServlet extends HttpServlet {
             order.setMotorId(motorId);
             order.setEmployeeId(user.getUserId()); // Set the employee who created the order
             order.setPaymentMethod(paymentMethod);
-            order.setTotalAmount(motor.getPrice());
+            
+            // Calculate total amount with warranty if applicable
+            double basePrice = motor.getPrice();
+            double totalAmount = basePrice;
+            if (hasWarranty) {
+                totalAmount = basePrice * 1.10; // Add 10% warranty fee
+            }
+            order.setTotalAmount(totalAmount);
+            
             order.setDepositStatus(depositStatus);
             order.setHasWarranty(hasWarranty);
             order.setOrderStatus("Processing"); // Initial status for employee-created orders

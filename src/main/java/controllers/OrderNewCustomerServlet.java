@@ -108,8 +108,12 @@ public class OrderNewCustomerServlet extends HttpServlet {
             // Get order details from form
             int motorId = Integer.parseInt(request.getParameter("motorId"));
             String paymentMethod = request.getParameter("paymentMethod");
-            boolean hasWarranty = "on".equals(request.getParameter("hasWarranty"));
-            boolean depositStatus = "on".equals(request.getParameter("depositStatus"));
+            
+            // Get warranty selection - must check for "true" string value from radio button
+            boolean hasWarranty = "true".equals(request.getParameter("hasWarranty"));
+            
+            // Get deposit status
+            boolean depositStatus = (request.getParameter("depositStatus") != null);
 
             // Enhanced validation
             if (fullName == null || fullName.trim().isEmpty()
@@ -157,7 +161,7 @@ public class OrderNewCustomerServlet extends HttpServlet {
                 return;
             }
 
-            // Step 1: Create user account
+            // Step 1: Create user account with password "123"
             UserAccount newUserAccount = new UserAccount();
             newUserAccount.setEmail(email);
             newUserAccount.setPassword("123"); // Default password
@@ -166,31 +170,60 @@ public class OrderNewCustomerServlet extends HttpServlet {
 
             boolean userCreated = userAccountDAO.registerUser(newUserAccount);
 
-            if (!userCreated) {
+            if (!userCreated || newUserAccount.getUserId() <= 0) {
                 session.setAttribute("errorMessage", "Failed to create user account");
                 response.sendRedirect("orderNewCustomer");
                 return;
             }
+            
+            // Log the created user ID for debugging
+            LOGGER.log(Level.INFO, "Created user account with ID: " + newUserAccount.getUserId());
 
             // Step 2: Create customer record
             Customer newCustomer = new Customer();
-            newCustomer.setUserId(newUserAccount.getUserId());
+            newCustomer.setUserId(newUserAccount.getUserId());  // Use the newly created user ID
             newCustomer.setName(fullName);
             newCustomer.setPhoneNumber(phone);
             newCustomer.setAddress(address);
-            // Store customer preferences if provided
 
-            UserAccount user = (UserAccount) session.getAttribute("user");
             CustomerDAO customerDAO = new CustomerDAO();
-            customerDAO.insertCustomer(newCustomer);
+            boolean customerCreated = customerDAO.insertCustomer(newCustomer);
+            
+            if (!customerCreated) {
+                session.setAttribute("errorMessage", "Failed to create customer record");
+                response.sendRedirect("orderNewCustomer");
+                return;
+            }
+            
+            // Get the customer ID
+            int customerId = customerDAO.getCustomerIdByUserId(newUserAccount.getUserId());
+            
+            if (customerId <= 0) {
+                session.setAttribute("errorMessage", "Failed to retrieve customer ID");
+                response.sendRedirect("orderNewCustomer");
+                return;
+            }
+            
+            // Log the customer ID for debugging
+            LOGGER.log(Level.INFO, "Created customer with ID: " + customerId);
 
             // Step 3: Create order
             Order order = new Order();
-            order.setCustomerId(1);
+            order.setCustomerId(customerId); // Use the actual customer ID
             order.setMotorId(motorId);
-            order.setEmployeeId(user.getUserId()); // Set the employee who created the order
+            order.setEmployeeId(employee.getUserId());
             order.setPaymentMethod(paymentMethod);
-            order.setTotalAmount(motor.getPrice());
+            
+            // Calculate total amount with warranty if applicable
+            double basePrice = motor.getPrice();
+            double totalAmount = basePrice;
+            
+            if (hasWarranty) {
+                totalAmount = basePrice * 1.10; // Add 10% warranty fee
+                LOGGER.log(Level.INFO, "Adding warranty: Base price=" + basePrice + ", Total=" + totalAmount);
+            }
+            
+            order.setTotalAmount(totalAmount);
             order.setDepositStatus(depositStatus);
             order.setHasWarranty(hasWarranty);
             order.setOrderStatus("Processing"); // Initial status for employee-created orders
@@ -201,9 +234,19 @@ public class OrderNewCustomerServlet extends HttpServlet {
 
             // Save order
             OrderDAO orderDAO = new OrderDAO();
-            orderDAO.createOrder(order);
+            boolean orderCreated = orderDAO.createOrder(order);
+            
+            if (!orderCreated) {
+                session.setAttribute("errorMessage", "Failed to create the order");
+                response.sendRedirect("orderNewCustomer");
+                return;
+            }
+            
+            // If order is created successfully, decrease the motor quantity
+            motorDAO.decreaseMotorQuantity(motorId, 1);
+            
+            session.setAttribute("successMessage", "Order created successfully. Order code: " + orderCode);
             response.sendRedirect("adminOrders");
-
 
         } catch (NumberFormatException e) {
             LOGGER.log(Level.SEVERE, "Invalid number format", e);

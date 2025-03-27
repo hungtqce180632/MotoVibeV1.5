@@ -259,11 +259,12 @@
                                         <div class="col-md-6 mb-3">
                                             <label for="motorId" class="form-label">Select Motorcycle*</label>
                                             <select class="form-select" id="motorId" name="motorId" required>
-                                                <option value="">Select a motorcycle</option>
+                                                <option value="" data-price="0">Select a motorcycle</option>
                                                 <c:forEach var="motor" items="${motors}">
-                                                    <option value="${motor.motorId}" data-price="${motor.price}" <c:if
-                                                        test="${motor.motorId eq motor.motorId}">selected
-                                                        </c:if>>
+                                                    <option value="${motor.motorId}" data-price="${motor.price}"
+                                                        data-name="${motor.motorName}" data-color="${motor.color}"
+                                                        data-quantity="${motor.quantity}"
+                                                        data-picture="${motor.picture}">
                                                         ${motor.motorName} - $
                                                         <fmt:formatNumber value="${motor.price}" pattern="#,##0.00" />
                                                         (${motor.quantity} in stock)
@@ -273,8 +274,16 @@
                                             <div class="invalid-feedback">Please select a motorcycle.</div>
                                         </div>
                                         <div class="col-md-6 mb-3">
-                                            <label for="paymentMethod" class="form-label">Payment
-                                                Method*</label>
+                                            <button type="button" id="viewDetailsBtn" class="btn btn-secondary mt-4"
+                                                style="display:none;">
+                                                <i class="fas fa-eye me-2"></i>View Motorcycle Details
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="paymentMethod" class="form-label">Payment Method*</label>
                                             <select class="form-select" id="paymentMethod" name="paymentMethod"
                                                 required>
                                                 <option value="">Select payment method</option>
@@ -285,16 +294,6 @@
                                             </select>
                                             <div class="invalid-feedback">Please select a payment method.</div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3">
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" id="hasWarranty"
-                                                    name="hasWarranty">
-                                                <label class="form-check-label" for="hasWarranty">Include
-                                                    Warranty</label>
-                                            </div>
-                                        </div>
                                         <div class="col-md-6 mb-3">
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox" id="depositStatus"
@@ -304,17 +303,65 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label">Warranty Options</label>
+                                        <div class="warranty-option">
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="radio" name="hasWarranty"
+                                                    id="noWarranty" value="false" checked>
+                                                <label class="form-check-label" for="noWarranty">
+                                                    No Warranty
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="hasWarranty"
+                                                    id="withWarranty" value="true">
+                                                <label class="form-check-label" for="withWarranty">
+                                                    <span style="color: var(--primary-gold);">Include Warranty
+                                                        (Recommended)</span>
+                                                    <small class="text-muted d-block">Protects your purchase for 12
+                                                        months</small>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Motorcycle Details Table -->
+                                    <div id="motorDetails" class="mt-3" style="display: none;">
+                                        <table class="table table-dark table-striped">
+                                            <thead>
+                                                <tr></tr>
+                                                <th>Picture</th>
+                                                <th>Name</th>
+                                                <th>Price</th>
+                                                <th>Color</th>
+                                                <th>Quantity</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td><img id="detailPicture" src="" alt="Motorcycle Picture"
+                                                            style="width: 100px;"></td>
+                                                    <td id="detailName"></td>
+                                                    <td id="detailPrice"></td>
+                                                    <td id="detailColor"></td>
+                                                    <td id="detailQuantity"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- Display the price information -->
-                            <div class="price-info mb-4">
-                                <h5 style="color: var(--primary-gold);">Order Summary</h5>
+                            <!-- Order Creation Form -->
+                            <div class="price-info mb-4 p-3">
+                                <h5>Order Summary</h5>
                                 <div class="d-flex justify-content-between">
                                     <div>Base Price:</div>
                                     <div>$<span id="basePrice">0.00</span></div>
                                 </div>
-                                <div class="d-flex justify-content-between" id="warrantyRow">
+                                <div class="d-flex justify-content-between" id="warrantyRow" style="display: none;">
                                     <div>Warranty (10%):</div>
                                     <div>$<span id="warrantyPrice">0.00</span></div>
                                 </div>
@@ -325,84 +372,132 @@
                                 </div>
                             </div>
 
-                            <div class="d-flex justify-content-between">
-                                <a href="adminOrders" class="btn btn-secondary"><i
-                                        class="fas fa-arrow-left me-2"></i>Back to
-                                    Orders</a>
-                                <button type="submit" class="btn btn-primary"><i class="fas fa-save me-2"></i>Create
-                                    Customer &
-                                    Place Order</button>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-success btn-lg">
+                                    <i class="fas fa-check-circle me-2"></i>Create Order
+                                </button>
+                            </div>
+
+                            <div class="d-flex justify-content-between mt-4">
+                                <a href="adminOrders" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left me-2"></i>Back to Orders
+                                </a>
                             </div>
                         </form>
                     </div>
-                </div>
 
-                <jsp:include page="admin_footer.jsp" />
+                    <%-- [Rest of the HTML remains unchanged] --%>
 
-                <script>
-                    // Price update calculation for warranty and motorcycle selection
-                    function updatePrice() {
-                        try {
-                            // Get the selected motorcycle option
-                            const motorSelect = document.getElementById('motorId');
-                            let basePrice = 0;
+                        <script>
+                            function formatWithCommas(number) {
+                                return number.toLocaleString('en-US', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                });
+                            }
 
-                            if (motorSelect && motorSelect.selectedIndex >= 0) {
-                                const selectedOption = motorSelect.options[motorSelect.selectedIndex];
-                                if (selectedOption && selectedOption.value) {
-                                    basePrice = parseFloat(selectedOption.getAttribute('data-price'));
+                            function updatePriceAndDetails() {
+                                try {
+                                    // Get the selected motorcycle option
+                                    const motorSelect = document.getElementById('motorId');
+                                    const viewDetailsBtn = document.getElementById('viewDetailsBtn');
+                                    let basePrice = 0;
+                                    let motorSelected = false;
+
+                                    if (motorSelect && motorSelect.selectedIndex > 0) {
+                                        const selectedOption = motorSelect.options[motorSelect.selectedIndex];
+                                        if (selectedOption && selectedOption.value) {
+                                            basePrice = parseFloat(selectedOption.getAttribute('data-price') || 0);
+                                            motorSelected = true;
+
+                                            // Update details table
+                                            document.getElementById('detailName').textContent = selectedOption.getAttribute('data-name');
+                                            document.getElementById('detailPrice').textContent = formatWithCommas(basePrice);
+                                            document.getElementById('detailColor').textContent = selectedOption.getAttribute('data-color');
+                                            document.getElementById('detailQuantity').textContent = selectedOption.getAttribute('data-quantity');
+
+                                            // Fix image path and ensure it's displayed correctly
+                                            const imagePath = selectedOption.getAttribute('data-picture');
+                                            document.getElementById('detailPicture').src = imagePath.startsWith('images/') ? imagePath : 'images/' + imagePath;
+
+                                            // Show the View Details button when a motorcycle is selected
+                                            viewDetailsBtn.style.display = 'block';
+                                        }
+                                    } else {
+                                        // Hide the View Details button when no motorcycle is selected
+                                        viewDetailsBtn.style.display = 'none';
+                                    }
+
+                                    // Calculate prices
+                                    const basePriceElement = document.getElementById('basePrice');
+                                    const withWarranty = document.getElementById('withWarranty').checked;
+                                    const warrantyRow = document.getElementById('warrantyRow');
+                                    const warrantyPrice = document.getElementById('warrantyPrice');
+                                    const totalPrice = document.getElementById('totalPrice');
+
+                                    // Display base price with proper formatting
+                                    basePriceElement.textContent = formatWithCommas(basePrice);
+
+                                    // Calculate warranty and total price
+                                    if (withWarranty) {
+                                        const warrantyAmount = basePrice * 0.1;
+                                        warrantyRow.style.display = 'flex';
+                                        warrantyPrice.textContent = formatWithCommas(warrantyAmount);
+                                        totalPrice.textContent = formatWithCommas(basePrice + warrantyAmount);
+                                    } else {
+                                        warrantyRow.style.display = 'none';
+                                        warrantyPrice.textContent = '0.00';
+                                        totalPrice.textContent = formatWithCommas(basePrice);
+                                    }
+                                } catch (error) {
+                                    console.error("Error in updatePriceAndDetails:", error);
                                 }
                             }
 
-                            // Update the base price display
-                            const basePriceElement = document.getElementById('basePrice');
-                            if (basePriceElement) {
-                                basePriceElement.textContent = basePrice.toFixed(2);
-                            }
+                            document.addEventListener('DOMContentLoaded', function () {
+                                // Initial setup
+                                updatePriceAndDetails();
 
-                            // Calculate warranty if checked
-                            const hasWarranty = document.getElementById('hasWarranty').checked;
-                            const warrantyRow = document.getElementById('warrantyRow');
-                            const warrantyPrice = document.getElementById('warrantyPrice');
-                            const totalPrice = document.getElementById('totalPrice');
+                                // Add event listeners
+                                const motorSelect = document.getElementById('motorId');
+                                if (motorSelect) {
+                                    motorSelect.addEventListener('change', updatePriceAndDetails);
+                                }
 
-                            if (hasWarranty) {
-                                const warrantyAmount = basePrice * 0.1; // 10% of base price
-                                warrantyRow.style.display = 'flex';
-                                warrantyPrice.textContent = warrantyAmount.toFixed(2);
-                                totalPrice.textContent = (basePrice + warrantyAmount).toFixed(2);
-                            } else {
-                                warrantyRow.style.display = 'none';
-                                totalPrice.textContent = basePrice.toFixed(2);
-                            }
-                        } catch (error) {
-                            console.error("Error in updatePrice:", error);
-                        }
-                    }
+                                const warrantyRadios = document.querySelectorAll('input[name="hasWarranty"]');
+                                warrantyRadios.forEach(radio => {
+                                    radio.addEventListener('change', updatePriceAndDetails);
+                                });
 
-                    // Initialize when the page loads
-                    document.addEventListener('DOMContentLoaded', function () {
-                        // Hide warranty row initially
-                        const warrantyRow = document.getElementById('warrantyRow');
-                        if (warrantyRow) {
-                            warrantyRow.style.display = 'none';
-                        }
+                                // View Details button functionality
+                                const viewDetailsBtn = document.getElementById('viewDetailsBtn');
+                                const motorDetails = document.getElementById('motorDetails');
 
-                        // Set initial values
-                        updatePrice();
+                                if (viewDetailsBtn && motorDetails) {
+                                    viewDetailsBtn.addEventListener('click', function () {
+                                        if (motorDetails.style.display === 'none') {
+                                            motorDetails.style.display = 'block';
+                                            viewDetailsBtn.innerHTML = '<i class="fas fa-eye-slash me-2"></i>Hide Details';
+                                        } else {
+                                            motorDetails.style.display = 'none';
+                                            viewDetailsBtn.innerHTML = '<i class="fas fa-eye me-2"></i>View Motorcycle Details';
+                                        }
+                                    });
+                                }
 
-                        // Add event listeners
-                        const motorSelect = document.getElementById('motorId');
-                        if (motorSelect) {
-                            motorSelect.addEventListener('change', updatePrice);
-                        }
-
-                        const hasWarrantyCheckbox = document.getElementById('hasWarranty');
-                        if (hasWarrantyCheckbox) {
-                            hasWarrantyCheckbox.addEventListener('change', updatePrice);
-                        }
-                    });
-                </script>
+                                // Form validation
+                                const form = document.querySelector('.needs-validation');
+                                if (form) {
+                                    form.addEventListener('submit', function (event) {
+                                        if (!form.checkValidity()) {
+                                            event.preventDefault();
+                                            event.stopPropagation();
+                                        }
+                                        form.classList.add('was-validated');
+                                    });
+                                }
+                            });
+                        </script>
             </body>
 
             </html>
