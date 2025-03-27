@@ -1,13 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package OTP;
-
 
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.util.HashMap;
+import java.util.Map;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -21,26 +19,47 @@ public class VerifyOtpServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Get the user-entered OTP
-        String enteredOtp = request.getParameter("otp");
+        // Thiết lập response trả về JSON
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
-        // Retrieve the stored OTP from session (which was placed there by SendOtpServlet)
+        Gson gson = new Gson();
+        PrintWriter out = response.getWriter();
+
+        // Đọc JSON từ body request
+        BufferedReader br = request.getReader();
+        Map<String, Object> requestData = gson.fromJson(br, Map.class);
+
+        // Lấy otp user nhập vào (VD: { "otp": "123456" })
+        String enteredOtp = (String) requestData.get("otp");
+
+        // Lấy otp đã lưu trong session (đặt bởi SendOtpServlet)
         Object otpObj = request.getSession().getAttribute("otp");
         String sessionOtp = (otpObj != null) ? String.valueOf(otpObj) : "";
 
-        // Basic check (in production, also check if session otp is null/expired, etc.)
-        boolean match = enteredOtp.equals(sessionOtp);
+        // Kiểm tra khớp
+        boolean match = enteredOtp != null && enteredOtp.equals(sessionOtp);
 
-        // Remove OTP from session so it can't be reused
+        // Xoá OTP khỏi session tránh tái sử dụng
         request.getSession().removeAttribute("otp");
 
-        // Prepare JSON response
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        Gson gson = new Gson();
+        // Tạo Map response JSON
+        Map<String, Object> jsonResponse = new HashMap<>();
+        if (match) {
+            jsonResponse.put("success", true);
+            jsonResponse.put("message", "Xác thực OTP thành công.");
+            // Nếu bạn muốn trả về token hoặc param khác cho client:
+            // jsonResponse.put("token", "some-random-token");
+        } else {
+            jsonResponse.put("success", false);
+            jsonResponse.put("message", "Mã OTP không hợp lệ hoặc đã hết hạn.");
+        }
 
-        // Return success/failure as JSON boolean
-        response.getWriter().write(gson.toJson(match));
+        // Gửi JSON kết quả
+        out.write(gson.toJson(jsonResponse));
+        out.flush();
+        out.close();
     }
 
     @Override
