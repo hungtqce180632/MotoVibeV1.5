@@ -4,11 +4,6 @@
  */
 package dao;
 
-import models.Order;
-import models.Warranty;
-import models.Motor;
-import models.Customer;
-import models.UserAccount;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +12,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import utils.DBContext;
 
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
@@ -26,6 +20,12 @@ import jakarta.mail.Session;
 import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import models.Customer;
+import models.Motor;
+import models.Order;
+import models.UserAccount;
+import models.Warranty;
+import utils.DBContext;
 
 /**
  *
@@ -300,7 +300,12 @@ public class OrderDAO {
 
     public List<Order> getAllOrders() {
         List<Order> orders = new ArrayList<>();
-        String sql = "SELECT * FROM [dbo].[Orders]";
+        String sql = "SELECT o.*, c.name as customer_name, e.name as employee_name, m.motor_name " +
+                "FROM orders o " +
+                "LEFT JOIN customers c ON o.customer_id = c.customer_id " +
+                "LEFT JOIN employees e ON o.employee_id = e.employee_id " +
+                "LEFT JOIN motors m ON o.motor_id = m.motor_id " +
+                "ORDER BY o.create_date DESC";
 
         try (Connection conn = DBContext.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -308,6 +313,12 @@ public class OrderDAO {
 
             while (rs.next()) {
                 Order order = mapOrder(rs);
+                
+                // Set names from joined tables
+                order.setCustomerName(rs.getString("customer_name"));
+                order.setEmployeeName(rs.getString("employee_name"));
+                order.setMotorName(rs.getString("motor_name"));
+                
                 orders.add(order);
             }
         } catch (SQLException e) {
@@ -347,7 +358,7 @@ public class OrderDAO {
 
             // Set parameters for the query
             stmt.setBoolean(1, true); // Set deposit_status to true
-            stmt.setString(2, "Processing"); // Set order_status to "Processing"
+            stmt.setString(2, "Shipped"); // Set order_status to "Processing"
             stmt.setString(3, orderId); // Bind the order_id to the query
 
             // Execute the update
@@ -377,7 +388,7 @@ public class OrderDAO {
         // Database connection initialization
         try (Connection conn = DBContext.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, "Completed"); // Set order_status to "Completed"
+            stmt.setString(1, "Delivered"); // Set order_status to "Completed"
             stmt.setString(2, orderId); // Bind the order_id to the query
 
             // Execute the update

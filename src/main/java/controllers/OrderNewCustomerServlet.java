@@ -226,7 +226,7 @@ public class OrderNewCustomerServlet extends HttpServlet {
             order.setTotalAmount(totalAmount);
             order.setDepositStatus(depositStatus);
             order.setHasWarranty(hasWarranty);
-            order.setOrderStatus("Processing"); // Initial status for employee-created orders
+            order.setOrderStatus("Pending"); // Initial status for employee-created orders
 
             // Generate unique order code
             String orderCode = "MV-" + System.currentTimeMillis() % 100000;
@@ -242,8 +242,6 @@ public class OrderNewCustomerServlet extends HttpServlet {
                 return;
             }
             
-            // If order is created successfully, decrease the motor quantity
-            motorDAO.decreaseMotorQuantity(motorId, 1);
             
             session.setAttribute("successMessage", "Order created successfully. Order code: " + orderCode);
             response.sendRedirect("adminOrders");

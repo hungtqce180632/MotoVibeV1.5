@@ -28,6 +28,11 @@ public class Order {
     private Integer warrantyId; // Nullable
     private Warranty warranty;
     private String orderCode; // New field for tracking orders
+    
+    // New fields for displaying names
+    private String customerName;
+    private String employeeName;
+    private String motorName;
 
     public Order() {
     }
@@ -170,4 +175,28 @@ public class Order {
         this.orderCode = orderCode;
     }
 
+    // Add getters and setters for the new fields
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getEmployeeName() {
+        return employeeName;
+    }
+
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
+    }
+
+    public String getMotorName() {
+        return motorName;
+    }
+
+    public void setMotorName(String motorName) {
+        this.motorName = motorName;
+    }
 }

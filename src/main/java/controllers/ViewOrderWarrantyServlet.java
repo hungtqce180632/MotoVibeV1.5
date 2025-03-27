@@ -63,7 +63,10 @@ public class ViewOrderWarrantyServlet extends HttpServlet {
         } else if (user.getRole().equalsIgnoreCase("Employee")) {
             // Employee can see all orders/warranties
             isAuthorized = true;
-        }
+        } else if (user.getRole().equalsIgnoreCase("Admin")) {
+            // Employee can see all orders/warranties
+            isAuthorized = true;
+        } 
 
         if (isAuthorized) {
             request.setAttribute("order", order);

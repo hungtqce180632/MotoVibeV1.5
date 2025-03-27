@@ -4,6 +4,7 @@
  */
 package controllers;
 
+import dao.MotorDAO;
 import dao.OrderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,6 +22,7 @@ import models.Order;
  */
 @WebServlet(name = "ConfirmOrderEmployeeServlet", urlPatterns = {"/ConfirmOrderEmployeeServlet"})
 public class ConfirmOrderEmployeeServlet extends HttpServlet {
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String orderId = request.getParameter("orderId");
 

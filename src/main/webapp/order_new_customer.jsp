@@ -294,14 +294,7 @@
                                             </select>
                                             <div class="invalid-feedback">Please select a payment method.</div>
                                         </div>
-                                        <div class="col-md-6 mb-3">
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" id="depositStatus"
-                                                    name="depositStatus">
-                                                <label class="form-check-label" for="depositStatus">Deposit
-                                                    Received</label>
-                                            </div>
-                                        </div>
+
                                     </div>
 
                                     <div class="mb-4">

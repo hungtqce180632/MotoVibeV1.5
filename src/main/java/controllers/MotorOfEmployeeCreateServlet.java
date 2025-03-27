@@ -134,7 +134,7 @@ public class MotorOfEmployeeCreateServlet extends HttpServlet {
             
             order.setDepositStatus(depositStatus);
             order.setHasWarranty(hasWarranty);
-            order.setOrderStatus("Processing"); // Initial status for employee-created orders
+            order.setOrderStatus("Pending"); // Initial status for employee-created orders
 
             // Generate order code
             String orderCode = "MV-" + System.currentTimeMillis() % 100000;
