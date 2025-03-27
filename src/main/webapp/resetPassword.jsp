@@ -107,7 +107,7 @@
                   (bạn tự viết Servlet xử lý khi OTP đã verify). 
                   onsubmit gọi validateForm() => chặn submit nếu chưa verify OTP. 
                 -->
-                <form id="resetForm" action="sendOtp" method="POST" onsubmit="return validateForm()">
+                <form id="resetForm" action="resetPassword" method="POST" onsubmit="return validateForm()">
 
                     <!-- Email -->
                     <div class="mb-3">
@@ -188,12 +188,17 @@
                             name="otp"
                             placeholder="6-digit code"
                             >
-                        <button type="button" class="btn btn-success" onclick="verifyOtp()">
+                        <span id="otpError" class="text-danger"></span>
+                        <button 
+                            type="button"
+                            class="btn btn-success mt-2"
+                            onclick="verifyOtp()"
+                            >
                             Verify OTP
                         </button>
                     </div>
 
-                    <!-- Thông báo success OTP -->
+                    <!-- Hiển thị khi verify OTP thành công -->
                     <p 
                         id="OTPSuccess"
                         class="text-success fw-bold mt-2"
@@ -202,241 +207,172 @@
                         OTP verified successfully!
                     </p>
 
-                    <!-- Hidden input lưu kết quả verify OTP -->
+                    <!-- Input ẩn lưu kết quả verify OTP -->
                     <input 
-                        type="hidden" 
-                        id="verificationResult" 
+                        type="hidden"
+                        id="verificationResult"
                         name="OTPResult"
                         value=""
-                        />
+                        >
 
-                    <!-- 
-                       Nút Submit form (đặt lại password).
-                       Sẽ bị chặn nếu OTPResult != "Success". 
-                    -->
+                    <!-- Nút submit (đặt lại mật khẩu) -->
                     <button 
                         type="submit" 
                         class="btn btn-dark w-100 mt-3"
                         >
                         Confirm Reset
                     </button>
-                </form>
 
-                <!-- Nút quay lại Login (tuỳ ý) -->
-                <button 
-                    type="button" 
-                    class="btn btn-secondary w-100 mt-3"
-                    onclick="redirectToLogin()"
-                    >
-                    Back to Login
-                </button>
+                    <!-- Nút quay lại Login (tuỳ ý) -->
+                    <button 
+                        type="button" 
+                        class="btn btn-secondary w-100 mt-3"
+                        onclick="redirectToLogin()"
+                        >
+                        Back to Login
+                    </button>
+                </form>
             </div>
         </div>
         <script>
             function validateForm() {
-                var OTPResult = document.getElementById('verificationResult').value; // Lấy giá trị của input hidden
-                if (OTPResult !== 'Success') { // Kiểm tra nếu giá trị không phải 'Success'                 
-                    var alertOTP = document.getElementById("alertOTP");
-
-                    if (alertOTP) {
-                        alertOTP.classList.remove('d-none'); // Hiển thị thông báo OTP
-                        alertOTP.classList.add('d-block');
-                    }
-                    return false; // Ngăn form submit
+                // Kiểm tra OTP đã verify chưa
+                var ver = document.getElementById("verificationResult").value;
+                if (ver !== "Success") {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'OTP Required',
+                        text: 'Please verify the OTP before resetting password.'
+                    });
+                    return false;
                 }
 
-                console.log("Start validation form");
-                var email = document.getElementById("email").value;
-                var password = document.getElementById("password").value;
-                var confirmPassword = document.getElementById("confirmPassword").value;
+                // Kiểm tra email
+                var emailVal = document.getElementById("email").value.trim();
                 var emailError = document.getElementById("emailError");
-                var passwordError = document.getElementById("passwordError");
-                var confirmError = document.getElementById("confirmError");
-
-                // Reset thông báo lỗi
                 emailError.textContent = "";
-                passwordError.textContent = "";
-                confirmError.textContent = "";
-
-                // Kiểm tra định dạng email
                 var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(email)) {
-                    emailError.textContent = "Invalid email.";
-                    event.preventDefault();
-                    return false; // Ngăn form submit
+                if (!emailRegex.test(emailVal)) {
+                    emailError.textContent = "Invalid email format.";
+                    return false;
                 }
 
-                // Kiểm tra mật khẩu
-                var passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{6,32}$/;
-                if (!passwordRegex.test(password)) {
-                    passwordError.textContent = "Password must be 6-32 characters, at least 1 uppercase letter, 1 number and 1 special character.";
-                    event.preventDefault();
-                    return false; // Ngăn form submit
+                // Kiểm tra password
+                var passwordVal = document.getElementById("password").value.trim();
+                var passwordError = document.getElementById("passwordError");
+                passwordError.textContent = "";
+                // Ví dụ: 6-32, có chữ hoa, số, ký tự đặc biệt
+                var passRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{6,32}$/;
+                if (!passRegex.test(passwordVal)) {
+                    passwordError.textContent =
+                            "Password must be 6-32 chars, uppercase, number & special char.";
+                    return false;
                 }
 
-                // Kiểm tra khớp mật khẩu
-                if (password !== confirmPassword) {
+                // Kiểm tra confirm
+                var confirmVal = document.getElementById("confirmPassword").value.trim();
+                var confirmError = document.getElementById("confirmError");
+                confirmError.textContent = "";
+                if (passwordVal !== confirmVal) {
                     confirmError.textContent = "Passwords do not match.";
-                    event.preventDefault();
-                    return false; // Ngăn form submit
+                    return false;
                 }
 
-                return true; // Cho phép submit nếu hợp lệ
+                return true;
             }
 
-            function checkPasswordsMatch() {
-                var password = document.getElementById('password').value;
-                var confirmPassword = document.getElementById('confirmPassword').value;
-                var confirmError = document.getElementById('confirmError');
-                var resetBtn = document.querySelector("button[name='resetPWDBtn']");
-
-                if (password !== confirmPassword) {
-                    confirmError.textContent = "Passwords do not match.";
-                    resetBtn.disabled = true; // Vô hiệu hóa nút khi mật khẩu không khớp
-                } else {
-                    confirmError.textContent = ""; // Xóa thông báo lỗi nếu mật khẩu khớp
-                    resetBtn.disabled = false; // Kích hoạt lại nút nếu mật khẩu khớp
+            function sendOtp() {
+                // Lấy email
+                var emailVal = document.getElementById("email").value.trim();
+                // Kiểm tra email
+                if (!emailVal) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Please enter email before sending OTP.'
+                    });
+                    return;
                 }
-            }
 
-            function togglePassword() {
-                var passwordField = document.getElementById("password");
-                var icon = document.getElementById("icon");
-
-                if (passwordField.type === "password") {
-                    passwordField.type = "text";
-                    icon.classList.remove("fa-eye");
-                    icon.classList.add("fa-eye-slash");
-                } else {
-                    passwordField.type = "password";
-                    icon.classList.remove("fa-eye-slash");
-                    icon.classList.add("fa-eye");
-                }
-            }
-
-            $(document).ready(function () {
-                $("#emailForm").submit(function (event) {
-                    event.preventDefault();
-                    $("#emailError").text("");    // clear lỗi cũ
-
-                    // Lấy giá trị email
-                    let emailVal = $("#email").val().trim();
-
-                    // Kiểm tra email tối thiểu ở client (nếu cần)
-                    if (!emailVal) {
-                        $("#emailError").text("Vui lòng nhập email.");
-                        return;
-                    }
-
-                    // AJAX gửi JSON { "email": emailVal } đến /sendOtp
-                    $.ajax({
-                        url: "sendOtp",
-                        type: "POST",
-                        contentType: "application/json; charset=utf-8", // Gửi dạng JSON
-                        dataType: "json", // Kỳ vọng nhận JSON
-                        data: JSON.stringify({email: emailVal}),
-                        success: function (response) {
-                            // response = { success: true/false, message: "..." }
-                            if (response.success) {
-                                // Hiển thị form OTP
-                                $("#emailForm").hide();
-                                $("#otpForm").show();
-
-                                // Thông báo
-                                Swal.fire({
-                                    icon: "success",
-                                    title: "OTP sent",
-                                    text: response.message || "OTP has been sent to your email."
-                                });
-                            } else {
-                                // Nếu success = false
-                                Swal.fire({
-                                    icon: "error",
-                                    title: "Failed",
-                                    text: response.message || "Send OTP failed."
-                                });
-                            }
-                        },
-                        error: function () {
+                // Gửi JSON
+                $.ajax({
+                    url: "sendOtp",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: JSON.stringify({email: emailVal}),
+                    success: function (response) {
+                        if (response.success) {
                             Swal.fire({
-                                icon: "error",
-                                title: "Error",
-                                text: "Có lỗi xảy ra khi gửi OTP. Vui lòng thử lại."
+                                icon: 'success',
+                                title: 'OTP Sent',
+                                text: response.message
+                            });
+                            // Hiển thị ô nhập OTP
+                            document.getElementById("otpInput").style.display = "block";
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Failed',
+                                text: response.message || 'Send OTP failed.'
                             });
                         }
-                    });
-                });
-
-
-                $("#otpForm").submit(function (event) {
-                    event.preventDefault();
-                    $("#otpError").text("");
-
-                    let otpVal = $("#otp").val().trim();
-                    if (!otpVal) {
-                        $("#otpError").text("Vui lòng nhập OTP.");
-                        return;
+                    },
+                    error: function () {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'An error occurred sending OTP.'
+                        });
                     }
+                });
+            }
 
-                    // Gửi JSON { "otp": otpVal } đến /verifyOtp
-                    $.ajax({
-                        url: "verifyOtp",
-                        type: "POST",
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        data: JSON.stringify({otp: otpVal}),
-                        success: function (response) {
-                            // { success: true/false, message: "..." }
-                            if (response.success) {
-                                Swal.fire({
-                                    icon: "success",
-                                    title: "Verified",
-                                    text: response.message || "OTP verified successfully."
-                                }).then(() => {
-                                    // Thông thường, sau khi xác thực, bạn có thể chuyển sang trang reset password
-                                    // Hoặc hiển thị form đặt lại mật khẩu 
-                                    // Ở đây tạm ẩn OTP form & in ra msg
-                                    $("#otpForm").hide();
-                                    $("#messageArea").html(
-                                            '<div class="alert alert-success">OTP xác thực thành công! Hãy tiếp tục...</div>'
-                                            );
-                                });
-                            } else {
-                                Swal.fire({
-                                    icon: "error",
-                                    title: "Failed",
-                                    text: response.message || "OTP is invalid or expired."
-                                });
-                            }
-                        },
-                        error: function () {
+            function verifyOtp() {
+                var otpVal = document.getElementById("otp").value.trim();
+                var otpError = document.getElementById("otpError");
+                var verificationResult = document.getElementById("verificationResult");
+                var otpSuccessMsg = document.getElementById("otpSuccessMsg");
+
+                otpError.textContent = "";
+
+                if (!otpVal) {
+                    otpError.textContent = "Please enter the OTP.";
+                    return;
+                }
+
+                $.ajax({
+                    url: "verifyOtp",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: JSON.stringify({otp: otpVal}),
+                    success: function (response) {
+                        if (response.success) {
+                            // OTP đúng
+                            verificationResult.value = "Success";
+                            otpSuccessMsg.style.display = "block";
                             Swal.fire({
-                                icon: "error",
-                                title: "Error",
-                                text: "Có lỗi xảy ra khi xác thực OTP. Vui lòng thử lại."
+                                icon: 'success',
+                                title: 'OTP Verified',
+                                text: response.message
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Verification Failed',
+                                text: response.message || 'OTP invalid or expired.'
                             });
                         }
-                    });
+                    },
+                    error: function () {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'An error occurred while verifying OTP.'
+                        });
+                    }
                 });
-            });
-
-            function checkPasswords() {
-                var password = document.getElementById('password').value;
-                var confirmPassword = document.getElementById('confirmPassword').value;
-                var confirmError = document.getElementById('confirmError');
-
-                if (password !== confirmPassword) {
-                    confirmError.textContent = "Passwords do not match.";
-                } else {
-                    confirmError.textContent = ""; // Xóa thông báo lỗi nếu mật khẩu khớp
-                }
-            }
-            function showNoti() {
-                document.getElementById('notificationOtp').removeAttribute('hidden');
-            }
-
-            function offNoti() {
-                document.getElementById('notificationOtp').hidden;
             }
         </script>  
     </body>

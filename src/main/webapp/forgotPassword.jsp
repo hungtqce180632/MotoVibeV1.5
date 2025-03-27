@@ -485,9 +485,7 @@
                                     timer: 2000,
                                     showConfirmButton: false
                                 }).then(() => {
-                                    window.location.href = "resetPassword.jsp?email="
-                                            + encodeURIComponent(email)
-                                            + "&token=" + encodeURIComponent(response.token || "");
+                                    window.location.href = "resetPassword.jsp";
                                 });
                             } else {
                                 $("#otpError").text(response.message || "Mã OTP không hợp lệ hoặc đã hết hạn");

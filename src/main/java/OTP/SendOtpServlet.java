@@ -25,7 +25,7 @@ public class SendOtpServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Thiết lập các thông tin cơ bản cho response
+        // Thiết lập request/response trả về JSON
         request.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -38,21 +38,17 @@ public class SendOtpServlet extends HttpServlet {
         BufferedReader br = request.getReader();
         Map<String, Object> requestData = gson.fromJson(br, Map.class);
 
-        // Lấy email từ object JSON (ví dụ { "email":"abc@gmail.com" })
+        // Lấy email từ object JSON (vd { "email": "abc@gmail.com" })
         String emailSendOTP = (String) requestData.get("email");
 
-        // Ví dụ nếu bạn muốn kiểm tra user tồn tại hay chưa:
-        // UserAccountDAO accDao = new UserAccountDAO();
-        // boolean userExists = accDao.checkUserByEmail(emailSendOTP);
-        // if (!userExists) { ... }
 
-        // Generate random 6-digit OTP (100000 -> 999999)
+        // Generate random 6-digit OTP
         int otp = new Random().nextInt(900000) + 100000;
 
-        // Gửi mail
+        // Gửi mail qua Gmail
         boolean sendSuccess = sendEmail(emailSendOTP, otp);
 
-        // Tạo một Map để chứa response JSON trả về
+        // Tạo Map trả về JSON
         Map<String, Object> jsonResponse = new HashMap<>();
 
         if (sendSuccess) {
@@ -63,7 +59,6 @@ public class SendOtpServlet extends HttpServlet {
             jsonResponse.put("success", true);
             jsonResponse.put("message", "OTP đã được gửi thành công!");
         } else {
-            // Báo lỗi nếu gửi mail thất bại
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             jsonResponse.put("success", false);
             jsonResponse.put("message", "Gửi OTP thất bại. Vui lòng thử lại.");
