@@ -78,11 +78,4 @@ public class ResetPasswordServlet extends HttpServlet {
         }
     }
 
-    // Method to generate a random OTP
-    private String generateOtp() {
-        Random random = new Random();
-        int otp = random.nextInt(999999); // Generate a 6-digit OTP
-        return String.format("%06d", otp); // Pad with leading zeros if necessary
-    }
-
 }

@@ -408,70 +408,76 @@
                 $("#emailForm").submit(function (event) {
                     event.preventDefault();
 
+                    // Kiểm tra định dạng email
                     if (!validateEmail()) {
                         return;
                     }
 
+                    var emailVal = $("#email").val().trim();
+                    var agreeChecked = $("#agree").is(":checked");
+
+                    if (!agreeChecked) {
+                        $("#message").html('<div class="alert alert-danger">Vui lòng đồng ý với điều khoản và chính sách.</div>');
+                        return;
+                    }
+
                     $.ajax({
-                        url: "sendOtp",
+                        url: "sendOtp", // servlet
                         type: "POST",
-                        data: $(this).serialize(),
+                        contentType: "application/json", // gửi JSON
+                        dataType: "json", // nhận JSON
+                        data: JSON.stringify({
+                            email: emailVal
+                                    // nếu cần thêm param => thêm vào object
+                        }),
                         success: function (response) {
                             if (response.success) {
-                                // Hide email form and show OTP form
                                 $("#emailForm").hide();
                                 $("#otpForm").show();
-                                $("#message").html('<div class="alert alert-success">OTP sent successfully! Check your email.</div>');
+                                $("#message").html('<div class="alert alert-success">' + response.message + '</div>');
                             } else {
                                 $("#message").html('<div class="alert alert-danger">' + response.message + '</div>');
                             }
                         },
                         error: function () {
-                            $("#message").html('<div class="alert alert-danger">Error sending OTP. Please try again.</div>');
+                            $("#message").html('<div class="alert alert-danger">Có lỗi khi gửi OTP. Vui lòng thử lại.</div>');
                         }
                     });
                 });
+
 
                 // Handle OTP form submission
                 $("#otpForm").submit(function (event) {
                     event.preventDefault();
 
-                    // Clear previous errors
-                    $("#otpError").text("");
+                    $("#otpError").text(""); // clear lỗi cũ
 
-                    // Get form data
                     var otp = $("#otp").val().trim();
-                    var email = $("#email").val();
+                    var email = $("#email").val().trim(); // Lấy lại email cũ
 
-                    // Validate OTP format (6 digits)
+                    // Kiểm tra otp phải đúng 6 số
                     if (!/^\d{6}$/.test(otp)) {
                         $("#otpError").text("OTP phải gồm 6 chữ số");
                         return;
                     }
 
-                    // Show loading state
                     var submitBtn = $(this).find("button[type='submit']");
                     var originalBtnText = submitBtn.html();
                     submitBtn.prop("disabled", true).html(
-                            '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Đang xác thực...'
+                            '<span class="spinner-border spinner-border-sm"></span> Đang xác thực...'
                             );
 
-                    // Prepare data
-                    var formData = {
-                        email: email,
-                        otp: otp
-                    };
-
-                    // AJAX call
                     $.ajax({
                         url: "verifyOtp",
                         type: "POST",
                         contentType: "application/json",
-                        data: JSON.stringify(formData),
                         dataType: "json",
+                        data: JSON.stringify({
+                            email: email,
+                            otp: otp
+                        }),
                         success: function (response) {
                             if (response.success) {
-                                // Show success message before redirect
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'Xác thực thành công',
@@ -479,14 +485,11 @@
                                     timer: 2000,
                                     showConfirmButton: false
                                 }).then(() => {
-                                    window.location.href = "resetPassword.jsp?email=" + encodeURIComponent(email) +
-                                            "&token=" + encodeURIComponent(response.token || "");
+                                    window.location.href = "resetPassword.jsp";
                                 });
                             } else {
-                                // Show error message
                                 $("#otpError").text(response.message || "Mã OTP không hợp lệ hoặc đã hết hạn");
-
-                                // Shake animation for error feedback
+                                // Shake animation
                                 $("#otpForm").effect("shake", {times: 2, distance: 5}, 300);
                             }
                         },
@@ -498,7 +501,6 @@
                             $("#otpError").text(errorMsg);
                         },
                         complete: function () {
-                            // Restore button state
                             submitBtn.prop("disabled", false).html(originalBtnText);
                         }
                     });

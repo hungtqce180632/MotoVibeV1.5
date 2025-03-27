@@ -40,16 +40,16 @@ public class LoginServlet extends HttpServlet {
                 CustomerDAO customerDAO = new CustomerDAO();
                 Customer customer = customerDAO.getCustomerByUserId(user.getUserId());
                 session.setAttribute("customer", customer);
-                response.sendRedirect("index.jsp");
+                response.sendRedirect("home");
                 return;
             } else if ("employee".equals(user.getRole())) {
                 EmployeeDAO employeeDAO = new EmployeeDAO();
                 Employee employee = employeeDAO.getEmployeeByUserId(user.getUserId());
                 session.setAttribute("employee", employee);
-                response.sendRedirect("index.jsp");
+                response.sendRedirect("home");
                 return;
             } else if ("admin".equals(user.getRole())) {
-                response.sendRedirect("index.jsp");
+                response.sendRedirect("home");
                 return;
             }
         } else {

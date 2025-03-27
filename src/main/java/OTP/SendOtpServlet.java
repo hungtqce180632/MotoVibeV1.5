@@ -1,15 +1,17 @@
 package OTP;
 
-import dao.UserAccountDAO;
 import com.google.gson.Gson;
+import dao.UserAccountDAO;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
-import java.util.Map;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -23,37 +25,49 @@ public class SendOtpServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String emailSendOTP = request.getParameter("email");
-
-        // Example: your DAO usage, if you need to check something about the user
-        UserAccountDAO accDao = new UserAccountDAO();
-        // boolean userExists = accDao.checkUserByEmail(emailSendOTP); // your code, if needed
-
-        // Generate random 6-digit OTP
-        int otp = new Random().nextInt(999999); // range 0-999999
-        if (otp < 100000) {
-            otp += 100000; // ensure it's always 6 digits (e.g., 012345 -> 12345)
-        }
-
-        // Attempt to send email
-        boolean sendSuccess = sendEmail(emailSendOTP, otp);
-
-        // JSON response setup
+        // Thiết lập request/response trả về JSON
+        request.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        Gson gson = new Gson();
 
-        // If successful, store OTP in session and return success = true
+        // Dùng Gson để parse JSON & trả JSON
+        Gson gson = new Gson();
+        PrintWriter out = response.getWriter();
+
+        // Đọc JSON từ body request
+        BufferedReader br = request.getReader();
+        Map<String, Object> requestData = gson.fromJson(br, Map.class);
+
+        // Lấy email từ object JSON (vd { "email": "abc@gmail.com" })
+        String emailSendOTP = (String) requestData.get("email");
+
+
+        // Generate random 6-digit OTP
+        int otp = new Random().nextInt(900000) + 100000;
+
+        // Gửi mail qua Gmail
+        boolean sendSuccess = sendEmail(emailSendOTP, otp);
+
+        // Tạo Map trả về JSON
+        Map<String, Object> jsonResponse = new HashMap<>();
+
         if (sendSuccess) {
-            request.getSession().setAttribute("otp", otp);
+            // Lưu OTP vào session
+            request.getSession().setAttribute("otp", String.valueOf(otp));
             request.getSession().setAttribute("emailSendOTP", emailSendOTP);
 
-            response.setStatus(HttpServletResponse.SC_OK);
-            response.getWriter().write(gson.toJson(true));
+            jsonResponse.put("success", true);
+            jsonResponse.put("message", "OTP đã được gửi thành công!");
         } else {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write(gson.toJson(false));
+            jsonResponse.put("success", false);
+            jsonResponse.put("message", "Gửi OTP thất bại. Vui lòng thử lại.");
         }
+
+        // Chuyển Map sang JSON và trả về cho client
+        out.write(gson.toJson(jsonResponse));
+        out.flush();
+        out.close();
     }
 
     /**
@@ -84,7 +98,7 @@ public class SendOtpServlet extends HttpServlet {
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
             message.setSubject("Your OTP code from MotoVibe");
             message.setText("Hello,\n\nYour OTP code is: " + otp
-                          + "\n\nPlease enter this code to verify.\n\nThank you!");
+                    + "\n\nPlease enter this code to verify.\n\nThank you!");
 
             Transport.send(message);
             return true;

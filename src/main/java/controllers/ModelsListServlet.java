@@ -40,8 +40,16 @@ public class ModelsListServlet extends HttpServlet {
                 modelDAO.deleteModel(Integer.parseInt(modelId)); // Deleting the model by ID
                 response.sendRedirect("modelslist");  // After deletion, redirect to the model list page
             } catch (SQLException ex) {
-                Logger.getLogger(ModelsListServlet.class.getName()).log(Level.SEVERE, null, ex);
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error deleting model");
+                Logger.getLogger(BrandsListServlet.class.getName()).log(Level.SEVERE, null, ex);
+
+                try {
+                    List<Model> models = modelDAO.getAllModels(); // load lại danh sách
+                    request.setAttribute("models", models);
+                    request.setAttribute("errorMessage", "Could not delete the model. It might be in use.");
+                    request.getRequestDispatcher("models_list.jsp").forward(request, response);
+                } catch (SQLException e) {
+                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error loading brands.");
+                }
             }
         } 
         // Displaying the model list

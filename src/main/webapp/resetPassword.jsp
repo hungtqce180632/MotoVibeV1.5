@@ -92,296 +92,287 @@
                 window.location.href = "login.jsp";
             }
         </script>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-6 d-flex justify-content-center align-items-center">
-                    <div class="form-container reset-password-form">
-                        <a class="logo text-decoration-none" href="/"><h1 class="mb-5">MotoVibe</h1></a>   
-                        <div class="alert alert-warning d-none" id="alertOTP">Please verify OTP.</div>
-                        <c:if test="${not empty message}">
-                            <div class="alert alert-warning">${message}</div>
-                        </c:if>
-                        <%
-                            session.removeAttribute("message");
-                        %>
-                        <h2 class="mb-3">Reset Password</h2>
-                        <form onsubmit="return validateForm()" action="ResetPassword" method="POST">
-                            <div class="form-group mb-3">
-                                <label for="email" class="form-label">Email address</label>
-                                <input name="emailTxt" required type="email" class="form-control" id="email" placeholder="Enter your email">
-                                <span id="emailError" class="text-danger"></span> <!-- Thêm thẻ này để hiển thị lỗi -->
-                            </div>
-                            <label for="password" class="form-label">New Password</label>
-                            <div class="mb-3 d-flex form-group">
-                                <input required type="password" class="form-control" id="password" name="pwdTxt" placeholder="Enter your password">
-                                <button type="button" class="form-control btn btn-outline-dark" id="showPassword" onclick="togglePassword()" style="width: 50px;">
-                                    <i class="fa-solid fa-eye p-0 m-0" id="icon"></i>                                    
-                                </button>                               
-                            </div>
-                            <span id="passwordError" class="text-danger mb-3"></span> <!-- Thêm thẻ này để hiển thị lỗi -->                           
+        <div class="container d-flex justify-content-center align-items-center flex-column">
+            <!-- Logo / Title -->
+            <a class="logo text-decoration-none mt-4" href="/">
+                <h1>MotoVibe</h1>
+            </a>
 
-                            <div class="form-group mb-3">
-                                <label for="confirmPassword">Confirm Password:</label>
-                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required oninput="checkPasswordsMatch()">
-                                <small id="confirmError" class="text-danger"></small>
-                            </div>
+            <!-- Form Reset Password -->
+            <div class="reset-password-form w-100">
+                <h2 class="mb-4">Reset Password</h2>
 
-                            <!-- Start OTP Section -->
-                            <div class="alert alert-warning alert-dismissible fade d-none" role="alert" id="alertOTP">
-                                Please verify OTP before resetting your password.
-                                <button type="button" class="btn-close" aria-label="Close" onclick="hideAlert()"></button>
-                            </div>
-                            <!-- Send OTP Section -->
-                            <div class="d-flex mb-3 align-items-center" id="otpSend">
-                                <button type="button" class="btn btn-outline-primary me-3" id="sendOtpButton" onclick="sendOtp();">Send OTP</button>
-                                <p class="text-danger" hidden id="notificationOtp">Please wait a few seconds before sending another OTP.</p>
-                            </div>
-                            <!-- OTP Input Section -->
-                            <div id="otpInput" style="display: none;" class="mb-3">
-                                <label for="otp" class="form-label">Enter OTP</label>
-                                <div class="mb-2">
-                                    <input type="text" class="form-control" id="otp" name="otp" required>
-                                </div>
-                                <button type="button" class="btn btn-success" onclick="verifyOtp()">Verify OTP</button>
-                            </div>
-                            <!-- OTP Success Notification -->
-                            <p style="display: none;" class="text-success mb-3 fw-bold" id="OTPSuccess">OTP authentication successful!</p>
+                <!-- 
+                  Form sẽ submit về "resetPassword" 
+                  (bạn tự viết Servlet xử lý khi OTP đã verify). 
+                  onsubmit gọi validateForm() => chặn submit nếu chưa verify OTP. 
+                -->
+                <form id="resetForm" action="resetPassword" method="POST" onsubmit="return validateForm()">
 
-                            <input hidden id="verificationResult" class="mt-3" name="OTPResult" value=""/>
-                            <!-- End OTP Section -->
-
-                            <button type="button" class="btn btn-dark" id="loginBtn" disabled onclick="redirectToLogin()">Login</button>
-                        </form>
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email address</label>
+                        <input 
+                            type="email" 
+                            class="form-control" 
+                            id="email"
+                            name="emailTxt"
+                            placeholder="Enter your email"
+                            required
+                            >
+                        <span id="emailError" class="text-danger"></span>
                     </div>
-                </div>
+
+                    <!-- Password mới -->
+                    <div class="mb-3">
+                        <label for="password" class="form-label">New Password</label>
+                        <div class="input-group">
+                            <input 
+                                type="password"
+                                class="form-control"
+                                id="password"
+                                name="pwdTxt"
+                                placeholder="Enter your password"
+                                required
+                                >
+                            <button 
+                                type="button" 
+                                class="btn btn-outline-dark" 
+                                style="width: 50px;"
+                                onclick="togglePassword()"
+                                >
+                                <i class="fa-solid fa-eye" id="icon"></i>
+                            </button>
+                        </div>
+                        <small id="passwordError" class="text-danger"></small>
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="mb-3">
+                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                        <input
+                            type="password"
+                            class="form-control"
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            placeholder="Re-type your password"
+                            required
+                            oninput="checkPasswordsMatch()"
+                            >
+                        <small id="confirmError" class="text-danger"></small>
+                    </div>
+
+                    <!-- OTP Section -->
+                    <!-- Nút gửi OTP -->
+                    <div class="mb-3 d-flex align-items-center">
+                        <button 
+                            type="button"
+                            class="btn btn-outline-primary me-3"
+                            id="sendOtpButton"
+                            onclick="sendOtp()"
+                            >
+                            Send OTP
+                        </button>
+                        <p class="text-danger mb-0" id="otpWarning" style="display:none;">
+                            Wait a moment before re-sending!
+                        </p>
+                    </div>
+
+                    <!-- Nhập OTP -->
+                    <div id="otpInput" class="mb-3" style="display: none;">
+                        <label for="otp" class="form-label">Enter OTP</label>
+                        <input 
+                            type="text"
+                            class="form-control mb-2"
+                            id="otp"
+                            name="otp"
+                            placeholder="6-digit code"
+                            >
+                        <span id="otpError" class="text-danger"></span>
+                        <button 
+                            type="button"
+                            class="btn btn-success mt-2"
+                            onclick="verifyOtp()"
+                            >
+                            Verify OTP
+                        </button>
+                    </div>
+
+                    <!-- Hiển thị khi verify OTP thành công -->
+                    <p 
+                        id="OTPSuccess"
+                        class="text-success fw-bold mt-2"
+                        style="display: none;"
+                        >
+                        OTP verified successfully!
+                    </p>
+
+                    <!-- Input ẩn lưu kết quả verify OTP -->
+                    <input 
+                        type="hidden"
+                        id="verificationResult"
+                        name="OTPResult"
+                        value=""
+                        >
+
+                    <!-- Nút submit (đặt lại mật khẩu) -->
+                    <button 
+                        type="submit" 
+                        class="btn btn-dark w-100 mt-3"
+                        >
+                        Confirm Reset
+                    </button>
+
+                    <!-- Nút quay lại Login (tuỳ ý) -->
+                    <button 
+                        type="button" 
+                        class="btn btn-secondary w-100 mt-3"
+                        onclick="redirectToLogin()"
+                        >
+                        Back to Login
+                    </button>
+                </form>
             </div>
         </div>
-                        <script>
+        <script>
             function validateForm() {
-                var OTPResult = document.getElementById('verificationResult').value; // Lấy giá trị của input hidden
-                if (OTPResult !== 'Success') { // Kiểm tra nếu giá trị không phải 'Success'                 
-                    var alertOTP = document.getElementById("alertOTP");
-
-                    if (alertOTP) {
-                        alertOTP.classList.remove('d-none'); // Hiển thị thông báo OTP
-                        alertOTP.classList.add('d-block');
-                    }
-                    return false; // Ngăn form submit
+                // Kiểm tra OTP đã verify chưa
+                var ver = document.getElementById("verificationResult").value;
+                if (ver !== "Success") {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'OTP Required',
+                        text: 'Please verify the OTP before resetting password.'
+                    });
+                    return false;
                 }
 
-                console.log("Start validation form");
-                var email = document.getElementById("email").value;
-                var password = document.getElementById("password").value;
-                var confirmPassword = document.getElementById("confirmPassword").value;
+                // Kiểm tra email
+                var emailVal = document.getElementById("email").value.trim();
                 var emailError = document.getElementById("emailError");
-                var passwordError = document.getElementById("passwordError");
-                var confirmError = document.getElementById("confirmError");
-
-                // Reset thông báo lỗi
                 emailError.textContent = "";
-                passwordError.textContent = "";
-                confirmError.textContent = "";
-
-                // Kiểm tra định dạng email
                 var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(email)) {
-                    emailError.textContent = "Invalid email.";
-                    event.preventDefault();
-                    return false; // Ngăn form submit
+                if (!emailRegex.test(emailVal)) {
+                    emailError.textContent = "Invalid email format.";
+                    return false;
                 }
 
-                // Kiểm tra mật khẩu
-                var passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{6,32}$/;
-                if (!passwordRegex.test(password)) {
-                    passwordError.textContent = "Password must be 6-32 characters, at least 1 uppercase letter, 1 number and 1 special character.";
-                    event.preventDefault();
-                    return false; // Ngăn form submit
+                // Kiểm tra password
+                var passwordVal = document.getElementById("password").value.trim();
+                var passwordError = document.getElementById("passwordError");
+                passwordError.textContent = "";
+                // Ví dụ: 6-32, có chữ hoa, số, ký tự đặc biệt
+                var passRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{6,32}$/;
+                if (!passRegex.test(passwordVal)) {
+                    passwordError.textContent =
+                            "Password must be 6-32 chars, uppercase, number & special char.";
+                    return false;
                 }
 
-                // Kiểm tra khớp mật khẩu
-                if (password !== confirmPassword) {
+                // Kiểm tra confirm
+                var confirmVal = document.getElementById("confirmPassword").value.trim();
+                var confirmError = document.getElementById("confirmError");
+                confirmError.textContent = "";
+                if (passwordVal !== confirmVal) {
                     confirmError.textContent = "Passwords do not match.";
-                    event.preventDefault();
-                    return false; // Ngăn form submit
+                    return false;
                 }
 
-                return true; // Cho phép submit nếu hợp lệ
-            }
-
-            function checkPasswordsMatch() {
-                var password = document.getElementById('password').value;
-                var confirmPassword = document.getElementById('confirmPassword').value;
-                var confirmError = document.getElementById('confirmError');
-                var resetBtn = document.querySelector("button[name='resetPWDBtn']");
-
-                if (password !== confirmPassword) {
-                    confirmError.textContent = "Passwords do not match.";
-                    resetBtn.disabled = true; // Vô hiệu hóa nút khi mật khẩu không khớp
-                } else {
-                    confirmError.textContent = ""; // Xóa thông báo lỗi nếu mật khẩu khớp
-                    resetBtn.disabled = false; // Kích hoạt lại nút nếu mật khẩu khớp
-                }
-            }
-
-            function togglePassword() {
-                var passwordField = document.getElementById("password");
-                var icon = document.getElementById("icon");
-
-                if (passwordField.type === "password") {
-                    passwordField.type = "text";
-                    icon.classList.remove("fa-eye");
-                    icon.classList.add("fa-eye-slash");
-                } else {
-                    passwordField.type = "password";
-                    icon.classList.remove("fa-eye-slash");
-                    icon.classList.add("fa-eye");
-                }
+                return true;
             }
 
             function sendOtp() {
-                var sendOtpButton = document.getElementById("sendOtpButton");
-                var countdown = 60; // 1 minute countdown
+                // Lấy email
+                var emailVal = document.getElementById("email").value.trim();
+                // Kiểm tra email
+                if (!emailVal) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Please enter email before sending OTP.'
+                    });
+                    return;
+                }
 
-                // Disable the Send OTP button
-                sendOtpButton.disabled = true;
-
-                // Show the countdown on the button
-                sendOtpButton.innerText = `Wait ${countdown} seconds`;
-
-                // Set up the countdown timer
-                var interval = setInterval(function () {
-                    countdown--;
-                    sendOtpButton.innerText = `Wait ${countdown} seconds`;
-
-                    // If countdown reaches zero, re-enable the button
-                    if (countdown <= 0) {
-                        clearInterval(interval);
-                        sendOtpButton.disabled = false;
-                        sendOtpButton.innerText = "Send OTP"; // Reset button text
-                    }
-                }, 1000); // Update every second
-
-                // Send OTP request to the server (use your actual AJAX endpoint here)
+                // Gửi JSON
                 $.ajax({
+                    url: "sendOtp",
                     type: "POST",
-                    url: "sendOtp", // replace with your server-side logic
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: JSON.stringify({email: emailVal}),
                     success: function (response) {
-                        // Handle the server's response to OTP request
-                        console.log(response);
                         if (response.success) {
                             Swal.fire({
                                 icon: 'success',
                                 title: 'OTP Sent',
-                                text: 'An OTP has been sent to your email.'
+                                text: response.message
                             });
-                            document.getElementById("otpInput").style.display = "block"; // Show OTP input field
+                            // Hiển thị ô nhập OTP
+                            document.getElementById("otpInput").style.display = "block";
                         } else {
                             Swal.fire({
                                 icon: 'error',
-                                title: 'OTP Error',
-                                text: 'Failed to send OTP. Please try again.'
+                                title: 'Failed',
+                                text: response.message || 'Send OTP failed.'
                             });
                         }
                     },
-                    error: function (xhr, status, error) {
-                        console.log("Error:", error);
+                    error: function () {
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: 'An error occurred while sending OTP.'
+                            text: 'An error occurred sending OTP.'
                         });
                     }
                 });
             }
 
             function verifyOtp() {
-                var otp = document.getElementById("otp").value;
+                var otpVal = document.getElementById("otp").value.trim();
+                var otpError = document.getElementById("otpError");
                 var verificationResult = document.getElementById("verificationResult");
+                var otpSuccessMsg = document.getElementById("otpSuccessMsg");
+
+                otpError.textContent = "";
+
+                if (!otpVal) {
+                    otpError.textContent = "Please enter the OTP.";
+                    return;
+                }
 
                 $.ajax({
+                    url: "verifyOtp",
                     type: "POST",
-                    url: "verifyOtp", // replace with your verification endpoint
-                    data: {otp: otp},
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: JSON.stringify({otp: otpVal}),
                     success: function (response) {
                         if (response.success) {
+                            // OTP đúng
                             verificationResult.value = "Success";
+                            otpSuccessMsg.style.display = "block";
                             Swal.fire({
                                 icon: 'success',
                                 title: 'OTP Verified',
-                                text: 'OTP verification successful.'
+                                text: response.message
                             });
-                            document.getElementById("OTPSuccess").style.display = "block";
-                            document.getElementById("loginBtn").disabled = false; // Enable Login button
                         } else {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Verification Failed',
-                                text: 'The OTP entered is incorrect or expired. Please try again.'
+                                text: response.message || 'OTP invalid or expired.'
                             });
                         }
                     },
-                    error: function (xhr, status, error) {
-                        console.log("Error:", error);
+                    error: function () {
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: 'An error occurred during OTP verification.'
+                            text: 'An error occurred while verifying OTP.'
                         });
                     }
                 });
-            }
-
-            function disableButtonWithCountdown() {
-                var sendOtpButton = document.getElementById("sendOtpButton");
-                var otpSend = document.getElementById("otpSend");
-                var alertOTP = document.getElementById("alertOTP");
-                var countdown = 60;
-
-                // Vô hiệu hóa nút
-                sendOtpButton.disabled = true;
-
-                // Cập nhật nội dung nút với thời gian đếm ngược
-                sendOtpButton.innerText = "Wait " + countdown + " second";
-
-                // Tạo bộ đếm ngược
-                var interval = setInterval(function () {
-                    countdown--;
-                    sendOtpButton.innerText = "Wait " + countdown + " second";
-
-                    // Kiểm tra nếu otpSend không có class mb-3 thì dừng bộ đếm                    
-                    if (!otpSend.classList.contains('mb-3') || !alertOTP.classList.contains('d-none')) {
-                        clearInterval(interval);
-                        sendOtpButton.disabled = false;
-                        sendOtpButton.innerText = "Send OTP";
-                        return; // Thoát khỏi hàm
-                    }
-
-                    // Khi hết 60 giây, kích hoạt lại nút
-                    if (countdown <= 0) {
-                        clearInterval(interval);
-                        sendOtpButton.disabled = false;
-                        sendOtpButton.innerText = "Send OTP";
-                    }
-                }, 1000); // Cập nhật mỗi giây
-            }
-
-            function checkPasswords() {
-                var password = document.getElementById('password').value;
-                var confirmPassword = document.getElementById('confirmPassword').value;
-                var confirmError = document.getElementById('confirmError');
-
-                if (password !== confirmPassword) {
-                    confirmError.textContent = "Passwords do not match.";
-                } else {
-                    confirmError.textContent = ""; // Xóa thông báo lỗi nếu mật khẩu khớp
-                }
-            }
-            function showNoti() {
-                document.getElementById('notificationOtp').removeAttribute('hidden');
-            }
-
-            function offNoti() {
-                document.getElementById('notificationOtp').hidden;
             }
         </script>  
     </body>

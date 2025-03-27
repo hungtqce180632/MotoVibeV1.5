@@ -1,10 +1,16 @@
+<%-- 
+    Document   : brand_list
+    Created on : Mar 26, 2025, 9:27:32 PM
+    Author     : Jackt
+--%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Model List</title>
+        <title>Brand List</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         <style>
@@ -69,6 +75,7 @@
 
             .btn-add i {
                 margin-right: 8px;
+
             }
 
             .btn-add:hover {
@@ -117,7 +124,7 @@
                 color: black;
                 transform: translateY(-3px);
             }
-            
+
             .alert-custom {
                 background-color: #333;  /* Màu nền đen */
                 color: white;             /* Màu chữ trắng */
@@ -129,24 +136,42 @@
 
         <jsp:include page="header.jsp"></jsp:include>
 
-        <div class="container list-container">
-            
+
+
+            <div class="container list-container">
+
                 <!-- Display error message if there is one -->
             <c:if test="${not empty errorMessage}">
                 <div id="error-message" class="alert alert-custom" role="alert">
                     <i class="fas fa-exclamation-triangle"></i> ${errorMessage}
                 </div>
             </c:if>
-            <h2><i class="fas fa-th-list"></i> Model List</h2>
+
+            <h2><i class="fas fa-th-list"></i> Brand List</h2>
 
             <div class="container">
-                <form action="modelslist" method="POST">
-                    <div class="mb-3 d-flex align-items-center">
-                        <label for="modelName" class="form-label mr-3">Add Model</label>
-                        <input type="text" class="form-control" id="modelName" name="modelName" placeholder="Enter model name" required>
-                        <button type="submit" class="btn btn-add ml-3">
-                            <i class="fas fa-plus"></i> Add New Model
-                        </button>
+                <form action="brandslist" method="POST">
+                    <div class="mb-3 d-flex align-items-center gap-2">
+                        <div class="flex-fill">
+                            <label for="brandName" class="form-label">Brand Name</label>
+                            <input type="text" class="form-control" id="brandName" name="brandName" placeholder="Enter brand name" required>
+                        </div>
+
+                        <div class="flex-fill">
+                            <label for="countryOfOrigin" class="form-label">Country of Origin</label>
+                            <input type="text" class="form-control" id="countryOfOrigin" name="countryOfOrigin" placeholder="Enter country of origin" required>
+                        </div>
+
+                        <div class="flex-fill">
+                            <label for="description" class="form-label">Description</label>
+                            <input type="text" class="form-control" id="description" name="description" placeholder="Enter description" required>
+                        </div>
+
+                        <div class="align-self-end mt-4">
+                            <button type="submit" class="btn btn-add h-100">
+                                <i class="fas fa-plus"></i> Add New Brand
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -155,24 +180,28 @@
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>Model ID</th>
-                            <th>Model Name</th>
+                            <th>Brand ID</th>
+                            <th>Brand Name</th>
+                            <th>Country of Origin</th>
+                            <th>Description</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="model" items="${models}">
+                        <c:forEach var="brand" items="${brands}">
                             <tr>
-                                <td>${model.modelId}</td>
-                                <td>${model.modelName}</td>
+                                <td>${brand.brandId}</td>
+                                <td>${brand.brandName}</td>
+                                <td>${brand.countryOfOrigin}</td>
+                                <td>${brand.description}</td>
                                 <td class="action-buttons">
                                     <!-- Edit Button -->
-                                    <a href="updateModelServlet?modelId=${model.modelId}" class="btn btn-sm btn-warning">
+                                    <a href="updateBrandServlet?brandId=${brand.brandId}" class="btn btn-sm btn-warning">
                                         <i class="fas fa-edit"></i> Edit
                                     </a>
 
                                     <!-- Delete Button -->
-                                    <a href="deleteModelServlet?modelId=${model.modelId}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this model?');">
+                                    <a href="deleteBrandServlet?brandId=${brand.brandId}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this brand?');">
                                         <i class="fas fa-trash"></i> Delete
                                     </a>
                                 </td>
@@ -186,7 +215,8 @@
         </div>
 
     </body>
-    
+
+
     <script>
         const errorMessage = document.getElementById('error-message');
         if (errorMessage) {
