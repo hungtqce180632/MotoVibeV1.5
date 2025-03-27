@@ -11,7 +11,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        
+
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Welcome to MotoVibe - Experience the Ride</title>
@@ -528,15 +528,15 @@
             .brand-logo {
                 max-width: 120px;
                 height: auto;
-                filter: brightness(0) invert(0.8) sepia(0.5) saturate(5) hue-rotate(40deg);
                 opacity: 0.8;
                 transition: all 0.3s ease;
             }
 
             .brand-logo:hover {
-                filter: brightness(0) invert(0.9) sepia(0.7) saturate(8) hue-rotate(25deg);
-                transform: scale(1.05);
-                opacity: 1;
+                filter: brightness(1.2) saturate(1.5) contrast(1.2) sepia(0.3);
+                transform: scale(1.1) rotate(5deg);
+                opacity: 0.9;
+                transition: all 0.3s ease-in-out;
             }
 
             /* Enhanced Chat Widget styling to match luxury theme */
@@ -739,192 +739,192 @@
                 }
             }
             .motor-card {
-        background: linear-gradient(145deg, var(--dark-black), var(--rich-black));
-        border: 1px solid var(--secondary-gold);
-        border-radius: 10px;
-        overflow: hidden;
-        transition: all 0.4s ease;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        position: relative;
-    }
+                background: linear-gradient(145deg, var(--dark-black), var(--rich-black));
+                border: 1px solid var(--secondary-gold);
+                border-radius: 10px;
+                overflow: hidden;
+                transition: all 0.4s ease;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                position: relative;
+            }
 
-    .motor-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 15px 35px rgba(212, 175, 55, 0.3);
-        border-color: var(--primary-gold);
-    }
+            .motor-card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 15px 35px rgba(212, 175, 55, 0.3);
+                border-color: var(--primary-gold);
+            }
 
-    .product-img {
-        position: relative;
-        height: 200px;
-        overflow: hidden;
-        border-bottom: 1px solid var(--secondary-gold);
-    }
+            .product-img {
+                position: relative;
+                height: 200px;
+                overflow: hidden;
+                border-bottom: 1px solid var(--secondary-gold);
+            }
 
-    .product-img img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: all 0.5s ease;
-    }
+            .product-img img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: all 0.5s ease;
+            }
 
-    .motor-card:hover .product-img img {
-        transform: scale(1.1);
-        filter: brightness(1.1);
-    }
+            .motor-card:hover .product-img img {
+                transform: scale(1.1);
+                filter: brightness(1.1);
+            }
 
-    .product-img::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(0deg, rgba(17, 17, 17, 0.8) 0%, rgba(26, 26, 26, 0) 50%);
-    }
+            .product-img::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(0deg, rgba(17, 17, 17, 0.8) 0%, rgba(26, 26, 26, 0) 50%);
+            }
 
-    .motor-card .card-body {
-        padding: 1.25rem;
-        color: var(--text-gold);
-        background: transparent;
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-    }
+            .motor-card .card-body {
+                padding: 1.25rem;
+                color: var(--text-gold);
+                background: transparent;
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+            }
 
-    .motor-card .card-title {
-        color: var(--primary-gold);
-        font-size: 1.5rem;
-        font-weight: 600;
-        margin-bottom: 1rem;
-        padding-bottom: 0.75rem;
-        border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    }
+            .motor-card .card-title {
+                color: var(--primary-gold);
+                font-size: 1.5rem;
+                font-weight: 600;
+                margin-bottom: 1rem;
+                padding-bottom: 0.75rem;
+                border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            }
 
-    .motor-card .card-text {
-        margin-bottom: 1.5rem;
-        flex-grow: 1;
-        line-height: 1.6;
-    }
+            .motor-card .card-text {
+                margin-bottom: 1.5rem;
+                flex-grow: 1;
+                line-height: 1.6;
+            }
 
-    .motor-card .card-text strong {
-        color: var(--primary-gold);
-        font-weight: 600;
-        margin-right: 5px;
-    }
+            .motor-card .card-text strong {
+                color: var(--primary-gold);
+                font-weight: 600;
+                margin-right: 5px;
+            }
 
-    .motor-card .btn-info {
-        background: linear-gradient(145deg, var(--primary-gold), var(--secondary-gold));
-        border: none;
-        color: var(--dark-black);
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        padding: 0.75rem 1.25rem;
-        transition: all 0.3s ease;
-        margin-top: auto;
-        width: 100%;
-        position: relative;
-        z-index: 2; /* Ensure button is above other elements */
-    }
+            .motor-card .btn-info {
+                background: linear-gradient(145deg, var(--primary-gold), var(--secondary-gold));
+                border: none;
+                color: var(--dark-black);
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                padding: 0.75rem 1.25rem;
+                transition: all 0.3s ease;
+                margin-top: auto;
+                width: 100%;
+                position: relative;
+                z-index: 2; /* Ensure button is above other elements */
+            }
 
-    .motor-card .btn-info:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
-    }
+            .motor-card .btn-info:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+            }
 
-    .price-tag {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: linear-gradient(145deg, var(--primary-gold), var(--secondary-gold));
-        color: var(--dark-black);
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
-        font-weight: 700;
-        font-size: 1rem;
-        z-index: 2;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    }
+            .price-tag {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background: linear-gradient(145deg, var(--primary-gold), var(--secondary-gold));
+                color: var(--dark-black);
+                padding: 0.5rem 1rem;
+                border-radius: 20px;
+                font-weight: 700;
+                font-size: 1rem;
+                z-index: 2;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            }
 
-    .badge-status {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        font-size: 0.8rem;
-        padding: 0.5rem 0.75rem;
-        border-radius: 20px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        z-index: 2;
-    }
+            .badge-status {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                font-size: 0.8rem;
+                padding: 0.5rem 0.75rem;
+                border-radius: 20px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                z-index: 2;
+            }
 
-    .badge-available {
-        background: rgba(40, 167, 69, 0.8);
-        color: white;
-    }
+            .badge-available {
+                background: rgba(40, 167, 69, 0.8);
+                color: white;
+            }
 
-    .badge-unavailable {
-        background: rgba(220, 53, 69, 0.8);
-        color: white;
-    }
+            .badge-unavailable {
+                background: rgba(220, 53, 69, 0.8);
+                color: white;
+            }
 
-    /* Add beautiful hover effects */
-    .motor-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(45deg, transparent, rgba(212, 175, 55, 0.1), transparent);
-        background-size: 200% 200%;
-        z-index: 1;
-        opacity: 0;
-        transition: all 0.6s ease;
-        pointer-events: none; /* Add this line to make the overlay non-blocking */
-    }
+            /* Add beautiful hover effects */
+            .motor-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(45deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+                background-size: 200% 200%;
+                z-index: 1;
+                opacity: 0;
+                transition: all 0.6s ease;
+                pointer-events: none; /* Add this line to make the overlay non-blocking */
+            }
 
-    .motor-card:hover::before {
-        opacity: 1;
-        animation: shimmer 1.5s infinite;
-    }
+            .motor-card:hover::before {
+                opacity: 1;
+                animation: shimmer 1.5s infinite;
+            }
 
-    @keyframes shimmer {
-        0% {
-            background-position: -200% 0;
-        }
-        100% {
-            background-position: 200% 0;
-        }
-    }
+            @keyframes shimmer {
+                0% {
+                    background-position: -200% 0;
+                }
+                100% {
+                    background-position: 200% 0;
+                }
+            }
 
-    .card-text .detail-row {
-        margin-bottom: 0.25rem;
-    }
+            .card-text .detail-row {
+                margin-bottom: 0.25rem;
+            }
 
-    .no-results {
-        background: linear-gradient(145deg, var(--rich-black), var(--dark-black));
-        border: 1px dashed var(--secondary-gold);
-        border-radius: 10px;
-        padding: 3rem;
-        text-align: center;
-        color: var(--text-gold);
-        width: 100%;
-        margin: 2rem 0;
-    }
+            .no-results {
+                background: linear-gradient(145deg, var(--rich-black), var(--dark-black));
+                border: 1px dashed var(--secondary-gold);
+                border-radius: 10px;
+                padding: 3rem;
+                text-align: center;
+                color: var(--text-gold);
+                width: 100%;
+                margin: 2rem 0;
+            }
 
-    .no-results i {
-        font-size: 3rem;
-        color: var(--primary-gold);
-        opacity: 0.7;
-        margin-bottom: 1rem;
-    }
+            .no-results i {
+                font-size: 3rem;
+                color: var(--primary-gold);
+                opacity: 0.7;
+                margin-bottom: 1rem;
+            }
         </style>
     </head>
     <body>
@@ -950,7 +950,7 @@
                     <div class="container featured-motorbikes">
                         <h2 class="text-center mb-5">Featured Motorbikes</h2>
                         <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
-                        
+
                         <c:forEach var="motor" items="${motors}">
                             <c:if test="${motor.present eq true}">
                                 <div class="col">
@@ -1097,7 +1097,7 @@
                         <img src="images/brands/ducati.png" alt="Ducati" class="brand-logo" onerror="this.onerror=null; this.src='images/default-logo.png';">
                         <img src="images/brands/bmw.png" alt="BMW" class="brand-logo" onerror="this.onerror=null; this.src='images/default-logo.png';">
                         <img src="images/brands/harley.png" alt="Harley-Davidson" class="brand-logo" onerror="this.onerror=null; this.src='images/default-logo.png';">
-                        <img src="images/brands/triumph.png" alt="Triumph" class="brand-logo" onerror="this.onerror=null; this.src='images/default-logo.png';">
+                        <img src="images/brands/yamaha.png" alt="Triumph" class="brand-logo" onerror="this.onerror=null; this.src='images/default-logo.png';">
                         <img src="images/brands/honda.png" alt="Honda" class="brand-logo" onerror="this.onerror=null; this.src='images/default-logo.png';">
                     </div>
                 </div>

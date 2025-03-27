@@ -75,11 +75,14 @@ public class BrandsListServlet extends HttpServlet {
             } catch (SQLException ex) {
                 Logger.getLogger(BrandsListServlet.class.getName()).log(Level.SEVERE, null, ex);
 
-                // Set the error message in the request
-                request.setAttribute("errorMessage", "Could not delete the brand. Please try again.");
-
-                // Forward the request back to the brand list page with the error message
-                request.getRequestDispatcher("brandslist").forward(request, response);
+                try {
+                    List<Brand> brands = brandDAO.getAllBrands(); // load lại danh sách
+                    request.setAttribute("brands", brands);
+                    request.setAttribute("errorMessage", "Could not delete the brand. It might be in use.");
+                    request.getRequestDispatcher("brand_list.jsp").forward(request, response);
+                } catch (SQLException e) {
+                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error loading brands.");
+                }
             }
         } // Displaying the brand list
         else if ("/brandslist".equals(servletPath)) {

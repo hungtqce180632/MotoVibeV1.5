@@ -125,9 +125,10 @@
                 transform: translateY(-3px);
             }
 
-            .alert-danger {
-                background-color: #dc3545; /* Red color for the background */
-                color: white; /* White color for the text */
+            .alert-custom {
+                background-color: #333;  /* Màu nền đen */
+                color: white;             /* Màu chữ trắng */
+                transition: opacity 1s ease-out;  /* Thêm hiệu ứng ẩn dần */
             }
         </style>
     </head>
@@ -135,14 +136,17 @@
 
         <jsp:include page="header.jsp"></jsp:include>
 
-            <!-- Display error message if there is one -->
-        <c:if test="${not empty errorMessage}">
-            <div class="alert alert-danger text-white" role="alert">
-                <i class="fas fa-exclamation-triangle"></i> ${errorMessage}
-            </div>
-        </c:if>
 
-        <div class="container list-container">
+
+            <div class="container list-container">
+
+                <!-- Display error message if there is one -->
+            <c:if test="${not empty errorMessage}">
+                <div id="error-message" class="alert alert-custom" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i> ${errorMessage}
+                </div>
+            </c:if>
+
             <h2><i class="fas fa-th-list"></i> Brand List</h2>
 
             <div class="container">
@@ -212,5 +216,18 @@
 
     </body>
 
+
+    <script>
+        const errorMessage = document.getElementById('error-message');
+        if (errorMessage) {
+            setTimeout(function () {
+                errorMessage.style.opacity = '0'; // Fade out
+                // Wait for transition to complete before hiding completely
+                setTimeout(function () {
+                    errorMessage.style.display = 'none'; // Remove from layout
+                }, 1000); // matches CSS transition time
+            }, 3000);
+        }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </html>
