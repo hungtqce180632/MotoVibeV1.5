@@ -1,7 +1,7 @@
 <%-- 
-    Document   : resetPWD
+    Document   : resetPassword
     Created on : 17 thg 2, 2025
-    Author     : sang
+    Author     : sanghtpce181720
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

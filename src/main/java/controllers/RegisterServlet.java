@@ -17,6 +17,11 @@ import models.Customer;
 import models.Employee;
 
 /**
+ * 
+ * @author sanghtpce181720
+ */
+
+/**
  * Servlet xử lý đăng ký người dùng.
  * URL mapping: "/register"
  * 
