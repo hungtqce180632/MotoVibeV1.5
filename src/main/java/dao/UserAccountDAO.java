@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.security.MessageDigest;
 
 public class UserAccountDAO {
 
@@ -72,26 +73,49 @@ public class UserAccountDAO {
 
     // Method to authenticate user login
     public UserAccount login(String email, String password) {
-        String sql = "SELECT * FROM user_account WHERE email = ? AND password = ? AND status = 1";
-        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql)) {
+        String sql = "SELECT * FROM user_account WHERE email = ? AND status = 1";
+        try (Connection conn = DBContext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, email);
-            stmt.setString(2, password);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                return new UserAccount(
-                        rs.getInt("user_id"),
-                        rs.getString("email"),
-                        rs.getString("password"),
-                        rs.getString("role"),
-                        rs.getBoolean("status"),
-                        rs.getTimestamp("date_created")
-                );
+                String storedHash = rs.getString("password");
+                
+                // Hash the input password using MD5
+                String hashedPassword = hashPassword(password);
+                
+                // Compare the hashed input with stored hash
+                if (storedHash.equals(hashedPassword)) {
+                    return new UserAccount(
+                            rs.getInt("user_id"),
+                            rs.getString("email"),
+                            rs.getString("password"),
+                            rs.getString("role"),
+                            rs.getBoolean("status"),
+                            rs.getTimestamp("date_created")
+                    );
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    // Add a common hashPassword method to ensure consistent hashing
+    private String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] hashedBytes = md.digest(password.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashedBytes) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     // Method to check if an email already exists in the database

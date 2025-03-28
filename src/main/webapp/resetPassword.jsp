@@ -293,6 +293,23 @@
                     });
                     return;
                 }
+                
+                // Validate email format
+                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(emailVal)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid Email',
+                        text: 'Please enter a valid email address.'
+                    });
+                    return;
+                }
+
+                // Disable button during sending
+                var sendButton = document.getElementById("sendOtpButton");
+                var originalText = sendButton.innerHTML;
+                sendButton.disabled = true;
+                sendButton.innerHTML = "Sending...";
 
                 // Gửi JSON
                 $.ajax({
@@ -324,6 +341,11 @@
                             title: 'Error',
                             text: 'An error occurred sending OTP.'
                         });
+                    },
+                    complete: function() {
+                        // Re-enable button after sending
+                        sendButton.disabled = false;
+                        sendButton.innerHTML = originalText;
                     }
                 });
             }
@@ -332,7 +354,7 @@
                 var otpVal = document.getElementById("otp").value.trim();
                 var otpError = document.getElementById("otpError");
                 var verificationResult = document.getElementById("verificationResult");
-                var otpSuccessMsg = document.getElementById("otpSuccessMsg");
+                var otpSuccessMsg = document.getElementById("OTPSuccess"); // Fixed element ID
 
                 // Lấy email từ id="email"
                 var emailVal = document.getElementById("email").value.trim();
@@ -342,6 +364,14 @@
                 if (!otpVal) {
                     otpError.textContent = "Please enter the OTP.";
                     return;
+                }
+                
+                // Disable input fields after successful verification
+                var verifyButton = document.getElementById("verifyButton");
+                var originalText = verifyButton ? verifyButton.innerHTML : "Verify OTP";
+                if (verifyButton) {
+                    verifyButton.disabled = true;
+                    verifyButton.innerHTML = "Verifying...";
                 }
 
                 $.ajax({
@@ -355,14 +385,20 @@
                     }),
                     success: function (response) {
                         if (response.success) {
+                            // Update UI elements
                             verificationResult.value = "Success";
                             otpSuccessMsg.style.display = "block";
+                            document.getElementById("otpInput").style.display = "none";
+                            document.getElementById("sendOtpButton").disabled = true;
+                            document.getElementById("email").readOnly = true;
+                            
                             Swal.fire({
                                 icon: 'success',
                                 title: 'OTP Verified',
-                                text: response.message
+                                text: 'Your email has been verified successfully!'
                             });
                         } else {
+                            otpError.textContent = response.message || 'OTP invalid or expired.';
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Verification Failed',
@@ -371,13 +407,48 @@
                         }
                     },
                     error: function () {
+                        otpError.textContent = "Error verifying OTP. Please try again.";
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
                             text: 'An error occurred while verifying OTP.'
                         });
+                    },
+                    complete: function() {
+                        // Re-enable verify button unless verification was successful
+                        if (verifyButton && verificationResult.value !== "Success") {
+                            verifyButton.disabled = false;
+                            verifyButton.innerHTML = originalText;
+                        }
                     }
                 });
+            }
+            
+            // Function to toggle password visibility
+            function togglePassword() {
+                var passwordField = document.getElementById("password");
+                var icon = document.getElementById("icon");
+                
+                if (passwordField.type === "password") {
+                    passwordField.type = "text";
+                    icon.className = "fa-solid fa-eye-slash";
+                } else {
+                    passwordField.type = "password";
+                    icon.className = "fa-solid fa-eye";
+                }
+            }
+            
+            // Function to check if passwords match
+            function checkPasswordsMatch() {
+                var password = document.getElementById("password").value;
+                var confirmPassword = document.getElementById("confirmPassword").value;
+                var confirmError = document.getElementById("confirmError");
+                
+                if (password && confirmPassword && password !== confirmPassword) {
+                    confirmError.textContent = "Passwords do not match.";
+                } else {
+                    confirmError.textContent = "";
+                }
             }
         </script>  
     </body>

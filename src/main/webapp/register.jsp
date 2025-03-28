@@ -726,13 +726,13 @@
                     // Disable button during request
                     sendOtpBtn.disabled = true;
                     
-                    // AJAX call to send OTP
+                    // AJAX call to send OTP - Fixed to properly send JSON
                     fetch('sendOtp', {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'Content-Type': 'application/json',
                         },
-                        body: 'email=' + encodeURIComponent(email)
+                        body: JSON.stringify({email: email})
                     })
                     .then(response => {
                         if (!response.ok) {
@@ -741,7 +741,7 @@
                         return response.json();
                     })
                     .then(data => {
-                        if (data === true) {
+                        if (data.success) {
                             // Show OTP input field
                             otpContainer.style.display = 'block';
                             verificationMessage.textContent = 'OTP sent to your email. Please check and enter below.';
@@ -750,7 +750,7 @@
                             // Start countdown for resend (60 seconds)
                             startCountdown(60);
                         } else {
-                            alert('Failed to send OTP. Please try again.');
+                            alert(data.message || 'Failed to send OTP. Please try again.');
                             sendOtpBtn.disabled = false;
                         }
                     })
@@ -764,19 +764,23 @@
                 // Verify OTP button click handler
                 verifyOtpBtn.addEventListener('click', function() {
                     const otp = otpInput.value.trim();
+                    const email = emailInput.value.trim();
                     
                     if (otp.length !== 6 || !/^\d+$/.test(otp)) {
                         alert('Please enter a valid 6-digit OTP');
                         return;
                     }
                     
-                    // AJAX call to verify OTP
+                    // AJAX call to verify OTP - Fixed to send JSON
                     fetch('verifyOtp', {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'Content-Type': 'application/json',
                         },
-                        body: 'otp=' + encodeURIComponent(otp)
+                        body: JSON.stringify({
+                            email: email,
+                            otp: otp
+                        })
                     })
                     .then(response => {
                         if (!response.ok) {
@@ -784,8 +788,8 @@
                         }
                         return response.json();
                     })
-                    .then(verified => {
-                        if (verified === true) {
+                    .then(data => {
+                        if (data.success) {
                             isEmailVerified = true;
                             verificationMessage.textContent = 'Email verified successfully!';
                             verificationMessage.className = 'verification-message verified';
@@ -812,7 +816,7 @@
                             document.getElementById('registrationForm').appendChild(hiddenField);
                             
                         } else {
-                            verificationMessage.textContent = 'Invalid OTP. Please try again.';
+                            verificationMessage.textContent = data.message || 'Invalid OTP. Please try again.';
                             verificationMessage.className = 'verification-message not-verified';
                         }
                     })
