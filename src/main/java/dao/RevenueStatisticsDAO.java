@@ -76,4 +76,55 @@ public class RevenueStatisticsDAO {
         }
         return 0;
     }
+
+    /**
+     * Lấy tất cả các tháng có trong dữ liệu (distinct months).
+     */
+    public List<String> getAvailableMonths() {
+        List<String> months = new ArrayList<>();
+        String sql = "SELECT DISTINCT FORMAT(o.create_date, 'yyyy-MM') AS month "
+                + "FROM orders o "
+                + "WHERE o.order_status = 'Completed' "
+                + "ORDER BY month";
+
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement ps = conn.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                months.add(rs.getString("month"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return months;
+    }
+
+    /**
+     * Get revenue statistics for the selected month.
+     */
+    public List<Map<String, Object>> getMonthlyRevenueByMonth(String monthFilter) {
+        List<Map<String, Object>> revenueList = new ArrayList<>();
+        String sql = "SELECT FORMAT(o.create_date, 'yyyy-MM') AS month, "
+                + "       COUNT(o.order_id) AS total_sales, "
+                + "       SUM(o.total_amount) AS total_revenue "
+                + "FROM orders o "
+                + "WHERE o.order_status = 'Completed' "
+                + "  AND FORMAT(o.create_date, 'yyyy-MM') = ? "
+                + "GROUP BY FORMAT(o.create_date, 'yyyy-MM') "
+                + "ORDER BY month";
+
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, monthFilter);
+            try ( ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Map<String, Object> revenue = new HashMap<>();
+                    revenue.put("month", rs.getString("month"));
+                    revenue.put("total_sales", rs.getInt("total_sales"));
+                    revenue.put("total_revenue", rs.getDouble("total_revenue"));
+                    revenueList.add(revenue);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return revenueList;
+    }
 }
