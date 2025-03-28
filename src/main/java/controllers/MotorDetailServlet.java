@@ -96,6 +96,10 @@ public class MotorDetailServlet extends HttpServlet {
             request.setAttribute("fuel", fuel);
             request.setAttribute("reviews", reviews);
             request.setAttribute("canReview", canReview);
+            
+            // Add stock availability check
+            boolean inStock = motor.getQuantity() > 0;
+            request.setAttribute("inStock", inStock);
 
             // 8) Forward to JSP
             request.getRequestDispatcher("motor_detail.jsp").forward(request, response);

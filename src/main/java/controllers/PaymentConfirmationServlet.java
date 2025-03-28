@@ -40,6 +40,12 @@ public class PaymentConfirmationServlet extends HttpServlet {
             return;
         }
         
+        // Check if motor is in stock
+        if (motor.getQuantity() <= 0) {
+            response.sendRedirect("motorDetail?id=" + motorId + "&error=outOfStock");
+            return;
+        }
+        
         // Calculate total amount including warranty if selected
         double basePrice = motor.getPrice();
         double totalAmount = basePrice;
@@ -64,6 +70,7 @@ public class PaymentConfirmationServlet extends HttpServlet {
         request.setAttribute("orderCode", orderCode);
         request.setAttribute("totalAmount", formattedTotal);
         request.setAttribute("motor", motor);
+        request.setAttribute("stockQuantity", motor.getQuantity());
         
         // Forward to payment confirmation page
         request.getRequestDispatcher("payment_confirmation.jsp").forward(request, response);
