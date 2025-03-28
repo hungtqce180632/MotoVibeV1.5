@@ -10,70 +10,111 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
 import java.io.IOException;
 import java.util.List;
 import models.UserAccount;
 
+/**
+ * 
+ * @author sanghtpce181720
+ */
+
+/**
+ * Servlet xử lý danh sách yêu thích (wishlist) của người dùng.
+ * URL mapping: "/wishlist"
+ *
+ * Servlet này hỗ trợ hai phương thức:
+ * - doGet: Hiển thị danh sách yêu thích của khách hàng
+ * - doPost: Thêm hoặc xoá motor khỏi danh sách yêu thích dựa trên action được gửi từ client.
+ */
 @WebServlet(name = "WishlistServlet", urlPatterns = {"/wishlist"})
 public class WishlistServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Phương thức doGet xử lý yêu cầu GET.
+     * - Kiểm tra xem người dùng đã đăng nhập chưa, nếu chưa chuyển hướng đến trang đăng nhập.
+     * - Lấy thông tin khách hàng dựa trên userId.
+     * - Lấy danh sách wishlist của khách hàng và chuyển tiếp sang trang JSP hiển thị.
+     *
+     * @param request  HttpServletRequest chứa yêu cầu từ client.
+     * @param response HttpServletResponse dùng để gửi phản hồi về client.
+     * @throws ServletException Nếu có lỗi xảy ra trong quá trình xử lý servlet.
+     * @throws IOException      Nếu có lỗi I/O xảy ra.
+     */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Get the current session
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        // Lấy session hiện tại
         HttpSession session = request.getSession();
+        // Lấy đối tượng UserAccount từ session
         UserAccount user = (UserAccount) session.getAttribute("user");
 
-        // If user is not logged in, redirect to the login page
+        // Nếu người dùng chưa đăng nhập, chuyển hướng đến trang đăng nhập
         if (user == null) {
             response.sendRedirect("login.jsp");
             return;
         }
 
-        // Get customer information based on logged-in user
+        // Lấy thông tin khách hàng dựa trên userId
         CustomerDAO customerDAO = new CustomerDAO();
         Customer customer = customerDAO.getCustomerByUserId(user.getUserId());
 
-        // Get the wishlist for the customer
+        // Lấy danh sách wishlist của khách hàng từ WishlistDAO
         WishlistDAO wishlistDAO = new WishlistDAO();
         List<Motor> wishlist = wishlistDAO.getWishlistForUser(customer.getCustomerId());
 
-        // Set the wishlist as an attribute for the JSP page
+        // Đưa danh sách wishlist vào attribute của request để JSP có thể hiển thị
         request.setAttribute("wishlist", wishlist);
 
-        // Forward the request to wishlist.jsp
+        // Chuyển tiếp yêu cầu đến trang wishlist.jsp để hiển thị danh sách yêu thích
         request.getRequestDispatcher("wishlist.jsp").forward(request, response);
     }
 
+    /**
+     * Phương thức doPost xử lý yêu cầu POST.
+     * - Kiểm tra người dùng đã đăng nhập hay chưa.
+     * - Xử lý các action "add" (thêm motor vào wishlist) và "remove" (xoá motor khỏi wishlist).
+     * - Trả về kết quả thông qua response writer.
+     *
+     * @param request  HttpServletRequest chứa yêu cầu từ client.
+     * @param response HttpServletResponse dùng để gửi phản hồi về client.
+     * @throws ServletException Nếu có lỗi xảy ra trong quá trình xử lý servlet.
+     * @throws IOException      Nếu có lỗi I/O xảy ra.
+     */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Get the current session
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        // Lấy session hiện tại
         HttpSession session = request.getSession();
+        // Lấy đối tượng UserAccount từ session
         UserAccount user = (UserAccount) session.getAttribute("user");
 
-        // If user is not logged in, redirect to the login page
+        // Nếu người dùng chưa đăng nhập, trả về thông báo "notLoggedIn" thay vì chuyển hướng
         if (user == null) {
-            response.getWriter().write("notLoggedIn");  // Thay vì sendRedirect
+            response.getWriter().write("notLoggedIn");
             return;
         }
 
+        // Lấy tham số action từ request để xác định hành động (add hoặc remove)
         String action = request.getParameter("action");
 
-        // Get customer information based on logged-in user
+        // Lấy thông tin khách hàng dựa trên userId
         CustomerDAO customerDAO = new CustomerDAO();
         Customer customer = customerDAO.getCustomerByUserId(user.getUserId());
 
-        // Get WishlistDAO to manage the wishlist
+        // Khởi tạo đối tượng WishlistDAO để quản lý danh sách yêu thích
         WishlistDAO wishlistDAO = new WishlistDAO();
 
         if ("add".equals(action)) {
+            // Nếu action là "add", lấy motorId từ request
             int motorId = Integer.parseInt(request.getParameter("motorId"));
 
-            // Add motor to wishlist
+            // Thêm motor vào danh sách yêu thích của khách hàng
             boolean isAdded = wishlistDAO.addToWishlist(motorId, customer.getCustomerId());
 
+            // Trả về kết quả: "success" nếu thêm thành công, "error" nếu thất bại
             if (isAdded) {
                 response.getWriter().write("success");
             } else {
@@ -81,11 +122,13 @@ public class WishlistServlet extends HttpServlet {
             }
 
         } else if ("remove".equals(action)) {
+            // Nếu action là "remove", lấy motorId từ request
             int motorId = Integer.parseInt(request.getParameter("motorId"));
 
-            // Remove motor from wishlist
+            // Xoá motor khỏi danh sách yêu thích của khách hàng
             boolean isRemoved = wishlistDAO.removeMotorFromWishlist(motorId, customer.getCustomerId());
 
+            // Trả về kết quả: "success" nếu xoá thành công, "error" nếu thất bại
             if (isRemoved) {
                 response.getWriter().write("success");
             } else {

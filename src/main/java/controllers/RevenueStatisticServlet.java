@@ -19,9 +19,11 @@ import java.util.Map;
 import models.UserAccount;
 
 /**
- *
- * @author Jackt
- */
+*    Document   : RevenueStatisticServlet
+*    Created on : Feb 23, 2025, 4:11:08 AM
+*    Author     : hieunmce181623
+*/
+
 @WebServlet(name = "RevenueStatisticServlet", urlPatterns = {"/revenueStatistic"})
 public class RevenueStatisticServlet extends HttpServlet {
 
@@ -63,35 +65,37 @@ public class RevenueStatisticServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        // Khởi tạo đối tượng DAO để lấy dữ liệu thống kê doanh thu
         RevenueStatisticsDAO revenueDAO = new RevenueStatisticsDAO();
         
-        // Get the selected month from the request parameter (if any)
+        // Lấy tháng được chọn từ tham số yêu cầu (nếu có)
         String monthFilter = request.getParameter("monthFilter");
         
-        // Get the available months for the dropdown
+        // Lấy danh sách các tháng có sẵn để hiển thị trên dropdown
         List<String> availableMonths = revenueDAO.getAvailableMonths();
         
-        // Fetch data based on the selected month or all months
+        // Lấy dữ liệu doanh thu dựa trên tháng đã chọn hoặc tất cả các tháng nếu không có bộ lọc
         List<Map<String, Object>> revenueData;
         if (monthFilter != null && !monthFilter.isEmpty()) {
+            // Lấy doanh thu cho tháng được chọn
             revenueData = revenueDAO.getMonthlyRevenueByMonth(monthFilter);
         } else {
+            // Lấy doanh thu cho tất cả các tháng
             revenueData = revenueDAO.getMonthlyRevenue(); // Fetch all data if no filter
         }
         
-        // Get total revenue and total orders
+        // Lấy tổng doanh thu và tổng số đơn hàng
         double totalRevenue = revenueDAO.getTotalRevenue();
         int totalOrders = revenueDAO.getTotalOrders();
         
-        // Set attributes to be used in JSP
+        // Đưa dữ liệu vào request để sử dụng trong trang JSP
         request.setAttribute("revenueData", revenueData);
         request.setAttribute("totalRevenue", totalRevenue);
         request.setAttribute("totalOrders", totalOrders);
-        request.setAttribute("monthFilter", monthFilter); // Keep selected month in page
-        request.setAttribute("availableMonths", availableMonths); // Available months for dropdown
+        request.setAttribute("monthFilter", monthFilter); // Lưu tháng đã chọn vào trang
+        request.setAttribute("availableMonths", availableMonths); // Lấy các tháng có sẵn để hiển thị dropdown
         
-        // Forward to JSP page
+        // Chuyển tiếp dữ liệu đến trang JSP
         request.getRequestDispatcher("revenue_statistic.jsp").forward(request, response);
     }
 

@@ -153,6 +153,21 @@ public class AppointmentDAO {
         return false;
     }
 
+    public List<Appointment> getAppointmentsByEmployeeId(int employeeId) {
+        List<Appointment> appointments = new ArrayList<>();
+        String sql = "SELECT * FROM Appointments WHERE employee_id = ?";
+        try ( Connection connection = DBContext.getConnection();  PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, employeeId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                appointments.add(mapAppointment(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return appointments;
+    }
+
     public List<Map<String, Object>> getRevenueStatistics() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }

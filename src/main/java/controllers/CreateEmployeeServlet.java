@@ -38,8 +38,9 @@ public class CreateEmployeeServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        UserAccountDAO acd = new UserAccountDAO();
         String email = request.getParameter("email");
-        String password = request.getParameter("password");
+        String password = acd.hashPassword(request.getParameter("password"));
         String name = request.getParameter("name");
         String phoneNumber = request.getParameter("phoneNumber");
         String role = "employee";
@@ -51,10 +52,14 @@ public class CreateEmployeeServlet extends HttpServlet {
         ac.setPassword(password);
         ac.setStatus(status);
         ac.setRole(role);
-        UserAccountDAO acd = new UserAccountDAO();
-        acd.registerUser(ac);
-        acd.addEmployeeDetails(ac, name, phoneNumber);
-        response.sendRedirect("createEmployee?isSuccess=1");
+
+        if (acd.registerUser(ac)) {
+            acd.addEmployeeDetails(ac, name, phoneNumber);
+            response.sendRedirect("createEmployee?isSuccess=1");
+        } else {
+            response.sendRedirect("createEmployee?isSuccess=0");
+        }
+
     }
 
 }

@@ -26,9 +26,8 @@ public class CustomerDAO {
     // Method to insert customer details into the database
     public boolean insertCustomer(Customer customer) {
         String sql = "INSERT INTO customers (user_id, name, phone_number, address) VALUES (?, ?, ?, ?)";
-        
-        try (Connection conn = DBContext.getConnection(); 
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, customer.getUserId());
             ps.setString(2, customer.getName());
@@ -79,11 +78,10 @@ public class CustomerDAO {
                 + "JOIN [dbo].[user_account] u ON c.user_id = u.user_id "
                 + "WHERE c.customer_id = ?";
 
-        try (Connection connection = DBContext.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
+        try ( Connection connection = DBContext.getConnection();  PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setInt(1, customerId);
-            try (ResultSet rs = ps.executeQuery()) {
+            try ( ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return mapCustomerJoined(rs);
                 }
@@ -156,6 +154,30 @@ public class CustomerDAO {
         return customerId;
     }
 
+    /**
+     * Get customer name by user_id
+     *
+     * @param userId The user_id of the customer
+     * @return The name of the customer if found, otherwise null
+     */
+    public String getCustomerNameByUserId(int userId) {
+        String sql = "SELECT name FROM customers WHERE user_id = ?";
+
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+
+            try ( ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("name");  // Return the name of the customer
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;  // Return null if no customer is found with the given user_id
+    }
+
     public List<Customer> getAllCustomers() {
         List<Customer> customers = new ArrayList<>();
         String sql = "SELECT * FROM customers";
@@ -197,22 +219,22 @@ public class CustomerDAO {
         }
         return customers;
     }
-    
+
     /**
      * Delete a customer by customer_id
+     *
      * @param customerId The ID of the customer to delete
      * @return true if deletion was successful, false otherwise
      */
     public boolean deleteCustomer(int customerId) {
         String sql = "DELETE FROM customers WHERE customer_id = ?";
-        
-        try (Connection conn = DBContext.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
+
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setInt(1, customerId);
             int rowsDeleted = ps.executeUpdate();
             return rowsDeleted > 0;
-            
+
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
