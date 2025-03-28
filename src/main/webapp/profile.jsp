@@ -269,7 +269,7 @@
                         <div class="mt-4">
                             <h4>Buy Motor History</h4>
                             <p>Track or view your previous orders and their warranty information.</p>
-                            <a href="listOrders" class="btn btn-outline-gold">
+                            <a href="listCustomerOrders" class="btn btn-outline-gold">
                                 <i class="fas fa-history"></i> <span>View My Orders</span>
                             </a>
                             <a href="wishlist" class="btn btn-outline-gold">

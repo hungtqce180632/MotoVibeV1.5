@@ -22,237 +22,254 @@ import models.Order;
 import models.UserAccount;
 
 /**
- * Servlet for handling orders for new customers who don't have accounts yet.
- * Creates both customer account and order in one process.
  *
  * @author ACER
  */
 @WebServlet(name = "OrderNewCustomerServlet", urlPatterns = {"/orderNewCustomer"})
 public class OrderNewCustomerServlet extends HttpServlet {
 
+    // Đối tượng Logger để ghi log lỗi và thông tin
     private static final Logger LOGGER = Logger.getLogger(OrderNewCustomerServlet.class.getName());
 
-    /**
-     * Handles the HTTP GET request - displays form for creating a new customer
-     * order
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            // Lấy thông tin hiện tại
             HttpSession session = request.getSession();
+            // Lấy thông tin người dùng đã đăng nhập từ session
             UserAccount user = (UserAccount) session.getAttribute("user");
 
-            // Check if logged in user is an employee
+            // Kiểm tra xem người dùng có đăng nhập và có vai trò là nhân viên không
             if (user == null || !"employee".equalsIgnoreCase(user.getRole())) {
+                // Chuyển hướng đến trang đăng nhập nếu không phải nhân viên
                 response.sendRedirect("login.jsp");
                 return;
             }
 
+            // Lấy motorId gán cho motorIdParam
             String motorIdParam = request.getParameter("motorId");
             if (motorIdParam != null) {
                 int motorId = Integer.parseInt(motorIdParam);
                 MotorDAO motorDAO = new MotorDAO();
+                // Lấy thông tin xe máy theo ID
                 Motor motor = motorDAO.getMotorById(motorId);
                 if (motor != null) {
+                    // Đặt thông tin xe máy vào thuộc tính request để JSP sử dụng
                     request.setAttribute("motor", motor);
                 }
             }
 
-            // Get all motors to populate the dropdown
+            // Lấy danh sách tất cả xe máy để hiển thị trong dropdown
             MotorDAO motorDAO = new MotorDAO();
             List<Motor> motors = motorDAO.getAllMotors();
+            // Đặt danh sách xe máy vào thuộc tính request để JSP sử dụng
             request.setAttribute("motors", motors);
 
-            // Forward to the JSP page
+            // Chuyển tiếp yêu cầu đến trang JSP để hiển thị
             request.getRequestDispatcher("order_new_customer.jsp").forward(request, response);
         } catch (SQLException ex) {
-            LOGGER.log(Level.SEVERE, "Error fetching motors", ex);
-            request.getSession().setAttribute("errorMessage", "Error loading the form: " + ex.getMessage());
+            // Ghi log lỗi SQL
+            LOGGER.log(Level.SEVERE, "Error when getting motorbike list", ex);
+            // Đặt thông báo lỗi vào session và chuyển hướng đến trang quản lý đơn hàng
+            request.getSession().setAttribute("errorMessage", "Error loading form: " + ex.getMessage());
             response.sendRedirect("adminOrders");
         }
     }
 
     /**
-     * Handles the HTTP POST request - processes the form submission
+     * Xử lý yêu cầu HTTP POST - xử lý dữ liệu gửi từ form
      *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @param request yêu cầu từ servlet
+     * @param response phản hồi từ servlet
+     * @throws ServletException nếu xảy ra lỗi liên quan đến servlet
+     * @throws IOException nếu xảy ra lỗi I/O
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Lấy phiên làm việc hiện tại
         HttpSession session = request.getSession();
+        // Lấy thông tin nhân viên đã đăng nhập từ session
         UserAccount employee = (UserAccount) session.getAttribute("user");
 
-        // Check if logged in user is an employee
+        // Kiểm tra xem người dùng có đăng nhập và có vai trò là nhân viên không
         if (employee == null || !"employee".equalsIgnoreCase(employee.getRole())) {
+            // Chuyển hướng đến trang đăng nhập nếu không phải nhân viên
             response.sendRedirect("login.jsp");
             return;
         }
 
         try {
-            // Get new customer details from form
+            // Lấy thông tin khách hàng mới từ form
             String fullName = request.getParameter("fullName");
             String email = request.getParameter("email");
             String phone = request.getParameter("phone");
             String address = request.getParameter("address");
 
-            // Get order details from form
+            // Lấy thông tin đơn hàng từ form
             int motorId = Integer.parseInt(request.getParameter("motorId"));
             String paymentMethod = request.getParameter("paymentMethod");
             
-            // Get warranty selection - must check for "true" string value from radio button
+            // Kiểm tra lựa chọn bảo hành (radio button trả về "true" dưới dạng chuỗi)
             boolean hasWarranty = "true".equals(request.getParameter("hasWarranty"));
             
-            // Get deposit status
+            // Kiểm tra trạng thái đặt cọc (checkbox trả về null nếu không được chọn)
             boolean depositStatus = (request.getParameter("depositStatus") != null);
 
-            // Enhanced validation
+            // Kiểm tra dữ liệu đầu vào của khách hàng
             if (fullName == null || fullName.trim().isEmpty()
                     || email == null || email.trim().isEmpty()
                     || phone == null || phone.trim().isEmpty()) {
+                // Đặt thông báo lỗi và chuyển hướng nếu các trường bắt buộc bị thiếu
                 session.setAttribute("errorMessage", "All customer fields marked with * are required");
                 response.sendRedirect("orderNewCustomer");
                 return;
             }
 
-            // Phone number validation - must be exactly 10 digits
+            // Kiểm tra số điện thoại (phải là 10 chữ số)
             if (!phone.matches("\\d{10}")) {
-                session.setAttribute("errorMessage", "Phone number must be exactly 10 digits");
+                session.setAttribute("errorMessage", "Phone number must consist of exactly 10 digits");
                 response.sendRedirect("orderNewCustomer");
                 return;
             }
 
-            // Validate order data
+            // Kiểm tra dữ liệu đơn hàng
             if (motorId <= 0 || paymentMethod == null || paymentMethod.trim().isEmpty()) {
-                session.setAttribute("errorMessage", "All order fields are required");
+                // Đặt thông báo lỗi và chuyển hướng nếu dữ liệu đơn hàng không hợp lệ
+                session.setAttribute("errorMessage", "All order information is required");
                 response.sendRedirect("orderNewCustomer");
                 return;
             }
 
-            // Check if motor exists and is in stock
+            // Kiểm tra xem xe máy có tồn tại và còn hàng không
             MotorDAO motorDAO = new MotorDAO();
             Motor motor = motorDAO.getMotorById(motorId);
             if (motor == null) {
-                session.setAttribute("errorMessage", "Selected motor does not exist");
+                // Đặt thông báo lỗi nếu xe máy không tồn tại
+                session.setAttribute("errorMessage", "The selected motorcycle does not exist.");
                 response.sendRedirect("orderNewCustomer");
                 return;
             }
 
             if (motor.getQuantity() <= 0) {
-                session.setAttribute("errorMessage", "Selected motor is out of stock");
+                // Đặt thông báo lỗi nếu xe máy hết hàng
+                session.setAttribute("errorMessage", "Xe máy được chọn đã hết hàng");
                 response.sendRedirect("orderNewCustomer");
                 return;
             }
 
-            // Check if email already exists in the system
+            // Kiểm tra xem email đã tồn tại trong hệ thống chưa
             UserAccountDAO userAccountDAO = new UserAccountDAO();
             if (userAccountDAO.checkEmailExists(email)) {
-                session.setAttribute("errorMessage", "Email already exists. Please use a different email or create an order for an existing customer.");
+                // Đặt thông báo lỗi nếu email đã được đăng ký
+                session.setAttribute("errorMessage", "Email already exists. Please use another email or create an order for an existing customer..");
                 response.sendRedirect("orderNewCustomer");
                 return;
             }
 
-            // Step 1: Create user account with password "123"
+            // Bước 1: Tạo tài khoản người dùng mới với mật khẩu mặc định
             UserAccount newUserAccount = new UserAccount();
             newUserAccount.setEmail(email);
-            newUserAccount.setPassword("123"); // Default password
+            newUserAccount.setPassword("202cb962ac59075b964b07152d234b70"); // Mật khẩu mặc định cho khách hàng mới "123"
             newUserAccount.setRole("customer");
             newUserAccount.setStatus(true);
 
+            // Đăng ký tài khoản người dùng mới
             boolean userCreated = userAccountDAO.registerUser(newUserAccount);
 
             if (!userCreated || newUserAccount.getUserId() <= 0) {
-                session.setAttribute("errorMessage", "Failed to create user account");
+                // Đặt thông báo lỗi nếu tạo tài khoản thất bại
+                session.setAttribute("errorMessage", "Unable to create user account");
                 response.sendRedirect("orderNewCustomer");
                 return;
             }
             
-            // Log the created user ID for debugging
+            // Ghi log ID của tài khoản vừa tạo để kiểm tra
             LOGGER.log(Level.INFO, "Created user account with ID: " + newUserAccount.getUserId());
 
-            // Step 2: Create customer record
+            // Bước 2: Tạo thông tin khách hàng liên kết với tài khoản mới
             Customer newCustomer = new Customer();
-            newCustomer.setUserId(newUserAccount.getUserId());  // Use the newly created user ID
+            newCustomer.setUserId(newUserAccount.getUserId());  // Liên kết với tài khoản vừa tạo
             newCustomer.setName(fullName);
             newCustomer.setPhoneNumber(phone);
             newCustomer.setAddress(address);
 
             CustomerDAO customerDAO = new CustomerDAO();
+            // Thêm thông tin khách hàng vào cơ sở dữ liệu
             boolean customerCreated = customerDAO.insertCustomer(newCustomer);
             
             if (!customerCreated) {
-                session.setAttribute("errorMessage", "Failed to create customer record");
+                // Đặt thông báo lỗi nếu tạo thông tin khách hàng thất bại
+                session.setAttribute("errorMessage", "Unable to create customer information");
                 response.sendRedirect("orderNewCustomer");
                 return;
             }
             
-            // Get the customer ID
+            // Lấy ID của khách hàng dựa trên userId
             int customerId = customerDAO.getCustomerIdByUserId(newUserAccount.getUserId());
             
             if (customerId <= 0) {
-                session.setAttribute("errorMessage", "Failed to retrieve customer ID");
+                // Đặt thông báo lỗi nếu không lấy được ID khách hàng
+                session.setAttribute("errorMessage", "Unable to get customer ID");
                 response.sendRedirect("orderNewCustomer");
                 return;
             }
             
-            // Log the customer ID for debugging
+            // Ghi log ID của khách hàng vừa tạo để kiểm tra
             LOGGER.log(Level.INFO, "Created customer with ID: " + customerId);
 
-            // Step 3: Create order
+            // Bước 3: Tạo đơn hàng
             Order order = new Order();
-            order.setCustomerId(customerId); // Use the actual customer ID
+            order.setCustomerId(customerId); // Liên kết với khách hàng vừa tạo
             order.setMotorId(motorId);
-            order.setEmployeeId(employee.getUserId());
+            order.setEmployeeId(employee.getUserId()); // Nhân viên tạo đơn hàng
             order.setPaymentMethod(paymentMethod);
             
-            // Calculate total amount with warranty if applicable
+            // Tính tổng số tiền dựa trên lựa chọn bảo hành
             double basePrice = motor.getPrice();
             double totalAmount = basePrice;
             
             if (hasWarranty) {
-                totalAmount = basePrice * 1.10; // Add 10% warranty fee
-                LOGGER.log(Level.INFO, "Adding warranty: Base price=" + basePrice + ", Total=" + totalAmount);
+                // Thêm 10% phí bảo hành vào giá gốc
+                totalAmount = basePrice * 1.10;
+                LOGGER.log(Level.INFO, "add warranty: basePrice=" + basePrice + ", totalAmount=" + totalAmount);
             }
             
             order.setTotalAmount(totalAmount);
             order.setDepositStatus(depositStatus);
             order.setHasWarranty(hasWarranty);
-            order.setOrderStatus("Pending"); // Initial status for employee-created orders
+            order.setOrderStatus("Pending"); // Trạng thái ban đầu cho đơn hàng do nhân viên tạo
 
-            // Generate unique order code
+            // Tạo mã đơn hàng duy nhất dựa trên thời gian
             String orderCode = "MV-" + System.currentTimeMillis() % 100000;
             order.setOrderCode(orderCode);
 
-            // Save order
+            // Lưu đơn hàng vào cơ sở dữ liệu
             OrderDAO orderDAO = new OrderDAO();
             boolean orderCreated = orderDAO.createOrder(order);
             
             if (!orderCreated) {
-                session.setAttribute("errorMessage", "Failed to create the order");
+                // Đặt thông báo lỗi nếu tạo đơn hàng thất bại (Không thể tạo đơn hàng)
+                session.setAttribute("errorMessage", "Unable to create order");
                 response.sendRedirect("orderNewCustomer");
                 return;
             }
             
-            
-            session.setAttribute("successMessage", "Order created successfully. Order code: " + orderCode);
+            // Đặt thông báo thành công và chuyển hướng đến trang quản lý đơn hàng (Đơn hàng đã được tạo thành công. Mã đơn hàng)
+            session.setAttribute("successMessage", "Order has been created successfully. Order ID: " + orderCode);
             response.sendRedirect("adminOrders");
 
         } catch (NumberFormatException e) {
+            // Xử lý lỗi định dạng số không hợp lệ 
             LOGGER.log(Level.SEVERE, "Invalid number format", e);
-            session.setAttribute("errorMessage", "Invalid numeric input: " + e.getMessage());
+            //Dữ liệu số không hợp lệ
+            session.setAttribute("errorMessage", "Invalid numeric data: " + e.getMessage());
             response.sendRedirect("orderNewCustomer");
         } catch (Exception e) {
+            // Xử lý các lỗi bất ngờ khác
             LOGGER.log(Level.SEVERE, "Error creating customer or order", e);
-            session.setAttribute("errorMessage", "Error: " + e.getMessage());
+            session.setAttribute("errorMessage", "error: " + e.getMessage());
             response.sendRedirect("orderNewCustomer");
         }
     }

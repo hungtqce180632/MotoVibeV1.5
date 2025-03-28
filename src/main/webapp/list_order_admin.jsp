@@ -115,7 +115,7 @@
                 color: #ffc107;
                 /* Yellow color for the icon */
             }
-            /* Thêm style cho nút btn-create-warranty */
+            /* Thêm style cho nút btn-detail-warranty */
             .btn-detail-warranty {
                 background-color: var(--light-gold);
                 color: var(--dark-black);
