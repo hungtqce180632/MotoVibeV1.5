@@ -15,14 +15,14 @@
         <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,300" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Oswald:500,400" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="css/luxury-theme.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         <style>
-            /* colors and layout from login.jsp (no changes needed for register.jsp) */
+            /* Updated background styling */
             html {
                 width: 100%;
                 height: 100%;
             }
             body {
-                background-color: #eff3f4;
                 position: relative;
                 width: 100%;
                 height: 100%;
@@ -30,166 +30,172 @@
                 font-family: 'Source Sans Pro', sans-serif;
                 font-weight: 400;
                 -webkit-font-smoothing: antialiased;
+                background: linear-gradient(135deg, #222222 0%, #050B20 100%);
+                background-size: cover;
+                color: #fff;
+                overflow-x: hidden;
             }
+            
+            /* Decorative pattern overlay */
+            body::before {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23D4AF37' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+                z-index: -1;
+            }
+            
+            /* Register container styling */
+            .register-container {
+                margin-top: 2rem;
+                margin-bottom: 2rem;
+                padding: 2rem;
+                background: rgba(255, 255, 255, 0.05);
+                backdrop-filter: blur(10px);
+                border-radius: 15px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            }
+            
+            .header-section {
+                text-align: center;
+                margin-bottom: 2rem;
+            }
+            
+            .logo {
+                font-family: "Oswald", sans-serif;
+                font-weight: 500;
+                color: #D4AF37;
+                text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            }
+            
+            .header-section h2 {
+                color: #fff;
+                margin-top: 1rem;
+                font-weight: 600;
+            }
+            
             form {
                 position: relative;
                 display: block;
                 width: 100%;
-                max-width: 400px;
-                background-color: #fff;
+                background-color: rgba(20, 20, 30, 0.7);
                 margin: 0;
                 padding: 2.25em;
                 box-sizing: border-box;
-                border: solid 1px #ddd;
+                border: solid 1px rgba(255, 255, 255, 0.15);
                 border-radius: 0.5em;
                 font-family: 'Source Sans Pro', sans-serif;
-                top: 0;
-                left: 0;
-                transform: none; /* Override centering transform for register page */
             }
+            
             form .svgContainer {
                 position: relative;
                 width: 200px;
                 height: 200px;
                 margin: 0 auto 1em;
                 border-radius: 50%;
-                background: none;
-                border: solid 2.5px #3a5e77;
+                background: rgba(255, 255, 255, 0.1);
+                border: solid 2.5px #D4AF37;
                 overflow: hidden;
                 pointer-events: none;
             }
-            form .svgContainer div {
-                position: relative;
-                width: 100%;
-                height: 0;
-                overflow: hidden;
-                padding-bottom: 100%;
-            }
-            form .svgContainer .mySVG {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: 100%;
-                pointer-events: none;
-            }
+            
+            /* Form styling updates */
             form .inputGroup {
                 margin: 0 0 2em;
                 padding: 0;
                 position: relative;
             }
-            form .inputGroup:last-of-type {
-                margin-bottom: 0;
-            }
+            
             form label {
                 margin: 0 0 12px;
                 display: block;
                 font-size: 1.25em;
-                color: #217093;
-                font-weight: 700;
+                color: #D4AF37;
+                font-weight: 600;
                 font-family: inherit;
             }
+            
             form input[type='email'], form input[type="text"], form input[type='password'] {
                 display: block;
                 margin: 0;
                 padding: 0 1em 0;
-                background-color: #f3fafd;
-                border: solid 2px #217093;
+                background-color: rgba(255, 255, 255, 0.1);
+                border: solid 2px rgba(212, 175, 55, 0.5);
                 border-radius: 4px;
                 -webkit-appearance: none;
                 box-sizing: border-box;
                 width: 100%;
                 height: 65px;
                 font-size: 1.55em;
-                color: #353538;
+                color: #fff;
                 font-weight: 600;
                 font-family: inherit;
                 transition: box-shadow 0.2s linear, border-color 0.25s ease-out;
             }
+            
             form input[type='email']:focus, form input[type="text"]:focus, form input[type='password']:focus {
                 outline: none;
-                box-shadow: 0px 2px 10px rgba(0, 0, 0, .1);
-                border: solid 2px #4eb8dd;
+                box-shadow: 0px 2px 10px rgba(212, 175, 55, 0.3);
+                border: solid 2px #D4AF37;
             }
-            form input[type='email'], form input[type="text"] {
-                padding: 14px 1em 0px;
-            }
+            
             form button {
                 display: block;
                 margin: 0;
                 padding: 0.65em 1em 1em;
-                background-color: #4eb8dd;
+                background-color: #D4AF37;
                 border: none;
                 border-radius: 4px;
                 box-sizing: border-box;
-                box-shadow: none;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
                 width: 100%;
                 height: 65px;
                 font-size: 1.55em;
-                color: #fff;
+                color: #050B20;
                 font-weight: 600;
                 font-family: inherit;
-                transition: background-color 0.2s ease-out;
+                transition: background-color 0.2s ease-out, transform 0.2s ease-out;
             }
+            
             form button:hover, form button:active {
-                background-color: #217093;
+                background-color: #C5A028;
+                transform: translateY(-2px);
             }
+            
+            form button:disabled {
+                background-color: #6c757d;
+                cursor: not-allowed;
+            }
+            
+            /* Helper text styling */
             form .inputGroup1 .helper {
                 position: absolute;
                 z-index: 1;
                 font-family: inherit;
             }
+            
             form .inputGroup1 .helper1 {
                 top: 0;
                 left: 0;
                 transform: translate(1.4em, 2.6em) scale(1);
                 transform-origin: 0 0;
-                color: #217093;
+                color: rgba(212, 175, 55, 0.7);
                 font-size: 1.25em;
                 font-weight: 400;
                 opacity: 0.65;
                 pointer-events: none;
                 transition: transform 0.2s ease-out, opacity 0.2s linear;
             }
+            
             form .inputGroup1.focusWithText .helper {
-                /*input[type='email']:focus + .helper {*/
                 transform: translate(1.4em, 2em) scale(0.65);
                 opacity: 1;
             }
-
-            /* boostrap layout  (no changes needed for register.jsp) */
-            .logo {
-                font-family: "Oswald", sans-serif;
-                font-weight: 500;
-                color: #050B20;
-            }
-            a:hover {
-                color: inherit; /* Keep original color on hover */
-            }
-            .btn-dark {
-                background-color: #050B20;
-            }
-            .container-fluid {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                padding: 0;
-            }
-
-            .row {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                width: 100%;
-            }
-
-            .col-lg-6 {
-                max-width: 400px; /* Set a max width to the form */
-                width: 100%;
-                margin: 0 auto; /* Center the form horizontally */
-            }
-
+            
             /* OTP Verification Styles */
             .otp-controls {
                 display: flex;
@@ -209,34 +215,36 @@
                 display: block;
                 margin: 0;
                 padding: 0 1em 0;
-                background-color: #f3fafd;
-                border: solid 2px #217093;
+                background-color: rgba(255, 255, 255, 0.1);
+                border: solid 2px rgba(212, 175, 55, 0.5);
                 border-radius: 4px;
                 width: 100%;
                 height: 50px;
                 font-weight: 600;
-                color: #353538;
+                color: #fff;
             }
             
             .btn-otp {
                 display: inline-block;
                 padding: 8px 15px;
-                background-color: #4eb8dd;
-                color: white;
+                background-color: #D4AF37;
+                color: #050B20;
                 border: none;
                 border-radius: 4px;
                 font-size: 0.9em;
                 cursor: pointer;
-                transition: background-color 0.2s;
+                transition: background-color 0.2s, transform 0.2s;
             }
             
             .btn-otp:hover {
-                background-color: #217093;
+                background-color: #C5A028;
+                transform: translateY(-2px);
             }
             
             .btn-otp:disabled {
-                background-color: #ccc;
+                background-color: #6c757d;
                 cursor: not-allowed;
+                transform: none;
             }
             
             .verification-message {
@@ -245,32 +253,78 @@
             }
             
             .verified {
-                color: green;
+                color: #28a745;
             }
             
             .not-verified {
-                color: red;
+                color: #dc3545;
             }
             
             .countdown {
-                color: #217093;
+                color: #D4AF37;
                 margin-left: 10px;
+            }
+            
+            /* Link styling */
+            a {
+                color: #D4AF37;
+                transition: color 0.2s;
+            }
+            
+            a:hover {
+                color: #C5A028;
+                text-decoration: underline;
+            }
+            
+            /* Decorative elements */
+            .decorative-line {
+                position: absolute;
+                height: 100%;
+                top: 0;
+                width: 5px;
+                background: linear-gradient(to bottom, transparent, #D4AF37, transparent);
+                opacity: 0.3;
+            }
+            
+            .decorative-line.left {
+                left: 0;
+            }
+            
+            .decorative-line.right {
+                right: 0;
+            }
+            
+            /* Responsive adjustments */
+            @media (max-width: 768px) {
+                .register-container {
+                    margin-top: 1rem;
+                    padding: 1rem;
+                }
+                
+                form {
+                    padding: 1.5rem;
+                }
             }
         </style>
     </head>
     <body>
-        <div class="container-fluid vh-100">
-            <div class="row h-100">
-                <div class="col-lg-6 d-flex justify-content-center align-items-center">
-                    <div class="w-100" style="max-width: 400px;">
-                        <a class="logo text-decoration-none" href="/"><h1 class="mb-5">MotoVibe</h1></a>
-                        <h2 class="fw-bold">Create Account</h2> <%-- Changed heading to "Create Account" --%>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-7 col-md-10">
+                    <div class="register-container">
+                        <div class="header-section">
+                            <a class="logo text-decoration-none" href="/"><h1><i class="fas fa-motorcycle me-2"></i>MotoVibe</h1></a>
+                            <h2 class="fw-bold">Create Account</h2>
+                        </div>
+                        
                         <%-- Display error if any --%>
                         <c:if test="${not empty error}">
                             <div class="alert alert-danger">${error}</div>
                         </c:if>
 
-                        <form action="register" method="post" id="registrationForm"> <%-- Changed form action to "register" --%>
+                        <form action="register" method="post" id="registrationForm">
+                            <div class="decorative-line left"></div>
+                            <div class="decorative-line right"></div>
                             <div class="svgContainer">
                                 <div>
                                     <svg class="mySVG" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 200">
@@ -363,7 +417,7 @@
                             </div>
 
                             <div class="inputGroup inputGroup1">
-                                <label class="form-label" for="email">Email</label> <%-- Changed label --%>
+                                <label class="form-label" for="email">Email</label>
                                 <input type="email" id="email" class="email form-control" maxlength="256" name="email" required>
                                 <p class="helper helper1">email@domain.com</p>
                                 <div class="otp-controls">
@@ -381,7 +435,7 @@
                                 <span class="indicator"></span>
                             </div>
                             <div class="inputGroup inputGroup2">
-                                <label class="form-label" for="password">Password</label> <%-- Changed label --%>
+                                <label class="form-label" for="password">Password</label>
                                 <input type="password" id="password" class="password form-control" name="password" required/>
                             </div>
                             <div class="inputGroup inputGroup2"> <%-- Added Confirm Password field --%>
