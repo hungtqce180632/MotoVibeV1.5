@@ -207,7 +207,7 @@
                     <div class="col-lg-4 footer-section">
                         <h4 class="footer-heading">Quick Links</h4>
                         <ul class="footer-list">
-                            <li class="footer-list-item"><a href="index.jsp">Home</a></li>
+                            <li class="footer-list-item"><a href="home">Home</a></li>
                             <li class="footer-list-item"><a href="motorList">Motorbikes</a></li>
                             <li class="footer-list-item"><a href="listevents">Events</a></li>
                             <li class="footer-list-item"><a href="listAppointments">Appointments</a></li>

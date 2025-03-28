@@ -79,6 +79,6 @@ public class PaymentConfirmationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Redirect GET requests to the home page
-        response.sendRedirect("index.jsp");
+        response.sendRedirect("home");
     }
 }

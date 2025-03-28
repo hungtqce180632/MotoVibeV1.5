@@ -135,7 +135,7 @@
                 <p class="text-center text-warning">No motorbike models have been sold.</p>
             </c:if>
 
-            <a href="index.jsp" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+            <a href="home" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
         </div>
 
     <jsp:include page="footer.jsp"></jsp:include>

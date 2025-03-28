@@ -194,7 +194,7 @@
         <header>
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm fixed-top">
                 <div class="container-fluid d-flex justify-content-between align-items-center">
-                    <a class="navbar-brand fw-bold fa-solid fa-motorcycle" href="index.jsp" style="font-size: 1.7rem;">MotoVibe</a>
+                    <a class="navbar-brand fw-bold fa-solid fa-motorcycle" href="home" style="font-size: 1.7rem;">MotoVibe</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
