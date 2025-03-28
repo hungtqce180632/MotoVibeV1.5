@@ -83,12 +83,20 @@ public class AppointmentServlet extends HttpServlet {
         CustomerDAO customerDAO = new CustomerDAO();
         EmployeeDAO employeeDAO = new EmployeeDAO();
 
-        
+        int customerId = customerDAO.getCustomerIdByUserId(user.getUserId());
         String customerName = customerDAO.getCustomerNameByUserId(user.getUserId());
+
         List<Employee> employees = employeeDAO.getAllEmployees();
 
+        // Find the employee with the least number of appointments
+        Employee leastBusyEmployee = getEmployeeWithLeastAppointments();
+        int selectedEmployeeId = leastBusyEmployee != null ? leastBusyEmployee.getEmployeeId() : -1;
+
+        request.setAttribute("customerId", customerId);
         request.setAttribute("customerName", customerName);
         request.setAttribute("employees", employees);
+
+        request.setAttribute("selectedEmployeeId", selectedEmployeeId);  // Add selectedEmployeeId
 
         request.getRequestDispatcher("add_appointment.jsp").forward(request, response);
     }
@@ -108,10 +116,20 @@ public class AppointmentServlet extends HttpServlet {
             // Retrieve form parameters
             int customerId = Integer.parseInt(request.getParameter("customerId"));
             String employeeIdStr = request.getParameter("employeeId");
-            Integer employeeId = (employeeIdStr != null && !employeeIdStr.isEmpty()) ? Integer.parseInt(employeeIdStr) : null;
+
+            Integer employeeId = null;
+
+            // If no employee is selected, get the employee with the least appointments
+            if (employeeIdStr == null || employeeIdStr.isEmpty()) {
+                Employee leastBusyEmployee = getEmployeeWithLeastAppointments();
+                employeeId = leastBusyEmployee.getEmployeeId();
+                request.setAttribute("selectedEmployeeId", employeeId);  // Set the selected employee ID
+            } else {
+                employeeId = Integer.parseInt(employeeIdStr);
+                request.setAttribute("selectedEmployeeId", employeeId);  // Set the selected employee ID
+            }
 
             String dateStartStr = request.getParameter("dateStart");
-
             String note = request.getParameter("note");
             boolean appointmentStatus = request.getParameter("appointmentStatus").equals("1");
 
@@ -123,7 +141,7 @@ public class AppointmentServlet extends HttpServlet {
             // Create Appointment object
             Appointment appointment = new Appointment();
             appointment.setCustomerId(customerId);
-            appointment.setEmployeeId(employeeId != null ? employeeId : 0); // Default to 0 if null
+            appointment.setEmployeeId(employeeId != null ? employeeId : 0);
             appointment.setDateStart(new java.sql.Timestamp(startDate.getTime()));
             appointment.setDateEnd(new java.sql.Timestamp(endDate.getTime()));
             appointment.setNote(note);
@@ -142,6 +160,25 @@ public class AppointmentServlet extends HttpServlet {
             e.printStackTrace();
             response.sendRedirect("add_appointment.jsp?error=1");
         }
+    }
+
+    private Employee getEmployeeWithLeastAppointments() {
+        EmployeeDAO employeeDAO = new EmployeeDAO();
+        AppointmentDAO appointmentDAO = new AppointmentDAO();
+
+        List<Employee> employees = employeeDAO.getAllEmployees();
+        Employee leastBusyEmployee = null;
+        int minAppointments = Integer.MAX_VALUE;
+
+        // Iterate through all employees and find the one with the least number of appointments
+        for (Employee employee : employees) {
+            int appointmentCount = appointmentDAO.getAppointmentsByEmployeeId(employee.getEmployeeId()).size();
+            if (appointmentCount < minAppointments) {
+                minAppointments = appointmentCount;
+                leastBusyEmployee = employee;
+            }
+        }
+        return leastBusyEmployee;
     }
 
     /**
