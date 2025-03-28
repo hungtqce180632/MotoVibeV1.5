@@ -83,10 +83,11 @@ public class AppointmentServlet extends HttpServlet {
         CustomerDAO customerDAO = new CustomerDAO();
         EmployeeDAO employeeDAO = new EmployeeDAO();
 
-        int customerId = customerDAO.getCustomerIdByUserId(user.getUserId());
+        
+        String customerName = customerDAO.getCustomerNameByUserId(user.getUserId());
         List<Employee> employees = employeeDAO.getAllEmployees();
 
-        request.setAttribute("customerId", customerId);
+        request.setAttribute("customerName", customerName);
         request.setAttribute("employees", employees);
 
         request.getRequestDispatcher("add_appointment.jsp").forward(request, response);

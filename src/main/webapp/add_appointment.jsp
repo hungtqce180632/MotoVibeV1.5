@@ -143,8 +143,8 @@
                 <form action="appointment" method="POST" class="mt-4">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="customerId" class="form-label">Customer ID</label>
-                            <input type="number" class="form-control" id="customerId" name="customerId" value="${customerId}" readonly>
+                            <label for="customerId" class="form-label">Customer Name</label>
+                            <input type="text" class="form-control" id="customerId" name="customerId" value="${customerName}" readonly>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="employeeId" class="form-label">Assign Technician</label>
