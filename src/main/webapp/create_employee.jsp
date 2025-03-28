@@ -81,7 +81,7 @@
             <div class="container mt-5 pt-5">
                 <div class="form-container">
                     <h2 class="text-center mb-4"><i class="fas fa-user-plus me-2"></i>Create Employee Account</h2>
-                    <form action="createEmployee" method="post" class="needs-validation" novalidate>
+                    <form action="createEmployee" method="post" class="needs-validation">
                         <div class="mb-3">
                             <label class="form-label">Email</label>
                             <input type="email" class="form-control" name="email" required>
@@ -96,7 +96,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Phone Number</label>
-                            <input type="text" class="form-control" name="phoneNumber" required>
+                            <input type="text" class="form-control" name="phoneNumber" pattern="^(0|\+84)[3-9][0-9]{8}$" required>
                         </div>
                         <div class="text-center">
                             <a href="accountManagement?listOf=emp" class="btn btn-secondary me-2">
@@ -112,7 +112,11 @@
                 <div style="border: 3px solid green; border-radius: 20px; display: flex; align-items: center; justify-content: center;">
                     <p style="color: green; margin: 0; font-size: 20px;">CREATE SUCCESS</p>
                 </div>
-
+            </c:if>
+            <c:if test="${isSuccess eq '0'}">
+                <div style="border: 3px solid red; border-radius: 20px; display: flex; align-items: center; justify-content: center;">
+                    <p style="color: red; margin: 0; font-size: 20px;">EMAIL WAS USED!</p>
+                </div>
             </c:if>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

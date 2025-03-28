@@ -103,7 +103,7 @@ public class UserAccountDAO {
     }
 
     // Add a common hashPassword method to ensure consistent hashing
-    private String hashPassword(String password) {
+    public String hashPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             byte[] hashedBytes = md.digest(password.getBytes());

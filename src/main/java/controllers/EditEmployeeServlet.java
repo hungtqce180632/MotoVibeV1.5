@@ -31,13 +31,14 @@ public class EditEmployeeServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        UserAccountDAO userAccountDAO = new UserAccountDAO();
         int userId = Integer.parseInt(request.getParameter("userId"));
         String email = request.getParameter("email");
         String name = request.getParameter("name");
-        String password = request.getParameter("password");
+        String password = userAccountDAO.hashPassword(request.getParameter("password"));
         String phoneNumber = request.getParameter("phoneNumber");
 
-        UserAccountDAO userAccountDAO = new UserAccountDAO();
+        
         userAccountDAO.updateUserAccount(userId, email, password);
         userAccountDAO.updateEmployee(userId, name, phoneNumber);
 

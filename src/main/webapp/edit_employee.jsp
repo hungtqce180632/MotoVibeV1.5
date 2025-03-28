@@ -61,7 +61,7 @@
         <div class="container mt-5 pt-5">
             <div class="form-container">
                 <h2 class="text-center mb-4"><i class="fas fa-user-edit me-2"></i>Edit Employee Account</h2>
-                <form action="editEmployee" method="post" class="needs-validation" novalidate>
+                <form action="editEmployee" method="post" class="needs-validation">
                     <input type="hidden" name="userId" value="${user.userId}">
                     <div class="mb-3">
                         <label class="form-label">Email</label>
@@ -69,7 +69,7 @@
                     </div>
                     <div class="mb-3">
                             <label class="form-label">Password</label>
-                            <input type="password" class="form-control" name="password" required>
+                            <input type="text" class="form-control" name="phoneNumber" pattern="^(0|\+84)[3-9][0-9]{8}$" required>
                         </div>
                     <div class="mb-3">
                         <label class="form-label">Full Name</label>
@@ -92,6 +92,11 @@
             <c:if test="${isSuccess eq '1'}">
                 <div style="border: 3px solid green; border-radius: 20px; display: flex; align-items: center; justify-content: center;">
                     <p style="color: green; margin: 0; font-size: 20px;">UPDATE SUCCESS</p>
+                </div>
+            </c:if>
+            <c:if test="${isSuccess eq '0'}">
+                <div style="border: 3px solid red; border-radius: 20px; display: flex; align-items: center; justify-content: center;">
+                    <p style="color: red; margin: 0; font-size: 20px;">EMAIL WAS USED!</p>
                 </div>
             </c:if>
         </div>
