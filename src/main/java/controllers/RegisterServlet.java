@@ -161,7 +161,7 @@ public class RegisterServlet extends HttpServlet {
             session.setAttribute("user", newUser);
             session.setAttribute("userRole", role);
 
-            response.sendRedirect("index.jsp"); // Redirect to home page after successful registration
+            response.sendRedirect("home"); // Redirect to home page after successful registration
         } else {
             request.setAttribute("error", "Registration failed. Please try again.");
             request.getRequestDispatcher("register.jsp").forward(request, response);

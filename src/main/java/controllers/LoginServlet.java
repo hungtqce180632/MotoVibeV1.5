@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.security.MessageDigest;
 import java.sql.SQLException;
 import models.Customer;
 import models.Employee;
@@ -19,7 +20,7 @@ import models.Employee;
 public class LoginServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
@@ -27,28 +28,31 @@ public class LoginServlet extends HttpServlet {
         
         UserAccountDAO userDAO = new UserAccountDAO();
 
+        // Let the DAO handle the password hashing
         UserAccount user = userDAO.login(email, password);
 
         HttpSession session = request.getSession();
-        session.setAttribute("user", user);
-        session.setAttribute("userRole", "admin");
-
+        
         if (user != null && user.isStatus()) { // Check if account is active
-
+            session.setAttribute("user", user);
+            
             // Set role-specific attributes
             if ("customer".equals(user.getRole())) {
                 CustomerDAO customerDAO = new CustomerDAO();
                 Customer customer = customerDAO.getCustomerByUserId(user.getUserId());
                 session.setAttribute("customer", customer);
+                session.setAttribute("userRole", "customer");
                 response.sendRedirect("home");
                 return;
             } else if ("employee".equals(user.getRole())) {
                 EmployeeDAO employeeDAO = new EmployeeDAO();
                 Employee employee = employeeDAO.getEmployeeByUserId(user.getUserId());
                 session.setAttribute("employee", employee);
+                session.setAttribute("userRole", "employee");
                 response.sendRedirect("home");
                 return;
             } else if ("admin".equals(user.getRole())) {
+                session.setAttribute("userRole", "admin");
                 response.sendRedirect("home");
                 return;
             }

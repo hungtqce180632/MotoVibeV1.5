@@ -54,9 +54,9 @@ public class MotorManagementServlet extends HttpServlet {
 
         // 3. Kiểm tra nếu user chưa đăng nhập hoặc không phải admin.
         if (user == null || !user.getRole().equals("admin")) {
-            // 4. Nếu không phải admin, chuyển hướng (redirect) về trang chủ "index.jsp".
-            // Corrected line: sendRedirect to "index.jsp"
-            response.sendRedirect("index.jsp"); // Chuyển hướng về trang chủ (index.jsp)
+            // 4. Nếu không phải admin, chuyển hướng (redirect) về trang chủ "home".
+            // Corrected line: sendRedirect to "home"
+            response.sendRedirect("home"); // Chuyển hướng về trang chủ (home)
             return; // 5. **Quan trọng:** Kết thúc phương thức tại đây để ngăn chặn forward sau redirect.
             // Giải thích: Khi đã gọi sendRedirect, response đã được commit và gửi header về client.
             // Gọi forward sau sendRedirect sẽ gây ra lỗi "Cannot forward after response has been committed".

@@ -26,19 +26,19 @@ public class ForgotPasswordServlet extends HttpServlet {
             // Generate OTP
             String otp = generateOTP();
             
-            // Store OTP in session
+            // Store OTP in session (using the same attribute names as other servlets)
             HttpSession session = request.getSession();
-            session.setAttribute("OTP", otp);
-            session.setAttribute("email", email);
+            session.setAttribute("otp", otp);  // Changed from "OTP" to "otp" for consistency
+            session.setAttribute("emailSendOTP", email);  // Changed from "email" to "emailSendOTP" for consistency
             
             // Send OTP to email (implement sendEmail method in AccountDAO)
             accDAO.SendOTPToEmail(email, otp);
             
             // Redirect to OTP verification page
-            response.sendRedirect("/MotoVibe/verifyOtp");
+            response.sendRedirect("resetPassword");  // Changed to go directly to resetPassword
         } else {
-            request.getSession().setAttribute("message", "Email does not exist. Please try again.");
-            response.sendRedirect("/MotoVibe/forgotPassword,jsp");
+            request.setAttribute("error", "Email does not exist. Please try again.");
+            request.getRequestDispatcher("forgotPassword.jsp").forward(request, response);
         }
     }
 

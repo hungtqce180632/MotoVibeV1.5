@@ -11,6 +11,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/verifyOtp")
 public class VerifyOtpServlet extends HttpServlet {
@@ -31,27 +32,36 @@ public class VerifyOtpServlet extends HttpServlet {
         BufferedReader br = request.getReader();
         Map<String, Object> requestData = gson.fromJson(br, Map.class);
 
-        // Lấy otp user nhập vào (VD: { "otp": "123456" })
+        // Lấy otp user nhập vào và email từ request
         String enteredOtp = (String) requestData.get("otp");
+        String email = (String) requestData.get("email");
 
-        // Lấy otp đã lưu trong session (đặt bởi SendOtpServlet)
-        Object otpObj = request.getSession().getAttribute("otp");
-        String sessionOtp = (otpObj != null) ? String.valueOf(otpObj) : "";
+        // Lấy session
+        HttpSession session = request.getSession();
+        
+        // Lấy otp đã lưu trong session
+        String sessionOtp = (String) session.getAttribute("otp");
+        String sessionEmail = (String) session.getAttribute("emailSendOTP");
 
-        // Kiểm tra khớp
-        boolean match = enteredOtp != null && enteredOtp.equals(sessionOtp);
-
+        // Kiểm tra khớp cả OTP và email
+        boolean match = enteredOtp != null && sessionOtp != null && 
+                      enteredOtp.equals(sessionOtp) && 
+                      email != null && email.equals(sessionEmail);
 
         // Tạo Map response JSON
         Map<String, Object> jsonResponse = new HashMap<>();
         if (match) {
-            request.getSession().removeAttribute("otp");
+            // Save verification status to session
+            session.setAttribute("otpVerified", true);
+            session.setAttribute("verifiedEmail", email);
+            // Remove OTP from session for security
+            session.removeAttribute("otp");
             
             jsonResponse.put("success", true);
-            jsonResponse.put("message", "Xác thực OTP thành công.");
+            jsonResponse.put("message", "OTP verification successful.");
         } else {
             jsonResponse.put("success", false);
-            jsonResponse.put("message", "Mã OTP không hợp lệ hoặc đã hết hạn.");
+            jsonResponse.put("message", "Invalid OTP or OTP has expired.");
         }
 
         // Gửi JSON kết quả

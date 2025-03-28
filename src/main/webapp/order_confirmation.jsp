@@ -211,7 +211,7 @@
             </div>
             
             <div class="text-center mt-4 animated delay-3">
-                <a href="index.jsp" class="btn btn-link text-gold">
+                <a href="home" class="btn btn-link text-gold">
                     <i class="fas fa-home me-1"></i> Return to Home
                 </a>
             </div>

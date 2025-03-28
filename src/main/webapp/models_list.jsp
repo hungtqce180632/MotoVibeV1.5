@@ -182,7 +182,7 @@
                 </table>
             </div>
 
-            <a href="index.jsp" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+            <a href="home" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
         </div>
 
     </body>
