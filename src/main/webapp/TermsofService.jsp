@@ -157,7 +157,7 @@
             <button>ON</button>
             <div id="bulb"></div>
             <span id="terms-of-service-text" class="text-decoration">Terms of Service</span> <!- Updated Text Decoration Text -->
-            <span id="website-link-text" class="text-decoration"><a href="index.jsp" style="color: #ddd; text-decoration: none;">www.motovibe.com</a></span>
+            <span id="website-link-text" class="text-decoration"><a href="home" style="color: #ddd; text-decoration: none;">www.motovibe.com</a></span>
         </div>
 
         <div class="terms-of-service-content container my-5 tos-container"> <!- Updated class name -->

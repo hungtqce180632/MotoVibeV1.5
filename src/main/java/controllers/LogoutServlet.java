@@ -40,8 +40,8 @@ public class LogoutServlet extends HttpServlet {
             session.invalidate();
         }
 
-        // 4. Chuyển hướng (redirect) người dùng về trang chủ (index.jsp) sau khi đăng xuất.
-        response.sendRedirect("index.jsp");
+        // 4. Chuyển hướng (redirect) người dùng về trang chủ (home) sau khi đăng xuất.
+        response.sendRedirect("home");
     }
 
     /**

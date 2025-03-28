@@ -208,7 +208,7 @@
                 %>
                 
                 <div class="text-center mt-4">
-                    <a href="index.jsp" class="btn btn-outline-gold">
+                    <a href="home" class="btn btn-outline-gold">
                         <i class="fas fa-home me-1"></i> Return to Home
                     </a>
                 </div>

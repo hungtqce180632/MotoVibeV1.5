@@ -329,7 +329,7 @@
                 </div>
                 
                 <div class="mt-4 text-center">
-                    <a href="index.jsp" class="btn btn-outline-secondary">
+                    <a href="home" class="btn btn-outline-secondary">
                         <i class="fas fa-arrow-left me-1"></i> Back to Homepage
                     </a>
                     <c:if test="${userRole == 'customer'}">
