@@ -94,7 +94,7 @@
                 <a href="profile" class="btn btn-custom me-2">Back to Profile</a>
                 <c:if test="${sessionScope.user.role == 'admin' || sessionScope.user.role == 'employee'}">
                     <a href="adminOrders" class="btn btn-custom">
-                        <i class="fas fa-cog me-2"></i>Back to Admin Orders
+                        <i class="fas fa-cog me-2"></i>Back to List Orders
                     </a>
                 </c:if>
             </div>

@@ -30,27 +30,30 @@ public class EditEventServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            // Get event_id from the request
+            // Lấy event_id từ tham số request
             int eventId = Integer.parseInt(request.getParameter("id"));
             EventDAO eventDAO = new EventDAO();
-            Event event = eventDAO.getEventById(eventId);  // Fetch the event from DB
-            request.setAttribute("event", event);  // Set the event as an attribute
-            request.getRequestDispatcher("edit_event.jsp").forward(request, response);  // Forward to the edit page
+            // Lấy thông tin sự kiện từ cơ sở dữ liệu
+            Event event = eventDAO.getEventById(eventId);
+            // Đặt đối tượng event làm thuộc tính của request dùng jsp
+            request.setAttribute("event", event);
+            request.getRequestDispatcher("edit_event.jsp").forward(request, response);
 
         } catch (NumberFormatException e) {
-            response.sendRedirect("error.jsp");  // Redirect to an error page if there's an issue
+            response.sendRedirect("error.jsp");
         } catch (SQLException ex) {
             Logger.getLogger(EditEventServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-@Override
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String contextPath = request.getContextPath();
 
         try {
+            // Lấy dữ liệu từ form
             int eventId = Integer.parseInt(request.getParameter("event_id"));
             String eventName = request.getParameter("event_name").trim();
             String eventDetails = request.getParameter("event_details").trim();
@@ -61,8 +64,7 @@ public class EditEventServlet extends HttpServlet {
             Part filePart = request.getPart("event_image");
             byte[] imageBytes = null;
             if (filePart != null && filePart.getSize() > 0) {
-                try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                     InputStream inputStream = filePart.getInputStream()) {
+                try ( ByteArrayOutputStream baos = new ByteArrayOutputStream();  InputStream inputStream = filePart.getInputStream()) {
                     byte[] buffer = new byte[1024];
                     int bytesRead;
                     while ((bytesRead = inputStream.read(buffer)) != -1) {
@@ -71,10 +73,10 @@ public class EditEventServlet extends HttpServlet {
                     imageBytes = baos.toByteArray();
                 }
             }
-
+            // Tạo đối tượng Event từ dữ liệu form
             Event event = new Event(eventName, eventDetails, null, dateStart, dateEnd, eventStatus, 0);
             event.setEvent_id(eventId);
-
+            // Cập nhật thông tin sự kiện vào cơ sở dữ liệu
             EventDAO.updateEvent(event, imageBytes);
             response.sendRedirect("ManageEventServlet");
         } catch (Exception e) {

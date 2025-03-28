@@ -13,6 +13,11 @@ import java.security.MessageDigest;
 import java.util.Random;
 
 /**
+ * 
+ * @author sanghtpce181720
+ */
+
+/**
  * Servlet xử lý việc đặt lại mật khẩu cho người dùng.
  * URL mapping: "/resetPassword"
  * 

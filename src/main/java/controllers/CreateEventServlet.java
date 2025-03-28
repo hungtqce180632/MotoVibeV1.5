@@ -17,13 +17,7 @@ import java.time.format.DateTimeFormatter;
         maxRequestSize = 1024 * 1024 * 50) // 50MB
 public class CreateEventServlet extends HttpServlet {
 
-    private EventDAO eventDAO;
-
-    @Override
-    public void init() throws ServletException {
-        super.init();
-        eventDAO = new EventDAO();
-    }
+    private final EventDAO eventDAO = new EventDAO();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -32,32 +26,35 @@ public class CreateEventServlet extends HttpServlet {
         String contextPath = request.getContextPath();
 
         try {
-            // Get user_id from session (default to 1 if not set)
-            HttpSession session = request.getSession();
-            int userId = (session.getAttribute("user_id") != null) ? (Integer) session.getAttribute("user_id") : 1;
+            // user_Id luôn bằng 1 vì admin luôn là user đầu tiên
+            int userId = 1;
             System.out.println("User ID: " + userId);
 
-            // Get form data
+            // Lấy dữ liệu từ form
             String eventName = request.getParameter("event_name").trim();
+            //check name rỗng
             if (eventName.isEmpty()) {
                 throw new IllegalArgumentException("Event name is required");
             }
 
             String eventDetails = request.getParameter("event_detail").trim();
+            //check detail rỗng
             if (eventDetails.isEmpty()) {
                 throw new IllegalArgumentException("Event details are required");
             }
-
+            // Lấy ngày bắt đầu và kết thúc của sự kiện
             String dateStartStr = request.getParameter("date_start").trim();
             String dateEndStr = request.getParameter("date_end").trim();
             if (dateStartStr.isEmpty() || dateEndStr.isEmpty()) {
                 throw new IllegalArgumentException("Start and end dates are required");
             }
 
-            // Parse dates
+            
+            // Chuyển đổi chuỗi ngày thành đối tượng LocalDate
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate dateStart = LocalDate.parse(dateStartStr, formatter);
             LocalDate dateEnd = LocalDate.parse(dateEndStr, formatter);
+            // Kiểm tra logic ngày kết thúc phải sau ngày bắt đầu
             if (dateEnd.isBefore(dateStart)) {
                 throw new IllegalArgumentException("End date must be after start date");
             }
@@ -75,10 +72,10 @@ public class CreateEventServlet extends HttpServlet {
                 inputStream.read(imageBytes);
             }
 
-            // Set null as the image path since we're using the database
+            // Tạo đối tượng Event với đường dẫn hình ảnh là null vì sẽ lưu trực tiếp vào DB
             Event event = new Event(eventName, eventDetails, null, dateStart.toString(), dateEnd.toString(), true, userId);
 
-            // Save to database with image bytes
+            // Lưu sự kiện và hình ảnh vào cơ sở dữ liệu
             boolean isCreated = eventDAO.createEvent(event, imageBytes);
             if (!isCreated) {
                 throw new Exception("Failed to create event");

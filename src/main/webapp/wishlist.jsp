@@ -1,3 +1,7 @@
+<%-- Document : wishlist
+     Created on : Feb 23, 2025, 12:57:46 AM 
+     Author : sanghtpce181720 --%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="models.Motor" %>

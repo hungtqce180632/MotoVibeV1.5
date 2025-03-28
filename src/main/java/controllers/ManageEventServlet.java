@@ -7,8 +7,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
+import models.UserAccount;
 
 /**
  *
@@ -19,7 +21,19 @@ public class ManageEventServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Lấy phiên làm việc hiện tại
+        HttpSession session = request.getSession();
+        // Lấy thông tin nhân viên đã đăng nhập từ session
+        UserAccount admin = (UserAccount) session.getAttribute("user");
+
+        // Kiểm tra xem người dùng có đăng nhập và có vai trò là nhân viên không
+        if (admin == null || !"admin".equalsIgnoreCase(admin.getRole())) {
+            // Chuyển hướng đến trang đăng nhập nếu không phải nhân viên
+            response.sendRedirect("login.jsp");
+            return;
+        }
         try {
+            
             // Fetch all events using EventDAO
             List<Event> events = EventDAO.getAllEvents();
 
