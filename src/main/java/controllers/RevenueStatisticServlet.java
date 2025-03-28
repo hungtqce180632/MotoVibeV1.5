@@ -63,19 +63,35 @@ public class RevenueStatisticServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
         RevenueStatisticsDAO revenueDAO = new RevenueStatisticsDAO();
-
-        // Lấy dữ liệu từ DAO
-        List<Map<String, Object>> revenueData = revenueDAO.getMonthlyRevenue();
+        
+        // Get the selected month from the request parameter (if any)
+        String monthFilter = request.getParameter("monthFilter");
+        
+        // Get the available months for the dropdown
+        List<String> availableMonths = revenueDAO.getAvailableMonths();
+        
+        // Fetch data based on the selected month or all months
+        List<Map<String, Object>> revenueData;
+        if (monthFilter != null && !monthFilter.isEmpty()) {
+            revenueData = revenueDAO.getMonthlyRevenueByMonth(monthFilter);
+        } else {
+            revenueData = revenueDAO.getMonthlyRevenue(); // Fetch all data if no filter
+        }
+        
+        // Get total revenue and total orders
         double totalRevenue = revenueDAO.getTotalRevenue();
         int totalOrders = revenueDAO.getTotalOrders();
-
-        // Gửi dữ liệu đến JSP
+        
+        // Set attributes to be used in JSP
         request.setAttribute("revenueData", revenueData);
         request.setAttribute("totalRevenue", totalRevenue);
         request.setAttribute("totalOrders", totalOrders);
-
+        request.setAttribute("monthFilter", monthFilter); // Keep selected month in page
+        request.setAttribute("availableMonths", availableMonths); // Available months for dropdown
+        
+        // Forward to JSP page
         request.getRequestDispatcher("revenue_statistic.jsp").forward(request, response);
     }
 
