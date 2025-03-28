@@ -25,7 +25,7 @@
                 position: relative;
                 text-align: center;
             }
-            
+
             h2::after {
                 content: '';
                 position: absolute;
@@ -37,11 +37,11 @@
                 background: var(--primary-gold);
                 box-shadow: 0 0 10px var(--primary-gold);
             }
-            
+
             .container {
                 padding-top: 80px;
             }
-            
+
             .table-container {
                 background: linear-gradient(145deg, var(--dark-black), var(--rich-black));
                 border: 1px solid var(--primary-gold);
@@ -51,12 +51,12 @@
                 margin-bottom: 2rem;
                 overflow-x: auto;
             }
-            
+
             .table {
                 margin-bottom: 0;
                 color: var(--text-gold) !important;
             }
-            
+
             .table thead th {
                 color: var(--primary-gold) !important;
                 text-transform: uppercase;
@@ -66,37 +66,37 @@
                 padding: 1rem 0.75rem;
                 vertical-align: middle;
             }
-            
+
             .table tbody tr {
                 border-bottom: 1px solid rgba(212, 175, 55, 0.2);
                 transition: all 0.3s ease;
             }
-            
+
             .table tbody tr:hover {
                 background: rgba(212, 175, 55, 0.05) !important;
                 transform: translateY(-1px);
             }
-            
+
             .table tbody tr:last-child {
                 border-bottom: none;
             }
-            
+
             .table td {
                 padding: 1rem 0.75rem;
                 vertical-align: middle;
                 color: var(--text-gold);
             }
-            
+
             .text-success {
                 color: #6eff7a !important;
                 font-weight: bold;
             }
-            
+
             .text-danger {
                 color: #ff6e6e !important;
                 font-weight: bold;
             }
-            
+
             .btn-secondary {
                 background: transparent;
                 border: 1px solid var(--primary-gold);
@@ -108,24 +108,24 @@
                 font-size: 0.9rem;
                 margin-top: 1rem;
             }
-            
+
             .btn-secondary:hover {
                 background: var(--primary-gold);
                 color: var(--dark-black);
                 transform: translateY(-2px);
                 box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
             }
-            
+
             .icon-action {
                 margin-right: 5px;
                 font-size: 0.9rem;
             }
-            
+
             .log-id {
                 font-weight: 600;
                 color: var(--primary-gold);
             }
-            
+
             /* Custom pagination styling */
             .pagination-container {
                 display: flex;
@@ -136,25 +136,25 @@
     </head>
     <body>
         <jsp:include page="header.jsp"></jsp:include>
-        
-        <div class="container mt-4">
-            <h2 class="mb-4"><i class="fas fa-history me-2"></i>Inventory Log</h2>
 
-            <div class="table-container">
-                <table class="table table-responsive">
-                    <thead>
-                        <tr>
-                            <th>Log ID</th>
-                            <th>Motor ID</th>
-                            <th>Previous Quantity</th>
-                            <th>Change Amount</th>
-                            <th>Action Type</th>
-                            <th>Modified By</th>
-                            <th>Modified At</th>
-                            <th>Note</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+            <div class="container mt-4">
+                <h2 class="mb-4"><i class="fas fa-history me-2"></i>Inventory Log</h2>
+
+                <div class="table-container">
+                    <table class="table table-responsive">
+                        <thead>
+                            <tr>
+                                <th>Log ID</th>
+                                <th>Motor ID</th>
+                                <th>Previous Quantity</th>
+                                <th>Change Amount</th>
+                                <th>Action Type</th>
+                                <th>Modified By</th>
+                                <th>Modified At</th>
+                                <th>Note</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                         <c:forEach var="log" items="${logs}">
                             <tr>
                                 <td class="log-id">#${log.logId}</td>
@@ -171,7 +171,13 @@
                                         </c:otherwise>
                                     </c:choose>
                                 </td>
-                                <td>${log.userIdModifiedBy}</td>
+                                <td>
+                                    <c:forEach var="admin" items="${admins}">
+                                        <c:if test="${admin.userId eq log.userIdModifiedBy}">
+                                            ${admin.email}
+                                        </c:if>
+                                    </c:forEach>
+                                </td>
                                 <td>${log.modifiedAt}</td>
                                 <td>${log.note}</td>
                             </tr>
@@ -179,7 +185,7 @@
                     </tbody>
                 </table>
             </div>
-            
+
             <!-- Add pagination if needed -->
             <c:if test="${totalPages > 1}">
                 <div class="pagination-container">
@@ -202,7 +208,7 @@
                     </ul>
                 </div>
             </c:if>
-            
+
             <div class="text-center">
                 <a href="motorManagement" class="btn btn-secondary">
                     <i class="fas fa-arrow-left me-1"></i> Back to Motor List

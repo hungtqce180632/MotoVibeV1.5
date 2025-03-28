@@ -5,6 +5,7 @@
 package controllers;
 
 import dao.InventoryLogDAO;
+import dao.UserAccountDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -26,7 +27,8 @@ public class InventoryLogServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         InventoryLogDAO logDAO = new InventoryLogDAO();
         List<InventoryLog> logs = logDAO.getAllLogs();
-
+        UserAccountDAO uad = new  UserAccountDAO();
+        request.setAttribute("admins", uad.getAllAdmin());
         request.setAttribute("logs", logs);
         request.getRequestDispatcher("inventory_log.jsp").forward(request, response);
     }

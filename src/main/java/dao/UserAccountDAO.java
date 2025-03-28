@@ -356,7 +356,29 @@ public class UserAccountDAO {
         }
         return users;
     }
+    
+    public List<UserAccount> getAllAdmin() {
+        List<UserAccount> users = new ArrayList<>();
+        String sql = "SELECT user_id, email, password, role, status, date_created FROM user_account WHERE role = 'admin'";
 
+        try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql);  ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                users.add(new UserAccount(
+                        rs.getInt("user_id"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("role"),
+                        rs.getBoolean("status"),
+                        rs.getTimestamp("date_created")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+    
     public List<UserAccount> getCustomers() {
         List<UserAccount> customers = new ArrayList<>();
         String query = "SELECT * FROM user_account WHERE role = 'customer'";
