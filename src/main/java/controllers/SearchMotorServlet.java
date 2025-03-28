@@ -18,8 +18,9 @@ import models.Fuel;
 import models.Model;
 import models.Motor;
 import java.io.IOException;
-import java.util.List;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  *
@@ -40,14 +41,34 @@ public class SearchMotorServlet extends HttpServlet {
             ModelDAO modelDAO = new ModelDAO();
             List<Model> models = modelDAO.getAllModels();
 
+            // Create maps for displaying brand, model, and fuel names
+            HashMap<Integer, String> brandMap = new HashMap<>();
+            HashMap<Integer, String> modelMap = new HashMap<>();
+            HashMap<Integer, String> fuelMap = new HashMap<>();
+
+            // Map brand ID -> brand name
+            for (Brand brand : brands) {
+                brandMap.put(brand.getBrandId(), brand.getBrandName());
+            }
+            // Map model ID -> model name
+            for (Model model : models) {
+                modelMap.put(model.getModelId(), model.getModelName());
+            }
+            // Map fuel ID -> fuel name
+            for (Fuel fuel : fuels) {
+                fuelMap.put(fuel.getFuelId(), fuel.getFuelName());
+            }
+
             request.setAttribute("brands", brands); // to keep filter options populated
             request.setAttribute("fuels", fuels);  // to keep filter options populated
             request.setAttribute("models", models);// to keep filter options populated
+            request.setAttribute("brandMap", brandMap);
+            request.setAttribute("modelMap", modelMap);
+            request.setAttribute("fuelMap", fuelMap);
 
         } catch (SQLException e) { // Catch SQLException
             e.printStackTrace(); // Log the error (for debugging)
-            throw new ServletException("Database error occurred while fetching brands, fuels, and models.", e); // Re-throw as ServletException
-            // In a real app, you might redirect to an error page or set an error attribute in the request.
+            throw new ServletException("Database error occurred while fetching brands, fuels, and models.", e);
         }
 
         request.setAttribute("motors", motors);
