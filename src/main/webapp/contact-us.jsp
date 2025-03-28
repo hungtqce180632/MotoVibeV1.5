@@ -17,7 +17,7 @@
                 --rich-black: #1A1A1A;
                 --text-gold: #F5E6CC;
             }
-            
+
             body {
                 font-family: 'Montserrat', sans-serif;
                 background: var(--dark-black);
@@ -25,13 +25,13 @@
                 margin: 0;
                 padding: 0;
             }
-            
+
             .container {
                 max-width: 1200px;
                 margin: 0 auto;
                 padding: 20px;
             }
-            
+
             .page-header {
                 text-align: center;
                 margin-bottom: 40px;
@@ -39,7 +39,7 @@
                 border-bottom: 1px solid var(--primary-gold);
                 position: relative;
             }
-            
+
             .page-header h1 {
                 color: var(--primary-gold);
                 font-weight: 700;
@@ -48,12 +48,12 @@
                 text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
                 margin-bottom: 10px;
             }
-            
+
             .page-header p {
                 color: var(--text-gold);
                 opacity: 0.9;
             }
-            
+
             .page-header::after {
                 content: '';
                 position: absolute;
@@ -65,7 +65,7 @@
                 background: var(--primary-gold);
                 box-shadow: 0 0 10px var(--primary-gold);
             }
-            
+
             /* Contact Info Section */
             .contact-info {
                 background: linear-gradient(145deg, var(--dark-black), var(--rich-black));
@@ -76,12 +76,12 @@
                 box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
                 transition: transform 0.3s;
             }
-            
+
             .contact-info:hover {
                 transform: translateY(-5px);
                 box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
             }
-            
+
             .contact-info h3 {
                 color: var(--primary-gold);
                 font-weight: 600;
@@ -92,7 +92,7 @@
                 position: relative;
                 padding-bottom: 10px;
             }
-            
+
             .contact-info h3::after {
                 content: '';
                 position: absolute;
@@ -103,13 +103,13 @@
                 background: var(--primary-gold);
                 box-shadow: 0 0 5px var(--primary-gold);
             }
-            
+
             .contact-item {
                 margin-bottom: 20px;
                 display: flex;
                 align-items: center;
             }
-            
+
             .contact-item i {
                 margin-right: 15px;
                 font-size: 20px;
@@ -118,23 +118,23 @@
                 text-align: center;
                 text-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
             }
-            
+
             .contact-item a, .contact-item span {
                 color: var(--text-gold);
                 text-decoration: none;
                 transition: all 0.3s;
             }
-            
+
             .contact-item a:hover {
                 color: var(--primary-gold);
                 text-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
             }
-            
+
             /* Map section */
             .map-section {
                 margin-bottom: 30px;
             }
-            
+
             .map-container {
                 border-radius: 10px;
                 overflow: hidden;
@@ -142,12 +142,12 @@
                 border: 1px solid var(--primary-gold);
                 transition: transform 0.3s;
             }
-            
+
             .map-container:hover {
                 transform: translateY(-5px);
                 box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
             }
-            
+
             /* FAQ Section */
             .faq-section {
                 background: linear-gradient(145deg, var(--dark-black), var(--rich-black));
@@ -158,12 +158,12 @@
                 box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
                 transition: transform 0.3s;
             }
-            
+
             .faq-section:hover {
                 transform: translateY(-5px);
                 box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
             }
-            
+
             .faq-section h3 {
                 color: var(--primary-gold);
                 font-weight: 600;
@@ -174,7 +174,7 @@
                 position: relative;
                 padding-bottom: 10px;
             }
-            
+
             .faq-section h3::after {
                 content: '';
                 position: absolute;
@@ -185,11 +185,11 @@
                 background: var(--primary-gold);
                 box-shadow: 0 0 5px var(--primary-gold);
             }
-            
+
             .faq-category {
                 margin-bottom: 30px;
             }
-            
+
             .faq-category h4 {
                 color: var(--primary-gold);
                 font-weight: 600;
@@ -198,7 +198,7 @@
                 border-bottom: 1px solid rgba(212, 175, 55, 0.2);
                 text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
             }
-            
+
             .accordion .card {
                 background: transparent;
                 border: none;
@@ -208,12 +208,12 @@
                 box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
                 transition: all 0.3s;
             }
-            
+
             .accordion .card:hover {
                 transform: translateY(-3px);
                 box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
             }
-            
+
             .accordion .card-header {
                 background: rgba(26, 26, 26, 0.9);
                 border: 1px solid var(--secondary-gold);
@@ -221,7 +221,7 @@
                 cursor: pointer;
                 border-radius: 8px;
             }
-            
+
             .accordion .btn-link {
                 color: var(--text-gold);
                 text-decoration: none;
@@ -232,13 +232,13 @@
                 padding: 15px;
                 transition: all 0.3s;
             }
-            
+
             .accordion .btn-link:hover, .accordion .btn-link:focus {
                 color: var(--primary-gold);
                 text-decoration: none;
                 text-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
             }
-            
+
             .accordion .card-body {
                 padding: 15px 20px;
                 color: var(--text-gold);
@@ -247,7 +247,7 @@
                 border: 1px solid rgba(212, 175, 55, 0.2);
                 border-top: none;
             }
-            
+
             /* Support buttons */
             .dv-social-button {
                 position: fixed;
@@ -255,7 +255,7 @@
                 right: 20px;
                 z-index: 9999;
             }
-            
+
             .dv-social-button-content {
                 position: absolute;
                 bottom: 60px;
@@ -268,7 +268,7 @@
                 box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
                 display: none;
             }
-            
+
             .dv-social-button-content a {
                 display: flex;
                 align-items: center;
@@ -280,24 +280,24 @@
                 transition: all 0.3s;
                 border: 1px solid transparent;
             }
-            
+
             .dv-social-button-content a:hover {
                 background: rgba(212, 175, 55, 0.1);
                 border-color: var(--secondary-gold);
                 transform: translateX(-3px);
             }
-            
+
             .dv-social-button-content i {
                 margin-right: 10px;
                 font-size: 20px;
                 color: var(--primary-gold);
                 text-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
             }
-            
+
             .dv-social-button-content a span {
                 font-size: 14px;
             }
-            
+
             .user-support {
                 background: linear-gradient(145deg, var(--primary-gold), var(--secondary-gold)) !important;
                 color: var(--dark-black);
@@ -314,12 +314,12 @@
                 transition: all 0.3s ease;
                 border: 1px solid rgba(255, 255, 255, 0.2);
             }
-            
+
             .user-support:hover {
                 transform: scale(1.1);
                 box-shadow: 0 6px 15px rgba(212, 175, 55, 0.4);
             }
-            
+
             .alo-circle, .alo-circle-fill {
                 animation-iteration-count: infinite;
                 animation-duration: 1s;
@@ -334,7 +334,7 @@
                 opacity: 0.5;
                 background: var(--primary-gold);
             }
-            
+
             .alo-circle-fill {
                 width: 60px;
                 height: 60px;
@@ -342,21 +342,30 @@
                 right: -10px;
                 opacity: 0.2;
             }
-            
+
             @keyframes pulse {
-                0% {transform: scale(0.95); opacity: 1;}
-                70% {transform: scale(1.1); opacity: 0.7;}
-                100% {transform: scale(0.95); opacity: 1;}
+                0% {
+                    transform: scale(0.95);
+                    opacity: 1;
+                }
+                70% {
+                    transform: scale(1.1);
+                    opacity: 0.7;
+                }
+                100% {
+                    transform: scale(0.95);
+                    opacity: 1;
+                }
             }
-            
+
             .alo-circle {
                 animation-name: pulse;
             }
-            
+
             .alo-circle-fill {
                 animation-name: pulse;
             }
-            
+
             /* Back to top button */
             .back-to-top {
                 position: fixed;
@@ -378,11 +387,11 @@
                 z-index: 999;
                 border: 1px solid rgba(255, 255, 255, 0.2);
             }
-            
+
             .back-to-top.show {
                 opacity: 1;
             }
-            
+
             .back-to-top:hover {
                 transform: scale(1.1);
                 box-shadow: 0 6px 15px rgba(212, 175, 55, 0.4);
@@ -401,59 +410,59 @@
     <body>
         <!-- Include Header -->
         <jsp:include page="header.jsp" />
-        
+
         <div class="container mt-5">
             <div class="page-header">
                 <h1 class="luxury-text">Contact Us & FAQ</h1>
                 <p class="lead">Premium Support for MotoVibe Enthusiasts</p>
             </div>
-            
+
             <div class="row">
                 <!-- Contact Information -->
                 <div class="col-lg-6">
                     <div class="contact-info">
                         <h3>Contact Information</h3>
-                        
+
                         <div class="contact-item">
                             <i class="fa fa-map-marker"></i>
                             <span>600 Nguyễn Văn Cừ Nối Dài, An Bình, Bình Thủy, Cần Thơ 900000, Vietnam</span>
                         </div>
-                        
+
                         <div class="contact-item">
                             <i class="fa fa-phone"></i>
                             <a href="tel:0817771184">0817 771 184</a>
                         </div>
-                        
+
                         <div class="contact-item">
                             <i class="fa fa-envelope"></i>
                             <a href="mailto:support@motovibe.com">support@motovibe.com</a>
                         </div>
-                        
+
                         <div class="contact-item">
                             <i class="fa fa-clock-o"></i>
                             <span>Monday - Saturday: 8:00 AM - 7:00 PM</span>
                         </div>
-                        
+
                         <div class="contact-item">
                             <i class="fa fa-facebook"></i>
                             <a href="https://facebook.com/motovibe" target="_blank">facebook.com/motovibe</a>
                         </div>
                     </div>
-                    
+
                     <!-- Google Map -->
                     <div class="map-section">
                         <div class="map-container">
                             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3929.0533542569992!2d105.72985667461548!3d10.012451790093584!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31a0882139720a77%3A0x3916a227d0b95a64!2zVHLGsOG7nW5nIMSQ4bqhaSBo4buNYyBGUFQgQ-G6p24gVGjGoQ!5e0!3m2!1sen!2s!4v1743156143757!5m2!1sen!2s" 
-                                width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                    width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- FAQ Section -->
                 <div class="col-lg-6">
                     <div class="faq-section">
                         <h3>Frequently Asked Questions</h3>
-                        
+
                         <!-- Account Related FAQs -->
                         <div class="faq-category">
                             <h4>Account & Registration</h4>
@@ -475,7 +484,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="card">
                                     <div class="card-header" id="accountQ2">
                                         <h2 class="mb-0">
@@ -494,7 +503,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Motorcycle Related FAQs -->
                         <div class="faq-category">
                             <h4>Motorcycles & Browsing</h4>
@@ -516,7 +525,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="card">
                                     <div class="card-header" id="motorQ2">
                                         <h2 class="mb-0">
@@ -535,7 +544,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="card">
                                     <div class="card-header" id="motorQ3">
                                         <h2 class="mb-0">
@@ -555,7 +564,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Order & Payment FAQs -->
                         <div class="faq-category">
                             <h4>Orders, Payment & Delivery</h4>
@@ -573,11 +582,11 @@
                                         <div class="card-body">
                                             We accept various payment methods including cash, bank transfer, credit/debit cards,
                                             and installment options through our partner banks. For specific payment details,
-                                            please check with our sales team during the purchase process.
+                                            please check with our sales team during the purchase process. But now we only accept Bank Transfer.
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="card">
                                     <div class="card-header" id="orderQ2">
                                         <h2 class="mb-0">
@@ -595,7 +604,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="card">
                                     <div class="card-header" id="orderQ3">
                                         <h2 class="mb-0">
@@ -615,7 +624,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Warranty & Service FAQs -->
                         <div class="faq-category">
                             <h4>Warranty & After-Sales Service</h4>
@@ -631,14 +640,11 @@
                                     </div>
                                     <div id="warrantyA1" class="collapse" aria-labelledby="warrantyQ1" data-parent="#warrantyFaq">
                                         <div class="card-body">
-                                            Our standard warranty covers manufacturing defects for 12 months from the date of purchase.
-                                            The Premium Protection Plan extends warranty to 36 months and includes additional coverage
-                                            for engine, transmission, electrical systems, and selected wear items.
-                                            Detailed warranty terms are provided with your purchase documents.
+                                            Our standard warranty covers manufacturing defects for 12 months from the date of purchase. Detailed warranty terms are provided with your purchase documentation.
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="card">
                                     <div class="card-header" id="warrantyQ2">
                                         <h2 class="mb-0">
@@ -662,7 +668,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Support Button -->
         <div class="dv-social-button">
             <div class="dv-social-button-content">
@@ -670,12 +676,12 @@
                     <i class="fa fa-phone"></i>
                     <span>Hotline: 0817 771 184</span>
                 </a>
-                
+
                 <a href="https://facebook.com/motovibe" target="_blank" class="facebook">
                     <i class="fa fa-facebook"></i>
                     <span>Facebook Messenger</span>
                 </a>
-                
+
                 <a href="http://zalo.me/0817771184" target="_blank" class="zalo">
                     <i class="fa fa-commenting-o"></i>
                     <span>Zalo: 0817 771 184</span>
@@ -689,20 +695,20 @@
                 <div class="animated alo-circle-fill"></div>
             </a>
         </div>
-        
+
         <!-- Back to top button -->
         <div class="back-to-top">
             <i class="fa fa-arrow-up"></i>
         </div>
-        
+
         <!-- Include Footer -->
         <jsp:include page="footer.jsp" />
-        
+
         <!-- Scripts -->
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        
+
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 // Support button toggle
@@ -716,19 +722,19 @@
                         socialButtonContent.style.display = "none";
                     }
                 });
-                
+
                 // Back to top button
                 var backToTopButton = document.querySelector('.back-to-top');
-                
-                window.addEventListener('scroll', function() {
+
+                window.addEventListener('scroll', function () {
                     if (window.pageYOffset > 300) {
                         backToTopButton.classList.add('show');
                     } else {
                         backToTopButton.classList.remove('show');
                     }
                 });
-                
-                backToTopButton.addEventListener('click', function() {
+
+                backToTopButton.addEventListener('click', function () {
                     window.scrollTo({
                         top: 0,
                         behavior: 'smooth'
