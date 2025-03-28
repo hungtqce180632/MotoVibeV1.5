@@ -58,6 +58,10 @@ public class PaymentConfirmationServlet extends HttpServlet {
         DecimalFormat df = new DecimalFormat("#.##");
         String formattedTotal = df.format(totalAmount);
         
+        // Calculate VND amount
+        int exchangeRate = 25700;
+        long totalAmountVND = Math.round(totalAmount * exchangeRate);
+        
         // Pass all parameters to the JSP
         request.setAttribute("motorId", motorId);
         request.setAttribute("customerName", customerName);
@@ -69,6 +73,7 @@ public class PaymentConfirmationServlet extends HttpServlet {
         request.setAttribute("hasWarranty", hasWarranty);
         request.setAttribute("orderCode", orderCode);
         request.setAttribute("totalAmount", formattedTotal);
+        request.setAttribute("totalAmountVND", totalAmountVND);
         request.setAttribute("motor", motor);
         request.setAttribute("stockQuantity", motor.getQuantity());
         

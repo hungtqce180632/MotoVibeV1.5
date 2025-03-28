@@ -241,13 +241,14 @@
             
             <div class="payment-info">
                 <p class="mb-0">Please complete your payment using the details below. Once your payment is completed, click the "Confirm Payment" button.</p>
+                <p class="mt-2 mb-0" style="color: var(--primary-gold);">Note: Payment must be made in Vietnamese Dong (VND) at the exchange rate of 25,700 VND per USD.</p>
             </div>
             
             <div class="row">
                 <div class="col-md-6">
                     <div class="qr-container">
                         <!-- SePay QR code for Vietnamese banking -->
-                        <img src="https://qr.sepay.vn/img?acc=0817771184&bank=MSB&amount=${requestScope.totalAmount}&des=${requestScope.orderCode}&template=compact&download=false" 
+                        <img src="https://qr.sepay.vn/img?acc=0817771184&bank=MSB&amount=${requestScope.totalAmountVND}&des=${requestScope.orderCode}&template=compact&download=false" 
                              alt="Payment QR Code" class="qr-code">
                         <p class="mt-2 text-dark">Scan to pay</p>
                     </div>
@@ -274,15 +275,15 @@
                             <div class="row">
                                 <div class="col-5">Account Name:</div>
                                 <div class="col-7 d-flex justify-content-between">
-                                    <span>MOTOVIBE LTD</span>
+                                    <span>TRUONG QUOC HUNG</span>
                                     <button class="copy-btn" onclick="copyToClipboard('MOTOVIBE LTD')">Copy</button>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-5">Amount:</div>
                                 <div class="col-7 d-flex justify-content-between">
-                                    <span>$${requestScope.totalAmount}</span>
-                                    <button class="copy-btn" onclick="copyToClipboard('${requestScope.totalAmount}')">Copy</button>
+                                    <span>${requestScope.totalAmountVND} VND</span>
+                                    <button class="copy-btn" onclick="copyToClipboard('${requestScope.totalAmountVND}')">Copy</button>
                                 </div>
                             </div>
                             <div class="row">

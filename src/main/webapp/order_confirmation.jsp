@@ -202,7 +202,7 @@
                 <p><strong>Order Date:</strong> ${requestScope.orderDate}</p>
                 <p><strong>Payment Method:</strong> ${param.paymentMethod}</p>
                 <p><strong>Warranty:</strong> ${requestScope.hasWarranty ? 'Yes (+10%)' : 'No'}</p>
-                <p><strong>Total Amount:</strong> $${requestScope.totalAmount}</p>
+                <p><strong>Total Amount:</strong> $${requestScope.totalAmount} (${requestScope.totalAmountVND} VND)</p>
             </div>
             
             <div class="actions-container animated delay-2">
