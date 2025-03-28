@@ -388,7 +388,7 @@ public class OrderDAO {
         // Database connection initialization
         try (Connection conn = DBContext.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, "Delivered"); // Set order_status to "Completed"
+            stmt.setString(1, "Completed"); // Set order_status to "Completed"
             stmt.setString(2, orderId); // Bind the order_id to the query
 
             // Execute the update

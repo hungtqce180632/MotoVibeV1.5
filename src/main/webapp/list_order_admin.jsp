@@ -95,12 +95,12 @@
                         font-weight: bold;
                     }
 
-                    .status-delivered {
+                    .status-Completed {
                         color: #28a745;
                         /* Green color for "Delivered" text */
                     }
 
-                    .status-delivered i {
+                    .status-Completed i {
                         color: #28a745;
                         /* Green color for the icon */
                     }
@@ -206,12 +206,12 @@
                                                         <span class="status-badge
                                               ${order.orderStatus == 'Pending' ? 'status-pending' : 
                                                 order.orderStatus == 'Shipped' ? 'status-shipped' : 
-                                                order.orderStatus == 'Delivered' ? 'status-delivered' : 
+                                                order.orderStatus == 'Completed' ? 'status-delivered' : 
                                                 'status-cancelled'}">
                                                             <i class="fas
                                                ${order.orderStatus == 'Pending' ? 'fa-clock' : 
                                                  order.orderStatus == 'Shipped' ? 'fa-truck' : 
-                                                 order.orderStatus == 'Delivered' ? 'fa-check-circle' : 
+                                                 order.orderStatus == 'Completed' ? 'fa-check-circle' : 
                                                  'fa-times-circle'} me-1"></i>
                                                             ${order.orderStatus}
                                                         </span>
