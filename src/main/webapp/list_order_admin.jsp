@@ -244,7 +244,7 @@
                                                             </div>
                                                         </c:if>
                                                         <c:if
-                                                            test="${order.orderStatus eq 'Delivered' && order.hasWarranty eq true }">
+                                                            test="${order.orderStatus eq 'Completed' && order.hasWarranty eq true }">
                                                             <div id="warranty-${order.orderId}"
                                                                  class="create-warranty-container">
                                                                 <form action="viewOrderWarranty" method="get">
@@ -257,7 +257,7 @@
                                                             </div>
                                                         </c:if>
                                                         <c:if
-                                                            test="${order.orderStatus eq 'Delivered' && order.hasWarranty eq false }">
+                                                            test="${order.orderStatus eq 'Completed' && order.hasWarranty eq false }">
                                                             <div id="warranty-${order.orderId}"
                                                                  class="create-warranty-container">
                                                                 <button type="submit" class="btn-create-warranty">No
@@ -283,7 +283,7 @@
                                                             </div>
                                                         </c:if>
                                                         <c:if
-                                                            test="${order.orderStatus eq 'Delivered' && order.hasWarranty eq true }">
+                                                            test="${order.orderStatus eq 'Completed' && order.hasWarranty eq true }">
                                                             <div id="warranty-${order.orderId}"
                                                                  class="create-warranty-container">
                                                                 <form action="viewOrderWarranty" method="get">
@@ -296,7 +296,7 @@
                                                             </div>
                                                         </c:if>
                                                         <c:if
-                                                            test="${order.orderStatus eq 'Delivered' && order.hasWarranty eq false}">
+                                                            test="${order.orderStatus eq 'Completed' && order.hasWarranty eq false}">
                                                             <div id="warranty-${order.orderId}"
                                                                  class="create-warranty-container">
                                                                 <input type="hidden" name="orderId"

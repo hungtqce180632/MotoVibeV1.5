@@ -262,10 +262,10 @@
                 var passwordError = document.getElementById("passwordError");
                 passwordError.textContent = "";
                 // Ví dụ: 6-32, có chữ hoa, số, ký tự đặc biệt
-                var passRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{6,32}$/;
+                var passRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,32}$/;
                 if (!passRegex.test(passwordVal)) {
                     passwordError.textContent =
-                            "Password must be 6-32 chars, uppercase, number & special char.";
+                            "Password must be 8-32 chars, uppercase, number & special char.";
                     return false;
                 }
 
@@ -334,6 +334,9 @@
                 var verificationResult = document.getElementById("verificationResult");
                 var otpSuccessMsg = document.getElementById("otpSuccessMsg");
 
+                // Lấy email từ id="email"
+                var emailVal = document.getElementById("email").value.trim();
+
                 otpError.textContent = "";
 
                 if (!otpVal) {
@@ -344,12 +347,14 @@
                 $.ajax({
                     url: "verifyOtp",
                     type: "POST",
-                    contentType: "application/json; charset=utf-8",
+                    contentType: "application/json",
                     dataType: "json",
-                    data: JSON.stringify({otp: otpVal}),
+                    data: JSON.stringify({
+                        email: emailVal,
+                        otp: otpVal
+                    }),
                     success: function (response) {
                         if (response.success) {
-                            // OTP đúng
                             verificationResult.value = "Success";
                             otpSuccessMsg.style.display = "block";
                             Swal.fire({

@@ -55,7 +55,7 @@ public class WishlistServlet extends HttpServlet {
 
         // If user is not logged in, redirect to the login page
         if (user == null) {
-            response.sendRedirect("login.jsp");
+            response.getWriter().write("notLoggedIn");  // Thay vì sendRedirect
             return;
         }
 

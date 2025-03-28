@@ -39,6 +39,18 @@
 
             <div class="container list-container">
                 <h1><i class="fas fa-chart-line"></i> Revenue Statistics</h1>
+                <form method="GET" action="revenueStatistic">
+                <div class="mb-3">
+                    <label for="monthFilter" class="form-label">Select Month</label>
+                    <select id="monthFilter" name="monthFilter" class="form-control">
+                        <option value="">-- All Months --</option>
+                        <c:forEach var="month" items="${availableMonths}">
+                            <option value="${month}" ${month == param.monthFilter ? 'selected' : ''}>${month}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </form>
                 <p class="lead">View monthly revenue statistics, including the number of cars sold and total revenue.</p>
 
                 <div class="row">
@@ -59,6 +71,7 @@
                         </div>
                     </div>
                 </div>
+                
             </div>
 
             <canvas id="revenueChart"></canvas>
@@ -123,7 +136,7 @@
                 options: {scales: {y: {beginAtZero: true}}}
             });
         </script>
-        
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>
