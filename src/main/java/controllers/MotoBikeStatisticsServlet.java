@@ -14,6 +14,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 
 /**
  *
@@ -60,10 +61,23 @@ public class MotoBikeStatisticsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String modelFilter = request.getParameter("modelFilter");
+
         MotoBikeStatisticsDAO motoDAO = new MotoBikeStatisticsDAO();
-        List<Map<String, Object>> motorbikeData = motoDAO.getMotorbikeSalesStatistics();
+
+        // Get motorbike data based on model filter
+        List<Map<String, Object>> motorbikeData = motoDAO.getMotorbikeSalesStatistics(modelFilter);
+
+        // Get available motorbike models for filter dropdown
+        List<String> motorbikeModels = motoDAO.getMotorbikeModels();
+        
+        if (motorbikeData == null || motorbikeData.isEmpty()) {
+            motorbikeData = new ArrayList<>(); // Empty list when no data found
+        }
 
         request.setAttribute("motorbikeData", motorbikeData);
+        request.setAttribute("motorbikeModels", motorbikeModels);
+
         request.getRequestDispatcher("motorbike_statistics.jsp").forward(request, response);
     }
 
