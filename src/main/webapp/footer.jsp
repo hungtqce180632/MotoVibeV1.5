@@ -211,7 +211,7 @@
                             <li class="footer-list-item"><a href="motorList">Motorbikes</a></li>
                             <li class="footer-list-item"><a href="listevents">Events</a></li>
                             <li class="footer-list-item"><a href="listAppointments">Appointments</a></li>
-                            <li class="footer-list-item"><a href="#">Contact Us</a></li>
+                            <li class="footer-list-item"><a href="contact-us">Contact Us</a></li>
                             <li class="footer-list-item"><a href="PrivacyPolicy.jsp">Privacy Policy</a></li>
                             <li class="footer-list-item"><a href="TermsofService.jsp">Terms of Service</a></li>
                         </ul>
