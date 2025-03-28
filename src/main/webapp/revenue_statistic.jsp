@@ -1,3 +1,9 @@
+<%-- 
+    Document   : revenue_statistic
+    Created on : Feb 23, 2025, 4:11:08 AM
+    Author     : hieunmce181623
+--%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
@@ -34,6 +40,9 @@
             /* Margin cho form */
             form {
                 margin-bottom: 10px;
+            }
+            p {
+                text-align: center;
             }
         </style>
     </head>
@@ -109,14 +118,16 @@
             <!-- Liên kết quay lại dashboard -->
             <a href="home" class="btn btn-secondary mt-3"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
         </div>
+        <%-- Chèn footer từ file footer.jsp --%>
         <jsp:include page="footer.jsp"></jsp:include>
 
-        <%-- Script cho biểu đồ thống kê --%>
+        <%-- Script hiển thị biểu đồ doanh thu bằng Chart.js --%>
         <script>
             var revenueData = [];
             var salesData = [];
             var monthLabels = [];
 
+            <!-- Duyệt qua revenueData và thêm dữ liệu vào các mảng cho biểu đồ -->
             <c:forEach var="data" items="${revenueData}">
             monthLabels.push("${data.month}");
             salesData.push(${data.total_sales});
@@ -125,27 +136,33 @@
 
             var ctx = document.getElementById('revenueChart').getContext('2d');
             var revenueChart = new Chart(ctx, {
-                type: 'bar',
+                type: 'bar',  <!-- Loại biểu đồ (bar chart) -->
                 data: {
-                    labels: monthLabels,
+                    labels: monthLabels,  <!-- Dữ liệu nhãn (tháng) -->
                     datasets: [
                         {
-                            label: 'Cars Sold',
-                            data: salesData,
-                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 1
+                            label: 'Cars Sold',  <!-- Dữ liệu cho số lượng xe bán ra -->
+                            data: salesData,  <!-- Dữ liệu cho số lượng xe bán ra -->
+                            backgroundColor: 'rgba(54, 162, 235, 0.6)',  <!-- Màu nền của các thanh biểu đồ -->
+                            borderColor: 'rgba(54, 162, 235, 1)',  <!-- Màu viền của các thanh biểu đồ -->
+                            borderWidth: 1  <!-- Độ dày viền của các thanh biểu đồ -->
                         },
                         {
-                            label: 'Revenue ($)',
-                            data: revenueData,
-                            backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            borderWidth: 1
+                            label: 'Revenue ($)',  <!-- Dữ liệu cho doanh thu -->
+                            data: revenueData,  <!-- Dữ liệu cho doanh thu -->
+                            backgroundColor: 'rgba(75, 192, 192, 0.6)',  <!-- Màu nền của các thanh biểu đồ -->
+                            borderColor: 'rgba(75, 192, 192, 1)',  <!-- Màu viền của các thanh biểu đồ -->
+                            borderWidth: 1  <!-- Độ dày viền của các thanh biểu đồ -->
                         }
                     ]
                 },
-                options: {scales: {y: {beginAtZero: true}}}
+                options: { 
+                    scales: { 
+                        y: { 
+                            beginAtZero: true  <!-- Đảm bảo trục y bắt đầu từ 0 -->
+                        }
+                    }
+                }
             });
         </script>
 

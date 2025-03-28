@@ -17,8 +17,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 
 /**
- *
- * @author Jackt
+ * Document   : MotoBikeStatisticsServlet
+ * Created on : Feb 23, 2025, 4:11:08 AM
+ * Author     : hieunmce181623
+ */
+
+/**
+ * Servlet xử lý thống kê doanh thu xe máy.
+ * Servlet này xử lý các yêu cầu GET và POST, lấy dữ liệu thống kê xe máy từ cơ sở dữ liệu và hiển thị trên trang JSP.
  */
 @WebServlet(name = "MotoBikeStatisticsServlet", urlPatterns = {"/motorbikeStatistics"})
 public class MotoBikeStatisticsServlet extends HttpServlet {
@@ -49,35 +55,40 @@ public class MotoBikeStatisticsServlet extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP <code>GET</code> method.
+     * Phương thức xử lý yêu cầu HTTP GET.
+     * Lấy dữ liệu thống kê doanh thu xe máy từ DAO và chuyển đến trang JSP để hiển thị.
      *
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws ServletException nếu có lỗi trong quá trình xử lý servlet
+     * @throws IOException nếu có lỗi trong quá trình nhập/xuất
      */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        // Lấy thông tin lọc mẫu xe từ yêu cầu HTTP
         String modelFilter = request.getParameter("modelFilter");
 
+        // Tạo đối tượng DAO để lấy dữ liệu từ cơ sở dữ liệu
         MotoBikeStatisticsDAO motoDAO = new MotoBikeStatisticsDAO();
 
-        // Get motorbike data based on model filter
+        // Lấy dữ liệu thống kê doanh thu xe máy từ DAO, có thể lọc theo mẫu xe
         List<Map<String, Object>> motorbikeData = motoDAO.getMotorbikeSalesStatistics(modelFilter);
 
-        // Get available motorbike models for filter dropdown
+        // Lấy danh sách các mẫu xe có sẵn để hiển thị trong dropdown
         List<String> motorbikeModels = motoDAO.getMotorbikeModels();
         
+        // Kiểm tra nếu không có dữ liệu, tạo danh sách trống
         if (motorbikeData == null || motorbikeData.isEmpty()) {
-            motorbikeData = new ArrayList<>(); // Empty list when no data found
+            motorbikeData = new ArrayList<>(); // Danh sách rỗng nếu không tìm thấy dữ liệu
         }
 
+        // Gửi dữ liệu vào JSP thông qua các thuộc tính của request
         request.setAttribute("motorbikeData", motorbikeData);
         request.setAttribute("motorbikeModels", motorbikeModels);
 
+        // Chuyển hướng tới trang JSP để hiển thị kết quả
         request.getRequestDispatcher("motorbike_statistics.jsp").forward(request, response);
     }
 
