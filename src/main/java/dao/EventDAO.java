@@ -209,31 +209,6 @@ public class EventDAO {
         }
     }
 
-    public boolean changeEventStatus(int eventId) throws SQLException {
-        String sql = "UPDATE events SET event_status = NOT event_status WHERE event_id = ?";
-
-        try (Connection conn = DBContext.getConnection()) {
-            if (conn == null) {
-                System.err.println("Database connection is null - check DBContext configuration");
-                return false;
-            }
-            
-            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                // Set the event_id parameter
-                stmt.setInt(1, eventId);
-
-                // Execute the update query
-                int rowsAffected = stmt.executeUpdate();
-
-                // Return true if the status was successfully updated
-                return rowsAffected > 0;
-            }
-        } catch (SQLException e) {
-            System.err.println("Error changing event status: " + e.getMessage());
-            e.printStackTrace();
-            throw e;
-        }
-    }
     
     /**
      * Explicitly disable an event by setting event_status to false
@@ -246,6 +221,7 @@ public class EventDAO {
         System.out.println("Attempting to disable event ID: " + eventId);
 
         try (Connection conn = DBContext.getConnection()) {
+            // check có kết nói database l
             if (conn == null) {
                 System.err.println("Database connection is null - check DBContext configuration");
                 return false;
@@ -254,12 +230,8 @@ public class EventDAO {
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 // Set the event_id parameter
                 stmt.setInt(1, eventId);
-                System.out.println("Executing SQL: " + sql + " with parameter: " + eventId);
-
                 // Execute the update query
                 int rowsAffected = stmt.executeUpdate();
-                System.out.println("Rows affected by disabling event: " + rowsAffected);
-
                 // Return true if the status was successfully updated
                 return rowsAffected > 0;
             }
@@ -289,11 +261,9 @@ public class EventDAO {
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 // Set the event_id parameter
                 stmt.setInt(1, eventId);
-                System.out.println("Executing SQL: " + sql + " with parameter: " + eventId);
 
                 // Execute the update query
                 int rowsAffected = stmt.executeUpdate();
-                System.out.println("Rows affected by activating event: " + rowsAffected);
 
                 // Return true if the status was successfully updated
                 return rowsAffected > 0;

@@ -216,13 +216,6 @@
                                     <i class="fas fa-plus me-1"></i> Create New Event
                                 </a>
                             </div>
-                            <form action="searchEvents" method="get" class="d-flex">
-                                <input class="form-control me-2" type="search" placeholder="Search by Event Name"
-                                    name="searchTerm">
-                                <button class="btn btn-outline-success" type="submit">
-                                    <i class="fas fa-search me-1"></i> Search
-                                </button>
-                            </form>
                         </div>
 
                         <div class="table-responsive">

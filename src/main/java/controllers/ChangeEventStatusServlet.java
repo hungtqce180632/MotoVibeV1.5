@@ -19,46 +19,39 @@ public class ChangeEventStatusServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         try {
-            // Get the event ID from the request and log it
+            // lấy id và gán vào eventIdParam
             String eventIdParam = request.getParameter("event_id");
             System.out.println("Received event_id parameter: " + eventIdParam);
-            
-            // Get the action parameter (activate or deactivate)
+
+            // lấy action 
             String action = request.getParameter("action");
             System.out.println("Received action parameter: " + action);
-
+            // kiểm tra id chuyển vào
             if (eventIdParam == null || eventIdParam.isEmpty()) {
                 throw new IllegalArgumentException("event_id parameter is missing");
             }
-
+            //gán thành int
             int eventId = Integer.parseInt(eventIdParam);
             System.out.println("Parsed event_id: " + eventId);
 
-            // Call the appropriate DAO method based on the action
+            // khởi tạo
             EventDAO eventDAO = new EventDAO();
             boolean statusChanged;
-            
+
+            //xet action
+            // nếu active thì bật event
             if ("activate".equals(action)) {
                 statusChanged = eventDAO.actEvent(eventId);
                 if (statusChanged) {
                     request.getSession().setAttribute("statusMessage", "Event activated successfully");
                 }
+                
+             // nếu deactive thì tắt event
             } else if ("deactivate".equals(action)) {
                 statusChanged = eventDAO.disEvent(eventId);
                 if (statusChanged) {
                     request.getSession().setAttribute("statusMessage", "Event deactivated successfully");
                 }
-            } else {
-                // Fall back to toggle behavior if action not specified
-                statusChanged = eventDAO.changeEventStatus(eventId);
-                if (statusChanged) {
-                    request.getSession().setAttribute("statusMessage", "Event status updated successfully");
-                }
-            }
-
-            if (!statusChanged) {
-                // Set an error message
-                request.getSession().setAttribute("errorMessage", "Failed to update event status");
             }
 
             response.sendRedirect("ManageEventServlet");
