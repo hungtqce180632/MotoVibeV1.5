@@ -77,7 +77,7 @@
                             <td>${motor.motorName}</td>
                             <td>${motor.brandName}</td>
                             <td>${motor.modelName}</td>
-                            <td>$${motor.price}</td>
+                            <td>${motor.price}</td>
                             <td>${motor.description}</td>
                             <td>1</td> <!-- Set quantity to 1 for each product -->
                             <td>

@@ -41,16 +41,14 @@ public class VerifyOtpServlet extends HttpServlet {
         // Kiểm tra khớp
         boolean match = enteredOtp != null && enteredOtp.equals(sessionOtp);
 
-        // Xoá OTP khỏi session tránh tái sử dụng
-        request.getSession().removeAttribute("otp");
 
         // Tạo Map response JSON
         Map<String, Object> jsonResponse = new HashMap<>();
         if (match) {
+            request.getSession().removeAttribute("otp");
+            
             jsonResponse.put("success", true);
             jsonResponse.put("message", "Xác thực OTP thành công.");
-            // Nếu bạn muốn trả về token hoặc param khác cho client:
-            // jsonResponse.put("token", "some-random-token");
         } else {
             jsonResponse.put("success", false);
             jsonResponse.put("message", "Mã OTP không hợp lệ hoặc đã hết hạn.");

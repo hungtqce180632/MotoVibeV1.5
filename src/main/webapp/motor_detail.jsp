@@ -25,7 +25,7 @@
                 margin-bottom: 1.5rem;
                 position: relative;
             }
-            
+
             h2::after {
                 content: '';
                 position: absolute;
@@ -37,7 +37,7 @@
                 background: var(--primary-gold);
                 box-shadow: 0 0 10px var(--primary-gold);
             }
-            
+
             .detail-card {
                 background: linear-gradient(145deg, var(--dark-black), var(--rich-black));
                 border: 1px solid var(--primary-gold);
@@ -46,23 +46,23 @@
                 box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
                 position: relative;
             }
-            
+
             .detail-image-container {
                 position: relative;
                 overflow: hidden;
             }
-            
+
             .detail-image {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
                 transition: transform 0.5s ease;
             }
-            
+
             .detail-card:hover .detail-image {
                 transform: scale(1.05);
             }
-            
+
             .image-overlay {
                 position: absolute;
                 top: 0;
@@ -71,7 +71,7 @@
                 height: 100%;
                 background: linear-gradient(0deg, var(--dark-black) 0%, transparent 50%);
             }
-            
+
             .card-title {
                 color: var(--primary-gold);
                 font-size: 2rem;
@@ -82,11 +82,11 @@
                 border-bottom: 1px solid rgba(212, 175, 55, 0.3);
                 padding-bottom: 0.75rem;
             }
-            
+
             .card-body {
                 padding: 2rem;
             }
-            
+
             .description {
                 color: var(--text-gold);
                 font-style: italic;
@@ -97,13 +97,13 @@
                 border-left: 3px solid var(--primary-gold);
                 border-radius: 3px;
             }
-            
+
             .detail-row {
                 margin-bottom: 0.75rem;
                 display: flex;
                 align-items: center;
             }
-            
+
             .detail-label {
                 color: var(--primary-gold);
                 font-weight: 600;
@@ -112,23 +112,23 @@
                 width: 120px;
                 flex-shrink: 0;
             }
-            
+
             .detail-value {
                 color: var(--text-gold);
                 flex-grow: 1;
             }
-            
+
             .brand-info {
                 cursor: pointer;
                 text-decoration: underline;
                 color: var(--primary-gold);
                 transition: all 0.3s ease;
             }
-            
+
             .brand-info:hover {
                 text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
             }
-            
+
             .price-tag {
                 font-size: 1.5rem;
                 color: var(--primary-gold);
@@ -140,7 +140,7 @@
                 border-radius: 5px;
                 border: 1px solid var(--primary-gold);
             }
-            
+
             .availability-badge {
                 font-size: 0.9rem;
                 padding: 0.5rem 1rem;
@@ -150,19 +150,19 @@
                 display: inline-block;
                 margin-bottom: 1.5rem;
             }
-            
+
             .in-stock {
                 background: rgba(40, 167, 69, 0.2);
                 color: #6eff7a;
                 border: 1px solid #28a745;
             }
-            
+
             .out-of-stock {
                 background: rgba(220, 53, 69, 0.2);
                 color: #ff6e6e;
                 border: 1px solid #dc3545;
             }
-            
+
             .btn-container {
                 margin-top: 2rem;
                 padding-top: 1.5rem;
@@ -171,50 +171,50 @@
                 justify-content: center;
                 gap: 1rem;
             }
-            
+
             .btn {
                 text-transform: uppercase;
                 letter-spacing: 1px;
                 padding: 0.75rem 1.5rem;
                 transition: all 0.3s ease;
             }
-            
+
             .btn:hover {
                 transform: translateY(-3px);
                 box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             }
-            
+
             .btn-primary {
                 background: linear-gradient(145deg, var(--primary-gold), var(--secondary-gold));
                 border: none;
                 color: var(--dark-black);
                 font-weight: 600;
             }
-            
+
             .btn-primary:hover {
                 box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
             }
-            
+
             .btn-success {
                 background: linear-gradient(145deg, #28a745, #218838);
                 border: none;
             }
-            
+
             .btn-success:hover {
                 box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
             }
-            
+
             .btn-secondary {
                 background: transparent;
                 border: 1px solid var(--primary-gold);
                 color: var(--primary-gold);
             }
-            
+
             .btn-secondary:hover {
                 background: rgba(212, 175, 55, 0.1);
                 color: var(--primary-gold);
             }
-            
+
             #brandTooltip {
                 background: linear-gradient(145deg, var(--dark-black), var(--rich-black)) !important;
                 border: 1px solid var(--primary-gold) !important;
@@ -224,7 +224,7 @@
                 border-radius: 5px;
                 z-index: 1000;
             }
-            
+
             .container {
                 padding-top: 80px;
                 padding-bottom: 50px;
@@ -233,24 +233,24 @@
     </head>
     <body>
         <jsp:include page="header.jsp"></jsp:include>
-        
-        <div class="container">
-            <div id="brandTooltip" style="position: absolute; display: none;"></div>
-            
-            <h2 class="text-center"><i class="fas fa-motorcycle me-2"></i>Motorbike Details</h2>
 
-            <div class="detail-card mx-auto" style="max-width: 900px;">
-                <div class="row g-0 align-items-center">
-                    <div class="col-md-5 detail-image-container">
-                        <img src="images/${motor.picture}" class="detail-image" alt="${motor.motorName}">
+            <div class="container">
+                <div id="brandTooltip" style="position: absolute; display: none;"></div>
+
+                <h2 class="text-center"><i class="fas fa-motorcycle me-2"></i>Motorbike Details</h2>
+
+                <div class="detail-card mx-auto" style="max-width: 900px;">
+                    <div class="row g-0 align-items-center">
+                        <div class="col-md-5 detail-image-container">
+                            <img src="images/${motor.picture}" class="detail-image" alt="${motor.motorName}">
                         <div class="image-overlay"></div>
                     </div>
-                    
+
                     <div class="col-md-7">
                         <div class="card-body">
                             <h3 class="card-title">${motor.motorName}</h3>
                             <div class="description">${motor.description}</div>
-                            
+
                             <div class="detail-row">
                                 <span class="detail-label">Brand:</span>
                                 <span class="detail-value">
@@ -261,29 +261,29 @@
                                     </span>
                                 </span>
                             </div>
-                            
+
                             <div class="detail-row">
                                 <span class="detail-label">Model:</span>
                                 <span class="detail-value">${model.modelName}</span>
                             </div>
-                            
+
                             <div class="detail-row">
                                 <span class="detail-label">Fuel Type:</span>
                                 <span class="detail-value">${fuel.fuelName}</span>
                             </div>
-                            
+
                             <div class="detail-row">
                                 <span class="detail-label">Color:</span>
                                 <span class="detail-value">${motor.color}</span>
                             </div>
-                            
+
                             <div class="detail-row">
                                 <span class="detail-label">Price:</span>
                                 <span class="detail-value">
                                     <span class="price-tag">$${motor.price}</span>
                                 </span>
                             </div>
-                            
+
                             <div class="detail-row">
                                 <span class="detail-label">Availability:</span>
                                 <span class="detail-value">
@@ -300,7 +300,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="card-body">
                     <div class="btn-container">
                         <c:choose>
@@ -327,7 +327,7 @@
         </div>
 
         <jsp:include page="review.jsp"/>
-        
+
         <script>
             function showTooltip(event, text) {
                 let tooltip = document.getElementById("brandTooltip");
@@ -355,7 +355,11 @@
                     type: "POST",
                     data: {motorId: motorId, action: 'add'},
                     success: function (response) {
-                        if (response === "success") {
+                        if (response === "notLoggedIn") {
+                            // Người dùng chưa đăng nhập => chuyển hướng login
+                            window.location.href = "login.jsp";
+                        } else if (response === "success") {
+                            // Thêm wishlist thành công
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Added to Wishlist',
@@ -364,7 +368,7 @@
                                 background: '#1A1A1A',
                                 color: '#F5E6CC'
                             }).then(() => {
-                                location.reload(); // Reload page to update UI
+                                location.reload();
                             });
                         } else {
                             Swal.fire({
@@ -390,7 +394,7 @@
                 });
             }
         </script>
-        
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </body>
