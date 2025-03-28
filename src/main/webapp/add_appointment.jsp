@@ -122,6 +122,29 @@
             .form-container {
                 position: relative;
             }
+
+            /* Style the date input field */
+            input[type="date"] {
+                background-color: rgba(0, 0, 0, 0.7) !important; /* Dark background */
+                color: white !important; /* White text */
+                border: 1px solid var(--secondary-gold); /* Gold border */
+                padding-right: 0px; /* Make room for the custom icon */
+                position: relative;
+                cursor: pointer; /* Ensure the input field is clickable */
+            }
+
+            /* Add custom icon for the date picker */
+            input[type="date"]::after {
+                content: '\f073'; /* Font Awesome calendar icon */
+                font-family: 'Font Awesome 5 Free'; /* Ensure you use FontAwesome */
+                position: absolute;
+                right: 10px; /* Adjust position */
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: 18px;
+                color: white; /* White color */
+                pointer-events: none; /* Ensure it doesn't interfere with input interaction */
+            }
         </style>
     </head>
     <body>
