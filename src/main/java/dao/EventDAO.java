@@ -110,7 +110,17 @@ public class EventDAO {
                 event.setEvent_id(rs.getInt("event_id"));
                 event.setEvent_name(rs.getString("event_name"));
                 event.setEvent_details(rs.getString("event_details"));
-                event.setImage(rs.getBytes("image") != null ? "Image stored" : null);
+                
+                // Handle the image data - store event_id instead of hardcoded text
+                byte[] imageBytes = rs.getBytes("image");
+                if (imageBytes != null && imageBytes.length > 0) {
+                    // For performance reasons, we don't set the full base64 image for list view
+                    // Just indicate that the image exists
+                    event.setImage("exists");
+                } else {
+                    event.setImage(null);
+                }
+                
                 event.setDate_start(rs.getDate("date_start") != null ? rs.getDate("date_start").toString() : null);
                 event.setDate_end(rs.getDate("date_end") != null ? rs.getDate("date_end").toString() : null);
                 event.setEvent_status(rs.getBoolean("event_status"));
@@ -125,7 +135,7 @@ public class EventDAO {
 
     // Method to get all events (without filter)
     public static List<Event> getAllEvents() throws SQLException {
-        String sql = "SELECT event_id, event_name, event_details,image, date_start, date_end, event_status, user_id FROM events"; // No filter applied here
+        String sql = "SELECT event_id, event_name, event_details, image, date_start, date_end, event_status, user_id FROM events"; // No filter applied here
         List<Event> events = new ArrayList<>();
 
         try ( Connection conn = DBContext.getConnection();  PreparedStatement stmt = conn.prepareStatement(sql);  ResultSet rs = stmt.executeQuery()) {
@@ -134,7 +144,17 @@ public class EventDAO {
                 event.setEvent_id(rs.getInt("event_id"));
                 event.setEvent_name(rs.getString("event_name"));
                 event.setEvent_details(rs.getString("event_details"));
-                event.setImage(rs.getBytes("image") != null ? "Image stored" : null);
+                
+                // Handle the image data - store event_id instead of hardcoded text
+                byte[] imageBytes = rs.getBytes("image");
+                if (imageBytes != null && imageBytes.length > 0) {
+                    // For performance reasons, we don't set the full base64 image for list view
+                    // Just indicate that the image exists
+                    event.setImage("exists");
+                } else {
+                    event.setImage(null);
+                }
+                
                 event.setDate_start(rs.getDate("date_start") != null ? rs.getDate("date_start").toString() : null);
                 event.setDate_end(rs.getDate("date_end") != null ? rs.getDate("date_end").toString() : null);
                 event.setEvent_status(rs.getBoolean("event_status"));

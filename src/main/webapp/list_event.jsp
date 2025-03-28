@@ -108,10 +108,11 @@
                         display: flex;
                         flex-direction: column;
                         flex-grow: 1;
+                        color: white; /* Make all text in card content white */
                     }
 
                     .card-title {
-                        color: var(--primary-gold);
+                        color: var(--primary-gold); /* Keep card title gold as before */
                         font-size: 1.5rem;
                         font-weight: 600;
                         margin-bottom: 1.5rem;
@@ -143,6 +144,7 @@
                     .date-info {
                         font-size: 0.9rem;
                         opacity: 0.8;
+                        color: white;
                     }
 
                     .btn-primary {
@@ -208,8 +210,16 @@
                                 <c:forEach var="event" items="${events}">
                                     <div class="col">
                                         <div class="card h-100">
-                                            <img src="${pageContext.request.contextPath}/images/new-motorcycle-launch.jpg"
-                                                alt="${event.event_name}" class="card-img-top" />
+                                            <c:choose>
+                                                <c:when test="${not empty event.image && event.image.startsWith('data:')}">
+                                                    <img src="${event.image}" alt="${event.event_name}" class="card-img-top" />
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <img src="${pageContext.request.contextPath}/image/b/${event.event_id}" 
+                                                         alt="${event.event_name}" class="card-img-top" 
+                                                         onerror="this.src='${pageContext.request.contextPath}/images/new-motorcycle-launch.jpg'"/>
+                                                </c:otherwise>
+                                            </c:choose>
 
                                             <div class="card-content">
                                                 <h5 class="card-title">${event.event_name}</h5>

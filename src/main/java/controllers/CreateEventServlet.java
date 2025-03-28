@@ -67,16 +67,18 @@ public class CreateEventServlet extends HttpServlet {
             if (filePart == null || filePart.getSize() == 0) {
                 throw new IllegalArgumentException("Event image is required");
             }
-            String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+            
+            // We don't need the filename anymore as we're storing the image in the database
+            // Just read the bytes
             byte[] imageBytes = new byte[(int) filePart.getSize()];
             try (InputStream inputStream = filePart.getInputStream()) {
                 inputStream.read(imageBytes);
             }
 
-            // Create event object
-            Event event = new Event(eventName, eventDetails, fileName, dateStart.toString(), dateEnd.toString(), true, userId);
+            // Set null as the image path since we're using the database
+            Event event = new Event(eventName, eventDetails, null, dateStart.toString(), dateEnd.toString(), true, userId);
 
-            // Save to database
+            // Save to database with image bytes
             boolean isCreated = eventDAO.createEvent(event, imageBytes);
             if (!isCreated) {
                 throw new Exception("Failed to create event");

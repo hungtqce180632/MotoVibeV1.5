@@ -99,15 +99,24 @@
                             required>${event.event_details}</textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="image" class="form-label">Image (Leave empty to keep current)</label>
-                        <input type="file" class="form-control" id="image" name="image">
-                        <input type="hidden" name="existingPicture" value="${event.image}">
+                        <label for="event_image" class="form-label">Image (Leave empty to keep current)</label>
+                        <input type="file" class="form-control" id="event_image" name="event_image" accept="image/*">
                         <div class="mt-2">
                             <label class="form-label">Current Image:</label>
-                            <img src="${pageContext.request.contextPath}/images/events/${event.image}"
-                                alt="${event.event_name}"
-                                style="max-width: 200px; border: 2px solid var(--primary-gold); border-radius: 5px;"
-                                class="d-block">
+                            <c:choose>
+                                <c:when test="${not empty event.image && event.image.startsWith('data:')}">
+                                    <img src="${event.image}" alt="${event.event_name}"
+                                        style="max-width: 200px; border: 2px solid var(--primary-gold); border-radius: 5px;"
+                                        class="d-block">
+                                </c:when>
+                                <c:otherwise>
+                                    <img src="${pageContext.request.contextPath}/image/b/${event.event_id}" 
+                                         alt="${event.event_name}"
+                                         style="max-width: 200px; border: 2px solid var(--primary-gold); border-radius: 5px;"
+                                         class="d-block"
+                                         onerror="this.src='${pageContext.request.contextPath}/images/new-motorcycle-launch.jpg'">
+                                </c:otherwise>
+                            </c:choose>
                         </div>
                     </div>
                     <div class="mb-3">

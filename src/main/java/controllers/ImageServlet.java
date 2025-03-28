@@ -90,35 +90,40 @@ public class ImageServlet extends HttpServlet {
         }
         // Image event
         if (host.startsWith("/image/b/")) {
-            try ( Connection conn = DBContext.getConnection()) {
+            try (Connection conn = DBContext.getConnection()) {
                 int eventId = Integer.parseInt(request.getPathInfo().replace("/b/", ""));
                 String sql = "SELECT image FROM events WHERE event_id = ?";
                 PreparedStatement statement = conn.prepareStatement(sql);
                 statement.setInt(1, eventId);
                 ResultSet resultSet = statement.executeQuery();
                 if (resultSet.next()) {
-                    // Lấy dữ liệu ảnh dạng binary
+                    // Get binary image data
                     InputStream inputStream = resultSet.getBinaryStream("image");
-                    OutputStream outputStream = response.getOutputStream();
+                    if (inputStream != null) {
+                        OutputStream outputStream = response.getOutputStream();
 
-                    // Thiết lập loại nội dung là hình ảnh
-                    response.setContentType("image/jpeg");
+                        // Set content type as image
+                        response.setContentType("image/jpeg");
 
-                    byte[] buffer = new byte[4096];
-                    int bytesRead = -1;
+                        byte[] buffer = new byte[4096];
+                        int bytesRead = -1;
 
-                    // Ghi dữ liệu ảnh từ database ra client
-                    while ((bytesRead = inputStream.read(buffer)) != -1) {
-                        outputStream.write(buffer, 0, bytesRead);
+                        // Write image data from database to client
+                        while ((bytesRead = inputStream.read(buffer)) != -1) {
+                            outputStream.write(buffer, 0, bytesRead);
+                        }
+
+                        inputStream.close();
+                        outputStream.close();
+                    } else {
+                        response.sendError(HttpServletResponse.SC_NOT_FOUND, "Image not found");
                     }
-
-                    inputStream.close();
-                    outputStream.close();
+                } else {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND, "Event not found");
                 }
-
             } catch (SQLException ex) {
                 ex.printStackTrace();
-                response.getWriter().print("Error: " + ex.getMessage());
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error: " + ex.getMessage());
             }
         }
 
