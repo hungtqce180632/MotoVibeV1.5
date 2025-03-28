@@ -289,15 +289,14 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="paymentMethod" class="form-label">Payment Method*</label>
+                                <div class="mb-3">
+                                    <label for="paymentMethod" class="form-label">Payment Method</label>
                                     <select class="form-select" id="paymentMethod" name="paymentMethod" required>
-                                        <option value="">Select payment method</option>
-                                        <option value="Cash">Cash</option>
-                                        <option value="Credit Card">Credit Card</option>
                                         <option value="Bank Transfer">Bank Transfer</option>
+                                        <option value="Credit Card" disabled>Credit Card - Coming Soon</option>
+                                        <option value="Cash on Delivery" disabled>Cash on Delivery - Coming Soon</option>
+                                        <option value="Finance" disabled>Financing - Coming Soon</option>
                                     </select>
-                                    <div class="invalid-feedback">Please select a payment method.</div>
                                 </div>
                             </div>
 
@@ -469,7 +468,7 @@
                     warrantyRadios.forEach(radio => {
                         radio.addEventListener('change', updatePriceAndDetails);
                     });
-                    
+
                     // Chức năng nút xem chi tiết
                     // Lấy thông tin nút "View Details" bằng id
                     const viewDetailsBtn = document.getElementById('viewDetailsBtn');

@@ -384,15 +384,14 @@
                                 <input type="hidden" name="customerId" value="${customer.customerId}">
 
                                 <!-- Chọn phương thức thanh toán -->
-                                <div class="col-md-6 mb-3">
-                                    <label for="paymentMethod" class="form-label">Payment Method*</label>
+                                <div class="mb-3">
+                                    <label for="paymentMethod" class="form-label">Payment Method</label>
                                     <select class="form-select" id="paymentMethod" name="paymentMethod" required>
-                                        <option value="">Select payment method</option>
-                                        <option value="Cash">Cash</option>
-                                        <option value="Credit Card">Credit Card</option>
                                         <option value="Bank Transfer">Bank Transfer</option>
+                                        <option value="Credit Card" disabled>Credit Card - Coming Soon</option>
+                                        <option value="Cash on Delivery" disabled>Cash on Delivery - Coming Soon</option>
+                                        <option value="Finance" disabled>Financing - Coming Soon</option>
                                     </select>
-                                    <div class="invalid-feedback">Please select a payment method.</div>
                                 </div>
 
                                 <!-- Tùy chọn bảo hành -->
@@ -472,7 +471,7 @@
                     function updatePrice() {
                         // Lấy các phần tử cần thiết
                         const basePriceElement = document.getElementById('basePrice');
-                         // Loại bỏ dấu phẩy
+                        // Loại bỏ dấu phẩy
                         const basePrice = parseFloat(basePriceElement.textContent.replace(/,/g, ''));
                         const hasWarranty = document.getElementById('withWarranty').checked;
                         const warrantyRow = document.getElementById('warrantyRow');
