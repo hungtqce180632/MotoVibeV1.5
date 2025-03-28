@@ -163,7 +163,7 @@
                                 <td>${log.changeAmount}</td>
                                 <td>
                                     <c:choose>
-                                        <c:when test="${log.actionType eq 'Increase'}">
+                                        <c:when test="${log.actionType eq 'increase'}">
                                             <span class="text-success"><i class="fas fa-arrow-up icon-action"></i>Increase</span>
                                         </c:when>
                                         <c:otherwise>
