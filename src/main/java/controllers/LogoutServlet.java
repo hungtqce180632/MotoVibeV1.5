@@ -13,10 +13,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 /**
- *
- *  * Servlet xử lý đăng xuất người dùng. URL mapping: "/logout"
- *
- * @author truon
+ * Servlet xử lý việc đăng xuất (logout) người dùng. 
+ * URL mapping: "/logout"
+ * 
+ * Khi người dùng truy cập servlet này thông qua URL "/logout", 
+ * session của họ sẽ bị hủy và họ được chuyển hướng về trang chủ (home).
+ * 
+ * @author SangCE181720
  */
 @WebServlet(name = "LogoutServlet", urlPatterns = {"/logout"})
 public class LogoutServlet extends HttpServlet {
@@ -24,38 +27,42 @@ public class LogoutServlet extends HttpServlet {
     /**
      * Phương thức doGet xử lý yêu cầu GET để đăng xuất.
      *
-     * @param request HttpServletRequest cung cấp thông tin yêu cầu từ client.
+     * @param request  HttpServletRequest cung cấp thông tin yêu cầu từ client.
      * @param response HttpServletResponse để gửi phản hồi về client.
      * @throws ServletException Nếu servlet gặp lỗi trong quá trình xử lý.
-     * @throws IOException Nếu có lỗi I/O xảy ra.
+     * @throws IOException      Nếu có lỗi I/O xảy ra.
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // 1. Lấy session hiện tại từ request (getSession(false) không tạo session mới nếu chưa có).
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        
+        // 1. Lấy session hiện tại từ request (sử dụng getSession(false) để không tạo session mới nếu chưa có).
         HttpSession session = request.getSession(false);
 
-        // 2. Kiểm tra nếu session tồn tại.
+        // 2. Kiểm tra xem session có tồn tại hay không.
         if (session != null) {
-            // 3. Invalidate session hiện tại, hủy bỏ tất cả dữ liệu session.
+            // 3. Hủy session hiện tại, xóa bỏ tất cả dữ liệu liên quan trong session.
             session.invalidate();
         }
 
-        // 4. Chuyển hướng (redirect) người dùng về trang chủ (home) sau khi đăng xuất.
+        // 4. Chuyển hướng (redirect) người dùng về trang "home" sau khi đăng xuất.
         response.sendRedirect("home");
     }
 
     /**
-     * Phương thức doPost cũng xử lý đăng xuất (có thể sử dụng nếu bạn muốn xử
-     * lý đăng xuất qua POST). Trong ví dụ này, chúng ta đơn giản gọi doGet để
-     * thực hiện đăng xuất tương tự.
+     * Phương thức doPost cũng xử lý đăng xuất. 
+     * Trong trường hợp này, ta chỉ gọi lại doGet để quá trình đăng xuất diễn ra như nhau 
+     * cho cả GET và POST.
      *
-     * @param request HttpServletRequest cung cấp thông tin yêu cầu từ client.
+     * @param request  HttpServletRequest cung cấp thông tin yêu cầu từ client.
      * @param response HttpServletResponse để gửi phản hồi về client.
      * @throws ServletException Nếu servlet gặp lỗi trong quá trình xử lý.
-     * @throws IOException Nếu có lỗi I/O xảy ra.
+     * @throws IOException      Nếu có lỗi I/O xảy ra.
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response); // Gọi doGet để xử lý đăng xuất tương tự cho cả POST request.
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        // Gọi doGet để tái sử dụng logic đăng xuất
+        doGet(request, response);
     }
 }

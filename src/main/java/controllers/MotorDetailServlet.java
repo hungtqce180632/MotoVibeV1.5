@@ -9,7 +9,7 @@ import dao.FuelDAO;
 import dao.ModelDAO;
 import dao.MotorDAO;
 import dao.ReviewDAO;
-import dao.OrderDAO; // Add so we can check if user purchased
+import dao.OrderDAO; // Import OrderDAO để kiểm tra xem người dùng đã mua motor hay chưa
 import dao.CustomerDAO;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -26,8 +26,18 @@ import models.Review;
 import models.UserAccount;
 
 /**
+ * Servlet xử lý việc hiển thị chi tiết của một motor.
+ * URL mapping: "/motorDetail"
  *
- * @author tiend
+ * Các chức năng của servlet:
+ * 1. Lấy motorId từ request và kiểm tra tính hợp lệ.
+ * 2. Sử dụng các DAO để tải thông tin motor, brand, model, fuel và các đánh giá liên quan.
+ * 3. Kiểm tra xem người dùng đăng nhập có phải là khách hàng (customer) và đã mua motor này chưa.
+ *    Nếu khách hàng đã mua và chưa đánh giá, họ sẽ có quyền đánh giá motor.
+ * 4. Kiểm tra tình trạng còn hàng của motor.
+ * 5. Đưa các thông tin cần thiết lên request và chuyển tiếp sang trang motor_detail.jsp.
+ *
+ * @author 
  */
 @WebServlet(name = "MotorDetailServlet", urlPatterns = {"/motorDetail"})
 public class MotorDetailServlet extends HttpServlet {
@@ -37,10 +47,10 @@ public class MotorDetailServlet extends HttpServlet {
             throws ServletException, IOException {
 
         try {
-            // 1) Parse the motorId
+            // Phân tích và lấy motorId từ tham số request
             int motorId = Integer.parseInt(request.getParameter("id"));
 
-            // 2) Prepare DAOs
+            // Khởi tạo các DAO cần thiết
             MotorDAO motorDAO = new MotorDAO();
             BrandDAO brandDAO = new BrandDAO();
             ModelDAO modelDAO = new ModelDAO();
@@ -49,47 +59,49 @@ public class MotorDetailServlet extends HttpServlet {
             OrderDAO orderDAO = new OrderDAO();
             CustomerDAO customerDAO = new CustomerDAO();
 
-            // 3) Load motor
+            // Tải thông tin motor từ database
             Motor motor = motorDAO.getMotorById(motorId);
             if (motor == null) {
+                // Nếu motor không tồn tại, chuyển hướng đến trang lỗi
                 response.sendRedirect("error.jsp");
                 return;
             }
 
-            // 4) Load brand/model/fuel
+            // Tải thông tin brand, model và fuel của motor
             Brand brand = brandDAO.getBrandById(motor.getBrandId());
             Model model = modelDAO.getModelById(motor.getModelId());
             Fuel fuel = fuelDAO.getFuelById(motor.getFuelId());
 
-            // 5) Load reviews
+            // Tải danh sách đánh giá cho motor
             List<Review> reviews = reviewDAO.getAllReviewOfCar(motorId);
 
-            // 6) Check if the logged-in user is a CUSTOMER who purchased the motor
+            // Kiểm tra xem người dùng đăng nhập có phải là khách hàng đã mua motor hay không
             HttpSession session = request.getSession(false);
             UserAccount user = (session != null) ? (UserAccount) session.getAttribute("user") : null;
 
-            // Initialize canReview as false
+            // Khởi tạo biến canReview mặc định là false
             boolean canReview = false;
 
             if (user != null && "customer".equalsIgnoreCase(user.getRole())) {
-                // Find the customer's row
+                // Lấy thông tin khách hàng dựa trên userId
                 Customer c = customerDAO.getCustomerByUserId(user.getUserId());
                 if (c != null) {
-                    // Check if they have purchased this motor (with Completed status)
+                    // Kiểm tra xem khách hàng đã mua motor (với trạng thái Completed) hay chưa
                     boolean purchased = orderDAO.hasPurchasedMotor(c.getCustomerId(), motorId);
+                    // Kiểm tra xem khách hàng đã đánh giá motor này hay chưa
                     boolean alreadyReviewed = reviewDAO.hasAlreadyReviewed(c.getCustomerId(), motorId);
                     
-                    // Customer can only review if they've purchased the motor AND haven't already reviewed it
+                    // Khách hàng chỉ được đánh giá nếu đã mua motor và chưa đánh giá trước đó
                     canReview = purchased && !alreadyReviewed;
                     
-                    // If they've purchased but already reviewed, set a message
+                    // Nếu đã mua nhưng đã đánh giá, thiết lập thông báo cho khách hàng
                     if (purchased && alreadyReviewed) {
                         request.setAttribute("reviewMessage", "You have already submitted a review for this motor.");
                     }
                 }
             }
 
-            // 7) Put everything in request scope
+            // Đưa các thông tin cần thiết vào phạm vi request
             request.setAttribute("motor", motor);
             request.setAttribute("brand", brand);
             request.setAttribute("model", model);
@@ -97,14 +109,15 @@ public class MotorDetailServlet extends HttpServlet {
             request.setAttribute("reviews", reviews);
             request.setAttribute("canReview", canReview);
             
-            // Add stock availability check
+            // Kiểm tra tình trạng còn hàng: motor có số lượng lớn hơn 0 hay không
             boolean inStock = motor.getQuantity() > 0;
             request.setAttribute("inStock", inStock);
 
-            // 8) Forward to JSP
+            // Chuyển tiếp yêu cầu sang trang motor_detail.jsp để hiển thị chi tiết motor
             request.getRequestDispatcher("motor_detail.jsp").forward(request, response);
 
         } catch (NumberFormatException | SQLException e) {
+            // Nếu có lỗi trong quá trình lấy dữ liệu, ném ra ServletException
             throw new ServletException("Error retrieving motor details", e);
         }
     }
