@@ -105,7 +105,7 @@ public class ResetPasswordServlet extends HttpServlet {
 
         // Kiểm tra nếu OTP chưa được xác thực thành công
         if (!"Success".equals(verificationResult)) {
-            request.setAttribute("error", "Vui lòng xác thực OTP trước khi đặt lại mật khẩu.");
+            request.setAttribute("error", "Please verify OTP before resetting password.");
             request.getRequestDispatcher("resetPassword.jsp").forward(request, response);
             return;
         }
@@ -113,14 +113,14 @@ public class ResetPasswordServlet extends HttpServlet {
         // Kiểm tra các trường email và mật khẩu không được để trống
         if (email == null || newPassword == null || confirmPassword == null || 
             email.isEmpty() || newPassword.isEmpty() || confirmPassword.isEmpty()) {
-            request.setAttribute("error", "Tất cả các trường đều là bắt buộc.");
+            request.setAttribute("error", "All fields are required.");
             request.getRequestDispatcher("resetPassword.jsp").forward(request, response);
             return;
         }
 
         // Kiểm tra xem mật khẩu mới và mật khẩu xác nhận có khớp nhau hay không
         if (!newPassword.equals(confirmPassword)) {
-            request.setAttribute("error", "Mật khẩu và xác nhận mật khẩu không khớp.");
+            request.setAttribute("error", "Password do not match.");
             request.getRequestDispatcher("resetPassword.jsp").forward(request, response);
             return;
         }
@@ -130,7 +130,7 @@ public class ResetPasswordServlet extends HttpServlet {
         UserAccount user = userDao.getUserByEmail(email);
 
         if (user == null) {
-            request.setAttribute("error", "Email không tồn tại.");
+            request.setAttribute("error", "Email does not exist.");
             request.getRequestDispatcher("resetPassword.jsp").forward(request, response);
             return;
         }
@@ -138,7 +138,7 @@ public class ResetPasswordServlet extends HttpServlet {
         // Mã hoá mật khẩu mới trước khi lưu vào cơ sở dữ liệu
         String hashedPassword = hashPassword(newPassword);
         if (hashedPassword == null) {
-            request.setAttribute("error", "Lỗi khi xử lý mật khẩu. Vui lòng thử lại.");
+            request.setAttribute("error", "Error processing password. Please try again.");
             request.getRequestDispatcher("resetPassword.jsp").forward(request, response);
             return;
         }
@@ -149,12 +149,12 @@ public class ResetPasswordServlet extends HttpServlet {
         if (isUpdated) {
             // Nếu cập nhật thành công, lưu thông báo thành công vào session
             HttpSession session = request.getSession();
-            session.setAttribute("success", "Đặt lại mật khẩu thành công. Vui lòng đăng nhập bằng mật khẩu mới.");
+            session.setAttribute("success", "Password reset successful. Please log in with your new password.");
             // Chuyển hướng về trang đăng nhập (login.jsp)
             response.sendRedirect("login.jsp");
         } else {
             // Nếu cập nhật thất bại, hiển thị thông báo lỗi và quay lại trang resetPassword.jsp
-            request.setAttribute("error", "Đặt lại mật khẩu thất bại. Vui lòng thử lại.");
+            request.setAttribute("error", "Password reset failed. Please try again.");
             request.getRequestDispatcher("resetPassword.jsp").forward(request, response);
         }
     }
