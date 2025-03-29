@@ -151,7 +151,7 @@ public class OrderDAO {
              PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             
             ps.setInt(1, orderId);
-            ps.setString(2, "Standard 2-year manufacturer warranty covering parts and service.");
+            ps.setString(2, "Standard 1-year manufacturer warranty covering parts and service. Our warranty package lasts 12 months from the date of purchase, premium package can extend up to 24 months, warranty all manufacturer defects");
             
             int affectedRows = ps.executeUpdate();
             

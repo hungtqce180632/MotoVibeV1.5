@@ -287,7 +287,7 @@
                     <c:if test="${order.hasWarranty && empty order.warranty}">
                         <div class="alert alert-warning">
                             <i class="fas fa-exclamation-circle me-2"></i>
-                            This order has warranty coverage, but detailed information is not available.
+                            This order has warranty coverage, Our warranty package lasts 12 months from the date of purchase, premium package can extend up to 24 months, warranty all manufacturer defects
                         </div>
                     </c:if>
                 </c:otherwise>
