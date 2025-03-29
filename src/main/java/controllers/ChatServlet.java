@@ -45,6 +45,9 @@ public class ChatServlet extends HttpServlet {
     private static final String FAQ_PATH = "C:\\Users\\truon\\Desktop\\yeah2\\MotoVibeV1.5\\src\\FAQ.txt";
     private static final String MOTOR_DATA_PATH = "C:\\Users\\truon\\Desktop\\yeah2\\MotoVibeV1.5\\src\\main\\java\\aiData\\MotoVibeListMotor.txt";
     
+    // Maximum number of conversation exchanges to remember
+    private static final int MAX_CONVERSATION_HISTORY = 5;
+    
     private String faqContent = "";
     private String motorDataContent = "";
     private boolean dataLoaded = false;
@@ -172,16 +175,38 @@ public class ChatServlet extends HttpServlet {
             if (questionCount == null) {
                 questionCount = 0;
             }
+            
+            // Get or create conversation history
+            @SuppressWarnings("unchecked")
+            List<String[]> conversationHistory = (List<String[]>) session.getAttribute("conversationHistory");
+            if (conversationHistory == null) {
+                conversationHistory = new ArrayList<>();
+                session.setAttribute("conversationHistory", conversationHistory);
+            }
 
             String aiResponseText;
             if (isMotorcycleRelated(message) || isRelatedToFAQ(message)) {
-                aiResponseText = getGeminiApiResponse(message); // Call Gemini API
+                // Pass the conversation history to the Gemini API
+                aiResponseText = getGeminiApiResponse(message, conversationHistory);
                 if (aiResponseText == null || aiResponseText.isEmpty()) {
                     aiResponseText = "I apologize, but I couldn't get a proper response. Please try again or ask a different question about motorcycles.";
                 }
             } else {
                 aiResponseText = "I'm an AI assistant specialized in motorcycles and MotoVibe information. Please ask me about motorcycles, bikes, riding, or related topics.";
             }
+            
+            // Add current exchange to conversation history
+            conversationHistory.add(new String[]{"user", message});
+            conversationHistory.add(new String[]{"assistant", aiResponseText});
+            
+            // Keep history at a manageable size
+            while (conversationHistory.size() > MAX_CONVERSATION_HISTORY * 2) {
+                conversationHistory.remove(0);
+                conversationHistory.remove(0);
+            }
+            
+            // Save updated conversation history
+            session.setAttribute("conversationHistory", conversationHistory);
 
             questionCount++;
             session.setAttribute("questionCount", questionCount);
@@ -230,7 +255,7 @@ public class ChatServlet extends HttpServlet {
         return false;
     }
 
-    private String getGeminiApiResponse(String message) {
+    private String getGeminiApiResponse(String message, List<String[]> conversationHistory) {
         try {
             URL url = new URL(GEMINI_API_URL);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -253,17 +278,34 @@ public class ChatServlet extends HttpServlet {
                                              .replace("\n", "\\n")
                                              .replace("\r", "\\r");
             
-            // Enhanced prompt with instructions
+            // Build conversation history string
+            StringBuilder historyBuilder = new StringBuilder();
+            if (!conversationHistory.isEmpty()) {
+                historyBuilder.append("Conversation history:\\n");
+                for (String[] exchange : conversationHistory) {
+                    String role = exchange[0];
+                    String text = exchange[1].replace("\\", "\\\\")
+                                           .replace("\"", "\\\"")
+                                           .replace("\n", "\\n")
+                                           .replace("\r", "\\r");
+                    historyBuilder.append(role).append(": ").append(text).append("\\n");
+                }
+                historyBuilder.append("\\nPlease respond to the latest message while keeping the conversation context in mind.\\n\\n");
+            }
+            
+            // Enhanced prompt with instructions and conversation history
             String jsonInputString = String.format(
                 "{\"contents\": [{\"parts\":[" +
                 "{\"text\": \"You are MotoVibe's AI assistant, specializing in motorcycles and our specific inventory. " +
                 "Here is our motorcycle information and FAQ:\\n%s\\n\\n" +
+                "%s" +
                 "Now, please respond to this customer query in a helpful, friendly and concise way. " +
                 "If the question is about a specific motorcycle model, check if we have it in inventory and provide accurate details. " +
-                "If the query is in Vietnamese, respond in Vietnamese. If the query is in English, respond in English.\\n\\n" +
-                "User query: %s\"}" +
+                "If the query is in Vietnamese, respond in Vietnamese. If the query is in English, respond in English." +
+                "If the user's message refers to something mentioned earlier in the conversation, make sure to maintain that context.\\n\\n" +
+                "User's latest query: %s\"}" +
                 "]}]}", 
-                sanitizedData, sanitizedMessage);
+                sanitizedData, historyBuilder.toString(), sanitizedMessage);
 
             try (OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(), "UTF-8")) {
                 writer.write(jsonInputString);

@@ -132,6 +132,11 @@
         <div id="appointment-button-container">
             <button id="create-appointment-button">Book a Test Ride</button>
         </div>
+        <div class="text-center mt-2">
+            <button id="reset-chat-button" class="btn btn-sm" style="background-color: transparent; color: #999; border: 1px solid #ddd; font-size: 0.8rem;">
+                <i class="fas fa-redo-alt"></i> Reset Conversation
+            </button>
+        </div>
     </div>
     
     <script>
@@ -142,6 +147,7 @@
             const chatSendButton = document.getElementById('chat-send-button');
             const appointmentButtonContainer = document.getElementById('appointment-button-container');
             const createAppointmentButton = document.getElementById('create-appointment-button');
+            const resetChatButton = document.getElementById('reset-chat-button');
             
             // Track question count
             let questionCount = 0;
@@ -154,6 +160,29 @@
                     sendMessage();
                     event.preventDefault();
                 }
+            });
+            
+            resetChatButton.addEventListener('click', function() {
+                // Clear chat messages except the initial greeting
+                while (chatBody.children.length > 1) {
+                    chatBody.removeChild(chatBody.lastChild);
+                }
+                
+                // Reset question count
+                questionCount = 0;
+                
+                // Reset conversation in the session
+                fetch('ResetChatServlet', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    }
+                }).catch(error => {
+                    console.error('Error resetting chat:', error);
+                });
+                
+                // Hide appointment button
+                appointmentButtonContainer.style.display = 'none';
             });
             
             createAppointmentButton.addEventListener('click', function() {
