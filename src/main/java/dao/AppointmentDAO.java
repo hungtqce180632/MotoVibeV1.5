@@ -168,6 +168,7 @@ public class AppointmentDAO {
         return appointments;
     }
 
+
     public List<Map<String, Object>> getRevenueStatistics() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }

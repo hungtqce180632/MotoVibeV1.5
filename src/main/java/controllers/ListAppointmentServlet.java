@@ -6,6 +6,7 @@ package controllers;
 
 import dao.AppointmentDAO;
 import dao.CustomerDAO;
+import dao.EmployeeDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import models.Appointment;
 import models.Customer;
+import models.Employee;
 import models.UserAccount;
 
 /**
@@ -54,6 +56,7 @@ public class ListAppointmentServlet extends HttpServlet {
 
         CustomerDAO customerDAO = new CustomerDAO();
         AppointmentDAO appointmentDAO = new AppointmentDAO();
+        EmployeeDAO employeeDAO = new EmployeeDAO();
         List<Appointment> appointmentList = null;
         Map<Integer, Customer> customerMap = new HashMap<>();
 
@@ -67,11 +70,13 @@ public class ListAppointmentServlet extends HttpServlet {
                 request.setAttribute("userRole", "customer");
 
             } else if (role.equalsIgnoreCase("Employee")) {
-                appointmentList = appointmentDAO.getAllAppointments();
+
+                Employee employee = employeeDAO.getEmployeeByUserId(user.getUserId()); // Assuming user ID is the same as employee ID
+                appointmentList = appointmentDAO.getAppointmentsByEmployeeId(employee.getEmployeeId());
 
                 for (Customer customer : customerDAO.getAllCustomers()) {
-                customerMap.put(customer.getCustomerId(), customer);
-            }
+                    customerMap.put(customer.getCustomerId(), customer);
+                }
 
                 request.setAttribute("userRole", "employee");
                 request.setAttribute("customerMap", customerMap);

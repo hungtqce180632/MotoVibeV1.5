@@ -228,7 +228,7 @@
             // Get today's date
             const today = new Date();
             // Add one day to the current date
-            today.setDate(today.getDate() + 1);
+            today.setDate(today.getDate());
             // Format the date to yyyy-mm-dd
             const tomorrow = today.toISOString().split('T')[0];
             // Set the min attribute of the date input to tomorrow
