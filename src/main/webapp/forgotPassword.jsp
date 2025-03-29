@@ -484,21 +484,21 @@
                             if (response.success) {
                                 Swal.fire({
                                     icon: 'success',
-                                    title: 'Xác thực thành công',
-                                    text: 'Bạn sẽ được chuyển đến trang đặt lại mật khẩu',
+                                    title: 'Authentication successful',
+                                    text: 'You will be redirected to the password reset page.',
                                     timer: 2000,
                                     showConfirmButton: false
                                 }).then(() => {
                                     window.location.href = "resetPassword.jsp";
                                 });
                             } else {
-                                $("#otpError").text(response.message || "Mã OTP không hợp lệ hoặc đã hết hạn");
+                                $("#otpError").text(response.message || "OTP code is invalid or expired");
                                 // Shake animation
                                 $("#otpForm").effect("shake", {times: 2, distance: 5}, 300);
                             }
                         },
                         error: function (xhr, status, error) {
-                            var errorMsg = "Lỗi kết nối máy chủ";
+                            var errorMsg = "Server connection error";
                             if (xhr.responseJSON && xhr.responseJSON.message) {
                                 errorMsg = xhr.responseJSON.message;
                             }

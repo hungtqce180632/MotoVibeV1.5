@@ -69,7 +69,7 @@
                     </div>
                     <div class="mb-3">
                             <label class="form-label">Password</label>
-                            <input type="text" class="form-control" name="phoneNumber" pattern="^(0|\+84)[3-9][0-9]{8}$" required>
+                            <input type="password" class="form-control" name="password" required>
                         </div>
                     <div class="mb-3">
                         <label class="form-label">Full Name</label>
@@ -77,7 +77,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Phone Number</label>
-                        <input type="text" class="form-control" name="phoneNumber" value="${emp.phoneNumber}" required>
+                       <input type="text" class="form-control" name="phoneNumber" value="${emp.phoneNumber}" pattern="^(0|\+84)[3-9][0-9]{8}$" required>
                     </div>
                     <div class="text-center">
                         <a href="accountManagement?listOf=emp" class="btn btn-secondary me-2">

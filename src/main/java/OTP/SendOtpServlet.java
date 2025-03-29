@@ -70,12 +70,12 @@ public class SendOtpServlet extends HttpServlet {
             request.getSession().setAttribute("emailSendOTP", emailSendOTP);
 
             jsonResponse.put("success", true);
-            jsonResponse.put("message", "OTP đã được gửi thành công!");
+            jsonResponse.put("message", "OTP sent successfully!");
         } else {
             // Nếu gửi mail thất bại, trả về mã lỗi 500 và thông báo lỗi
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             jsonResponse.put("success", false);
-            jsonResponse.put("message", "Gửi OTP thất bại. Vui lòng thử lại.");
+            jsonResponse.put("message", "OTP sending failed. Please try again.");
         }
 
         // Chuyển Map sang JSON và trả về cho client

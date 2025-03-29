@@ -58,7 +58,7 @@ public class ForgotPasswordServlet extends HttpServlet {
             response.sendRedirect("resetPassword");
         } else {
             // Nếu email không tồn tại, thiết lập thông báo lỗi và chuyển tiếp về trang forgotPassword.jsp
-            request.setAttribute("error", "Email không tồn tại. Vui lòng thử lại.");
+            request.setAttribute("error", "Email does not exist. Please try again.");
             request.getRequestDispatcher("forgotPassword.jsp").forward(request, response);
         }
     }

@@ -86,7 +86,7 @@ public class LoginServlet extends HttpServlet {
             }
         } else {
             // Nếu thông tin đăng nhập không hợp lệ hoặc tài khoản không hoạt động
-            request.setAttribute("error", "Sai email hoặc mật khẩu");
+            request.setAttribute("error", "Wrong email or password");
             // Quay lại trang login.jsp để hiển thị thông báo lỗi
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;

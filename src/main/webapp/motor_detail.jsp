@@ -283,7 +283,7 @@
                                     <span class="price-tag">$${motor.price}</span>
                                 </span>
                             </div>
-                            
+
                             <div class="detail-row">
                                 <span class="detail-label">In Stock:</span>
                                 <span class="detail-value">
@@ -297,7 +297,7 @@
                                     </c:choose>
                                 </span>
                             </div>
-                            
+
                             <div class="detail-row">
                                 <span class="detail-label">Availability:</span>
                                 <span class="detail-value">
@@ -379,8 +379,16 @@
                     data: {motorId: motorId, action: 'add'},
                     success: function (response) {
                         if (response === "notLoggedIn") {
-                            // Người dùng chưa đăng nhập => chuyển hướng login
-                            window.location.href = "login.jsp";
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Please login',
+                                text: 'You need to login to add products to your wishlist!',
+                                confirmButtonColor: '#D4AF37',
+                                background: '#1A1A1A',
+                                color: '#F5E6CC'
+                            }).then(() => {
+                                window.location.href = "login.jsp";
+                            });
                         } else if (response === "success") {
                             // Thêm wishlist thành công
                             Swal.fire({

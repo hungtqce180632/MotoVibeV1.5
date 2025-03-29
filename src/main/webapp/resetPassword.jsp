@@ -84,6 +84,17 @@
                 max-width: 500px;
                 margin: 2rem auto;
             }
+
+            .btn-outline-gold {
+                background-color: transparent;
+                border: 1px solid #d4af37;  /* Màu vàng kim */
+                color: #d4af37;             /* Màu vàng kim cho chữ */
+            }
+
+            .btn-outline-gold:hover {
+                background-color: #d4af37;  /* Nền vàng kim khi hover */
+                color: white;               /* Chữ trắng khi hover */
+            }
         </style>
     </head>
     <body>
@@ -137,7 +148,7 @@
                                 >
                             <button 
                                 type="button" 
-                                class="btn btn-outline-dark" 
+                                class="btn btn-outline-gold" 
                                 style="width: 50px;"
                                 onclick="togglePassword()"
                                 >
@@ -293,7 +304,7 @@
                     });
                     return;
                 }
-                
+
                 // Validate email format
                 var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(emailVal)) {
@@ -342,7 +353,7 @@
                             text: 'An error occurred sending OTP.'
                         });
                     },
-                    complete: function() {
+                    complete: function () {
                         // Re-enable button after sending
                         sendButton.disabled = false;
                         sendButton.innerHTML = originalText;
@@ -365,7 +376,7 @@
                     otpError.textContent = "Please enter the OTP.";
                     return;
                 }
-                
+
                 // Disable input fields after successful verification
                 var verifyButton = document.getElementById("verifyButton");
                 var originalText = verifyButton ? verifyButton.innerHTML : "Verify OTP";
@@ -391,7 +402,7 @@
                             document.getElementById("otpInput").style.display = "none";
                             document.getElementById("sendOtpButton").disabled = true;
                             document.getElementById("email").readOnly = true;
-                            
+
                             Swal.fire({
                                 icon: 'success',
                                 title: 'OTP Verified',
@@ -414,7 +425,7 @@
                             text: 'An error occurred while verifying OTP.'
                         });
                     },
-                    complete: function() {
+                    complete: function () {
                         // Re-enable verify button unless verification was successful
                         if (verifyButton && verificationResult.value !== "Success") {
                             verifyButton.disabled = false;
@@ -423,12 +434,12 @@
                     }
                 });
             }
-            
+
             // Function to toggle password visibility
             function togglePassword() {
                 var passwordField = document.getElementById("password");
                 var icon = document.getElementById("icon");
-                
+
                 if (passwordField.type === "password") {
                     passwordField.type = "text";
                     icon.className = "fa-solid fa-eye-slash";
@@ -437,13 +448,13 @@
                     icon.className = "fa-solid fa-eye";
                 }
             }
-            
+
             // Function to check if passwords match
             function checkPasswordsMatch() {
                 var password = document.getElementById("password").value;
                 var confirmPassword = document.getElementById("confirmPassword").value;
                 var confirmError = document.getElementById("confirmError");
-                
+
                 if (password && confirmPassword && password !== confirmPassword) {
                     confirmError.textContent = "Passwords do not match.";
                 } else {
