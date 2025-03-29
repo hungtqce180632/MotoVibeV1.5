@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page import="models.UserAccount" %>
 <%@ page import="models.Customer" %>
 <%@ page import="dao.CustomerDAO" %>
@@ -264,7 +265,7 @@
                     <div class="col-md-8">
                         <div class="card-body">
                             <h5 class="card-title">${motor.motorName}</h5>
-                            <p class="card-text"><strong>Price:</strong> <span style="color: var(--primary-gold); font-size: 1.2rem;">$${motor.price}</span></p>
+                            <p class="card-text"><strong>Price:</strong> <span style="color: var(--primary-gold); font-size: 1.2rem;">$${motor.price}</span> <span style="color: var(--text-gold); font-size: 0.9rem;">(<fmt:formatNumber value="${motor.price * 25700}" type="number" groupingUsed="true"/> VND)</span></p>
                             <p class="card-text">
                                 <span class="availability-badge ${motor.quantity > 0 ? '' : 'out-of-stock'}">
                                     <i class="fas ${motor.quantity > 0 ? 'fa-check-circle' : 'fa-times-circle'} me-1"></i>
@@ -381,15 +382,15 @@
                         <h5>Order Summary</h5>
                         <div class="d-flex justify-content-between">
                             <div>Base Price:</div>
-                            <div>$<span id="basePrice">${motor.price}</span></div>
+                            <div>$<span id="basePrice">${motor.price}</span> (<span id="basePriceVND"><fmt:formatNumber value="${motor.price * 25700}" type="number" groupingUsed="true"/></span> VND)</div>
                         </div>
                         <div class="d-flex justify-content-between" id="warrantyRow" style="display: none !important;">
                             <div>Warranty (10%):</div>
-                            <div>$<span id="warrantyPrice">0.00</span></div>
+                            <div>$<span id="warrantyPrice">0.00</span> (<span id="warrantyPriceVND">0</span> VND)</div>
                         </div>
                         <div class="d-flex justify-content-between mt-2 pt-2" style="border-top: 1px solid rgba(212, 175, 55, 0.3);">
                             <div><strong>Total Price:</strong></div>
-                            <div><strong>$<span id="totalPrice">${motor.price}</span></strong></div>
+                            <div><strong>$<span id="totalPrice">${motor.price}</span> (<span id="totalPriceVND"><fmt:formatNumber value="${motor.price * 25700}" type="number" groupingUsed="true"/></span> VND)</strong></div>
                         </div>
                     </div>
 
@@ -459,19 +460,25 @@
         // Price update calculation for warranty
         function updatePrice() {
             const basePrice = parseFloat(${motor.price});
+            const exchangeRate = 25700;
             const hasWarranty = document.getElementById('withWarranty').checked;
             const warrantyRow = document.getElementById('warrantyRow');
             const warrantyPrice = document.getElementById('warrantyPrice');
+            const warrantyPriceVND = document.getElementById('warrantyPriceVND');
             const totalPrice = document.getElementById('totalPrice');
+            const totalPriceVND = document.getElementById('totalPriceVND');
             
             if (hasWarranty) {
                 const warrantyAmount = basePrice * 0.1; // 10% of base price
                 warrantyRow.style.display = 'flex';
                 warrantyPrice.textContent = warrantyAmount.toFixed(2);
+                warrantyPriceVND.textContent = new Intl.NumberFormat('vi-VN').format(Math.round(warrantyAmount * exchangeRate));
                 totalPrice.textContent = (basePrice + warrantyAmount).toFixed(2);
+                totalPriceVND.textContent = new Intl.NumberFormat('vi-VN').format(Math.round((basePrice + warrantyAmount) * exchangeRate));
             } else {
                 warrantyRow.style.display = 'none';
                 totalPrice.textContent = basePrice.toFixed(2);
+                totalPriceVND.textContent = new Intl.NumberFormat('vi-VN').format(Math.round(basePrice * exchangeRate));
             }
         }
         

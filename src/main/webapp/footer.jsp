@@ -201,7 +201,6 @@
                             <a href="https://x.com" title="Twitter" target="_blank" rel="noopener"><i class="fab fa-twitter"></i></a> 
                             <a href="https://www.instagram.com" title="Instagram" target="_blank" rel="noopener"><i class="fab fa-instagram"></i></a> 
                             <a href="https://www.linkedin.com/in/smokeyduck132" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i></a>
-                            <a href="https://www.google.com/search?sca_esv=7ed8492f06ea75bb&q=fans&udm=2&fbs=ABzOT_AfCikcO6SgGMxZXxAG9tmS8rx53CbgOCSVg3O9Xo5xAK_RXi3VFy8QcDJV9F46BNVgXPVSNLh3EC8UATXqoQIBSA6FFNIPLMxYHHFRyE7wcmKutmRnya8dFuXrMKlslaMSg0PSD-RHrzxr5jD2xk4gJqbKjg8cuQm7NyLR-ch9tdhKN8ZBfmspljZBXQB0nbaLomPI1io-dTHEkKhfDGCJW_9usXtO9NhVLan8usNbMVE7ayw&sa=X&ved=2ahUKEwiTu8uN1N-LAxVqs1YBHSQwDT0QtKgLegQIDhAB&biw=2552&bih=936&dpr=1" title="OnlyFans" target="_blank" rel="noopener"><i class="fas fa-camera-video"></i></a> <!- Symbolic camera-video icon for OnlyFans -->
                         </div>
                     </div>
                     <div class="col-lg-4 footer-section">

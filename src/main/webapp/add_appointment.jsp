@@ -1,9 +1,3 @@
-<%-- 
-    Document   : add_appointment
-    Created on : Feb 28, 2025, 9:35:00 AM
-    Author     : Jackt
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
@@ -22,12 +16,12 @@
                 text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
                 margin-bottom: 0.5rem;
             }
-            
+
             h2 .fas {
                 margin-right: 10px;
                 color: var(--primary-gold);
             }
-            
+
             .lead {
                 color: var(--text-gold);
                 font-size: 1.1rem;
@@ -35,7 +29,7 @@
                 border-bottom: 1px solid var(--secondary-gold);
                 padding-bottom: 1rem;
             }
-            
+
             .container {
                 background: linear-gradient(145deg, var(--dark-black), var(--rich-black));
                 padding: 2rem;
@@ -45,7 +39,7 @@
                 margin-top: 80px;
                 max-width: 900px;
             }
-            
+
             .form-label {
                 color: var(--primary-gold);
                 font-weight: 500;
@@ -53,7 +47,7 @@
                 font-size: 0.9rem;
                 letter-spacing: 1px;
             }
-            
+
             .form-control, .form-select {
                 background-color: rgba(0, 0, 0, 0.2) !important;
                 border: 1px solid var(--secondary-gold);
@@ -61,29 +55,29 @@
                 padding: 10px;
                 border-radius: 5px;
             }
-            
+
             .form-control:focus, .form-select:focus {
                 background-color: rgba(0, 0, 0, 0.3) !important;
                 border-color: var(--primary-gold);
                 box-shadow: 0 0 0 0.25rem rgba(218, 165, 32, 0.25);
             }
-            
+
             .form-control::placeholder {
                 color: rgba(255, 255, 255, 0.5);
             }
-            
+
             .form-control:disabled, .form-control[readonly],
             .form-select:disabled {
                 background-color: rgba(0, 0, 0, 0.4) !important;
                 color: rgba(255, 255, 255, 0.6) !important;
                 border-color: rgba(218, 165, 32, 0.5);
             }
-            
+
             .form-select option {
                 background: var(--rich-black);
                 color: white;
             }
-            
+
             .btn {
                 text-transform: uppercase;
                 letter-spacing: 1px;
@@ -91,32 +85,31 @@
                 transition: all 0.3s ease;
                 margin: 0 5px;
             }
-            
+
             .btn-primary {
                 background: linear-gradient(145deg, var(--primary-gold), var(--secondary-gold));
                 border: none;
                 color: var(--dark-black);
                 font-weight: 600;
             }
-            
+
             .btn-primary:hover {
                 transform: translateY(-2px);
                 box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
             }
-            
+
             .btn-secondary {
                 background: transparent;
                 border: 1px solid var(--primary-gold);
                 color: var(--primary-gold);
             }
-            
+
             .btn-secondary:hover {
                 background: rgba(212, 175, 55, 0.1);
                 color: var(--primary-gold);
                 box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
             }
-            
-            /* Added decoration elements */
+
             .luxury-icon {
                 position: absolute;
                 top: 20px;
@@ -125,38 +118,67 @@
                 opacity: 0.1;
                 color: var(--primary-gold);
             }
-            
+
             .form-container {
                 position: relative;
+            }
+
+            /* Style the date input field */
+            input[type="date"] {
+                background-color: rgba(0, 0, 0, 0.7) !important; /* Dark background */
+                color: white !important; /* White text */
+                border: 1px solid var(--secondary-gold); /* Gold border */
+                padding-right: 0px; /* Make room for the custom icon */
+                position: relative;
+                cursor: pointer; /* Ensure the input field is clickable */
+            }
+
+            /* Add custom icon for the date picker */
+            input[type="date"]::after {
+                content: '\f073'; /* Font Awesome calendar icon */
+                font-family: 'Font Awesome 5 Free'; /* Ensure you use FontAwesome */
+                position: absolute;
+                right: 10px; /* Adjust position */
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: 18px;
+                color: white; /* White color */
+                pointer-events: none; /* Ensure it doesn't interfere with input interaction */
             }
         </style>
     </head>
     <body>
         <jsp:include page="header.jsp"></jsp:include>
 
-        <div class="container mt-4">
-            <div class="form-container">
-                <i class="fas fa-calendar-check luxury-icon"></i>
-                <h2><i class="fas fa-calendar-plus"></i> Schedule an Appointment</h2>
-                <p class="lead">Fill out the form below to schedule a premium motorbike service appointment.</p>
+            <div class="container mt-4">
+                <div class="form-container">
+                    <i class="fas fa-calendar-check luxury-icon"></i>
+                    <h2><i class="fas fa-calendar-plus"></i> Schedule an Appointment</h2>
+                    <p class="lead">Fill out the form below to schedule a premium motorbike service appointment.</p>
 
-                <form action="appointment" method="POST" class="mt-4">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="customerId" class="form-label">Customer ID</label>
-                            <input type="number" class="form-control" id="customerId" name="customerId" value="${customerId}" readonly>
+                    <form action="appointment" method="POST" class="mt-4">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="customerId" class="form-label">Customer Name</label>
+                                <input type="hidden" class="form-control" id="customerId" name="customerId" value="${customerId}" readonly>
+                            <input type="text" class="form-control" id="customerId" name="customerId" value="${customerName}" readonly>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="employeeId" class="form-label">Assign Technician</label>
-                            <select class="form-control form-select" id="employeeId" name="employeeId" required>
-                                <option value="" disabled selected>-- Select a Technician --</option>
+                            <select class="form-control form-select" id="employeeId" name="employeeId">
+                                <option value="">-- Automatically Assign a Technician --</option>
                                 <c:forEach var="employee" items="${employees}">
-                                    <option value="${employee.employeeId}">${employee.name}</option>
+                                    <option value="${employee.employeeId}" 
+                                            <c:if test="${employee.employeeId == selectedEmployeeId}">
+                                                selected
+                                            </c:if>>
+                                        ${employee.name}
+                                    </option>
                                 </c:forEach>
                             </select>
                         </div>
                     </div>
-                    
+
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="dateStart" class="form-label">Appointment Date</label>
@@ -168,12 +190,12 @@
                             <input type="hidden" id="dateEnd" name="dateEnd">
                         </div>
                     </div>
-                    
+
                     <div class="mb-3">
                         <label for="note" class="form-label">Service Details</label>
-                        <textarea class="form-control" id="note" name="note" rows="3" placeholder="Please describe the service needed or any special instructions..."></textarea>
+                        <textarea required class="form-control" id="note" name="note" rows="3" placeholder="Please describe the service needed or any special instructions..."></textarea>
                     </div>
-                    
+
                     <div class="mb-3">
                         <label for="appointmentStatus" class="form-label">Appointment Status</label>
                         <input type="hidden" name="appointmentStatus" value="0">
@@ -202,7 +224,15 @@
                     document.getElementById("estimatedCompletion").value = formattedDate; // Gán giá trị vào input readonly
                 }
             });
+
+            // Get today's date
+            const today = new Date();
+            // Add one day to the current date
+            today.setDate(today.getDate() + 1);
+            // Format the date to yyyy-mm-dd
+            const tomorrow = today.toISOString().split('T')[0];
+            // Set the min attribute of the date input to tomorrow
+            document.getElementById('dateStart').setAttribute('min', tomorrow);
         </script>
     </body>
 </html>
-

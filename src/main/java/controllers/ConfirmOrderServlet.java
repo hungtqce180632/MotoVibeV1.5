@@ -161,12 +161,17 @@ public class ConfirmOrderServlet extends HttpServlet {
                     // Commit the transaction
                     conn.commit();
                     
+                    // Calculate VND amount
+                    int exchangeRate = 25700;
+                    long totalAmountVND = Math.round(totalAmount * exchangeRate);
+                    
                     // Store some order details for the confirmation page
                     request.setAttribute("orderId", order.getOrderId());
                     request.setAttribute("orderCode", order.getOrderCode());
                     request.setAttribute("orderDate", new java.util.Date());
                     request.setAttribute("hasWarranty", hasWarranty);
                     request.setAttribute("totalAmount", totalAmount);
+                    request.setAttribute("totalAmountVND", totalAmountVND);
                     
                     request.getRequestDispatcher("order_confirmation.jsp").forward(request, response);
                 } catch (SQLException ex) {

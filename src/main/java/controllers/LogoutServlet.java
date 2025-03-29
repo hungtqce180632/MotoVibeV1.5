@@ -13,13 +13,16 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 /**
+ * 
+ * @author sanghtpce181720
+ */
+
+/**
  * Servlet xử lý việc đăng xuất (logout) người dùng. 
  * URL mapping: "/logout"
  * 
  * Khi người dùng truy cập servlet này thông qua URL "/logout", 
  * session của họ sẽ bị hủy và họ được chuyển hướng về trang chủ (home).
- * 
- * @author SangCE181720
  */
 @WebServlet(name = "LogoutServlet", urlPatterns = {"/logout"})
 public class LogoutServlet extends HttpServlet {

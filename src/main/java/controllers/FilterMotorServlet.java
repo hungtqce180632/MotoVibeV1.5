@@ -20,6 +20,7 @@ import models.Motor;
 import java.io.IOException;
 import java.util.List;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 /**
  *
@@ -53,9 +54,30 @@ public class FilterMotorServlet extends HttpServlet {
             ModelDAO modelDAO = new ModelDAO();
             List<Model> models = modelDAO.getAllModels();
 
+            // Create maps for displaying brand, model, and fuel names
+            HashMap<Integer, String> brandMap = new HashMap<>();
+            HashMap<Integer, String> modelMap = new HashMap<>();
+            HashMap<Integer, String> fuelMap = new HashMap<>();
+
+            // Map brand ID -> brand name
+            for (Brand brand : brands) {
+                brandMap.put(brand.getBrandId(), brand.getBrandName());
+            }
+            // Map model ID -> model name
+            for (Model model : models) {
+                modelMap.put(model.getModelId(), model.getModelName());
+            }
+            // Map fuel ID -> fuel name
+            for (Fuel fuel : fuels) {
+                fuelMap.put(fuel.getFuelId(), fuel.getFuelName());
+            }
+
             request.setAttribute("brands", brands);
             request.setAttribute("fuels", fuels);
             request.setAttribute("models", models);
+            request.setAttribute("brandMap", brandMap);
+            request.setAttribute("modelMap", modelMap);
+            request.setAttribute("fuelMap", fuelMap);
 
         } catch (SQLException e) { // Catch SQLException
             e.printStackTrace(); // Log the error (for debugging)

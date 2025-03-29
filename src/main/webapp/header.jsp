@@ -171,22 +171,22 @@
 
 
 
-/*            @keyframes slide-out {
-                from {
-                    transform: translateX(-28%);
-                }
-                to {
-                    transform: translateX(27%);
-                }
-            }
-
-             Định nghĩa animation cho phần tử đầu tiên 
-            .collapse {
-   
-                animation:
-                    3s linear 1s slide-in infinite alternate,  animation đầu tiên chạy qua lại liên tục 
-                    3s ease-out 5s slide-out infinite alternate;  animation thứ hai chạy qua lại liên tục 
-            }*/
+            /*            @keyframes slide-out {
+                            from {
+                                transform: translateX(-28%);
+                            }
+                            to {
+                                transform: translateX(27%);
+                            }
+                        }
+            
+                         Định nghĩa animation cho phần tử đầu tiên 
+                        .collapse {
+               
+                            animation:
+                                3s linear 1s slide-in infinite alternate,  animation đầu tiên chạy qua lại liên tục 
+                                3s ease-out 5s slide-out infinite alternate;  animation thứ hai chạy qua lại liên tục 
+                        }*/
 
         </style>
     </head>
@@ -226,6 +226,8 @@
                                         <li><a class="dropdown-item" href="brandslist"><i class="fas fa-cogs me-2"></i> Brand List</a></li>
                                         <li><a class="dropdown-item" href="adminOrders"><i class="fas fa-shopping-cart me-2"></i> List Order</a></li>
                                         <li><a class="dropdown-item" href="accountManagement"><i class="fas fa-list me-2"></i> Account Management</a></li>
+                                        <li><a class="dropdown-item" href="ManageEventServlet"><i class="fas fa-list me-2"></i> Event Management</a></li>
+
 
                                     </ul>
                                 </li>

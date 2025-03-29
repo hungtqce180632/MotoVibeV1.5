@@ -501,7 +501,11 @@ public class OrderDAO {
             msgBuilder.append("Date: ").append(new java.util.Date().toString()).append("\n\n");
             
             msgBuilder.append("Product: ").append(motor.getMotorName()).append("\n");
-            msgBuilder.append("Price: $").append(String.format("%.2f", order.getTotalAmount())).append("\n");
+            // Display price in both USD and VND
+            double usdPrice = order.getTotalAmount();
+            long vndPrice = Math.round(usdPrice * 25700);
+            msgBuilder.append("Price: $").append(String.format("%.2f", usdPrice))
+                      .append(" (").append(String.format("%,d", vndPrice)).append(" VND)\n");
             msgBuilder.append("Payment Method: ").append(order.getPaymentMethod()).append("\n\n");
             
             msgBuilder.append("Your order status has been updated to: Processing\n\n");

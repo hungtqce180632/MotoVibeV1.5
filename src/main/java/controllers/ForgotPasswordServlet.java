@@ -11,6 +11,11 @@ import jakarta.servlet.http.HttpSession;
 import java.util.Random;
 
 /**
+ * 
+ * @author sanghtpce181720
+ */
+
+/**
  * Controller xử lý yêu cầu "Quên mật khẩu" (forgot password).
  * Servlet này kiểm tra email có tồn tại trong hệ thống không.
  * Nếu có, nó tạo OTP, lưu OTP và email vào session, sau đó gửi OTP về email và chuyển hướng đến trang resetPassword.

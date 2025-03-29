@@ -26,6 +26,11 @@ import models.Review;
 import models.UserAccount;
 
 /**
+ * 
+ * @author sanghtpce181720
+ */
+
+/**
  * Servlet xử lý việc hiển thị chi tiết của một motor.
  * URL mapping: "/motorDetail"
  *
