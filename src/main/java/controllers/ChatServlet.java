@@ -15,11 +15,16 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ArrayList;
 import java.net.URL;
 import java.net.HttpURLConnection;
 import java.io.OutputStreamWriter;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.charset.StandardCharsets;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
@@ -37,6 +42,14 @@ public class ChatServlet extends HttpServlet {
 
     private static final String GEMINI_API_KEY = "AIzaSyAOxHxGAfI-VS-I6brZkQuyZ4uYLzdli74"; // **Replace with your actual API key!**
     private static final String GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + GEMINI_API_KEY;
+    private static final String FAQ_PATH = "C:\\Users\\truon\\Desktop\\yeah2\\MotoVibeV1.5\\src\\FAQ.txt";
+    private static final String MOTOR_DATA_PATH = "C:\\Users\\truon\\Desktop\\yeah2\\MotoVibeV1.5\\src\\main\\java\\aiData\\MotoVibeListMotor.txt";
+    
+    private String faqContent = "";
+    private String motorDataContent = "";
+    private boolean dataLoaded = false;
+    
+    // Existing motorcycle keywords list
     private static final List<String> MOTORCYCLE_KEYWORDS = Arrays.asList(
             // English Keywords (Keep these as well, for English queries)
             "motorcycle", "motorbike", "motorcycles", "motors", "bike", "bikes", "two-wheeler", "two wheelers", "ride", "riding", "biker", "bikers",
@@ -104,11 +117,49 @@ public class ChatServlet extends HttpServlet {
     );
 
     @Override
+    public void init() throws ServletException {
+        super.init();
+        loadData();
+    }
+    
+    private void loadData() {
+        try {
+            // Load FAQ data if exists
+            File faqFile = new File(FAQ_PATH);
+            if (faqFile.exists()) {
+                faqContent = new String(Files.readAllBytes(Paths.get(FAQ_PATH)), StandardCharsets.UTF_8);
+            } else {
+                System.err.println("FAQ file not found: " + FAQ_PATH);
+                faqContent = "# FAQ data could not be loaded";
+            }
+            
+            // Load motor data if exists
+            File motorDataFile = new File(MOTOR_DATA_PATH);
+            if (motorDataFile.exists()) {
+                motorDataContent = new String(Files.readAllBytes(Paths.get(MOTOR_DATA_PATH)), StandardCharsets.UTF_8);
+            } else {
+                System.err.println("Motor data file not found: " + MOTOR_DATA_PATH);
+                motorDataContent = "# Motor inventory data could not be loaded";
+            }
+            
+            dataLoaded = true;
+        } catch (IOException e) {
+            System.err.println("Error loading data files: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/plain;charset=UTF-8");
         PrintWriter out = response.getWriter();
         
         try {
+            // Reload data if it wasn't loaded initially
+            if (!dataLoaded) {
+                loadData();
+            }
+            
             String message = request.getParameter("message");
             if (message == null || message.trim().isEmpty()) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -123,13 +174,13 @@ public class ChatServlet extends HttpServlet {
             }
 
             String aiResponseText;
-            if (isMotorcycleRelated(message)) {
+            if (isMotorcycleRelated(message) || isRelatedToFAQ(message)) {
                 aiResponseText = getGeminiApiResponse(message); // Call Gemini API
                 if (aiResponseText == null || aiResponseText.isEmpty()) {
                     aiResponseText = "I apologize, but I couldn't get a proper response. Please try again or ask a different question about motorcycles.";
                 }
             } else {
-                aiResponseText = "I'm an AI assistant specialized in motorcycles. Please ask me about motorcycles, bikes, riding, or related topics.";
+                aiResponseText = "I'm an AI assistant specialized in motorcycles and MotoVibe information. Please ask me about motorcycles, bikes, riding, or related topics.";
             }
 
             questionCount++;
@@ -157,6 +208,27 @@ public class ChatServlet extends HttpServlet {
         }
         return false;
     }
+    
+    private boolean isRelatedToFAQ(String message) {
+        // List of common FAQ-related keywords
+        List<String> faqKeywords = Arrays.asList(
+            "faq", "question", "help", "how to", "what is", "warranty", "shipping", "delivery",
+            "payment", "account", "registration", "login", "password", "track", "order", "contact",
+            "support", "return", "refund", "cancel", "problem", "issue",
+            // Vietnamese keywords
+            "hỏi đáp", "câu hỏi", "giúp đỡ", "làm thế nào", "bảo hành", "vận chuyển", "giao hàng",
+            "thanh toán", "tài khoản", "đăng ký", "đăng nhập", "mật khẩu", "theo dõi", "đơn hàng",
+            "liên hệ", "hỗ trợ", "trả lại", "hoàn tiền", "hủy", "vấn đề", "sự cố"
+        );
+        
+        String lowerCaseMessage = message.toLowerCase();
+        for (String keyword : faqKeywords) {
+            if (lowerCaseMessage.contains(keyword.toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     private String getGeminiApiResponse(String message) {
         try {
@@ -174,9 +246,24 @@ public class ChatServlet extends HttpServlet {
                                            .replace("\n", "\\n")
                                            .replace("\r", "\\r");
             
+            // Create a combined context with both FAQ and motor data
+            String combinedData = "# MotoVibe Information\n\n## FAQ\n" + faqContent + "\n\n## Motorcycle Inventory\n" + motorDataContent;
+            String sanitizedData = combinedData.replace("\\", "\\\\")
+                                             .replace("\"", "\\\"")
+                                             .replace("\n", "\\n")
+                                             .replace("\r", "\\r");
+            
+            // Enhanced prompt with instructions
             String jsonInputString = String.format(
-                "{\"contents\": [{\"parts\":[{\"text\": \"Answer this motorcycle-related question in a helpful, friendly and concise way: %s\"}]}]}", 
-                sanitizedMessage);
+                "{\"contents\": [{\"parts\":[" +
+                "{\"text\": \"You are MotoVibe's AI assistant, specializing in motorcycles and our specific inventory. " +
+                "Here is our motorcycle information and FAQ:\\n%s\\n\\n" +
+                "Now, please respond to this customer query in a helpful, friendly and concise way. " +
+                "If the question is about a specific motorcycle model, check if we have it in inventory and provide accurate details. " +
+                "If the query is in Vietnamese, respond in Vietnamese. If the query is in English, respond in English.\\n\\n" +
+                "User query: %s\"}" +
+                "]}]}", 
+                sanitizedData, sanitizedMessage);
 
             try (OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(), "UTF-8")) {
                 writer.write(jsonInputString);

@@ -1,0 +1,109 @@
+# MotoVibe Motorcycle Inventory
+# This file contains inventory data for AI training purposes
+# Generated on: Sat Mar 29 12:24:40 ICT 2025
+
+## Available Motorcycles:
+
+- Model: Honda Wave Alpha
+  Brand: Honda
+  Type: Wave Alpha
+  Fuel: Gasoline
+  Color: Red
+  Price: $700.0
+  Quantity in Stock: 8
+  Description: Description: Popular manual bike, simple design, fuel-efficient, ideal for daily commuting.
+
+- Model: Honda Blade
+  Brand: Honda
+  Type: Blade
+  Fuel: Gasoline
+  Color: Red
+  Price: $820.0
+  Quantity in Stock: 10
+  Description: Description: Sporty manual bike, youthful design, 110cc engine, available in various styles.
+
+- Model: Honda Wave RSX
+  Brand: Honda
+  Type: Wave RSX
+  Fuel: Gasoline
+  Color: Red
+  Price: $980.0
+  Quantity in Stock: 10
+  Description: Premium manual bike compared to Wave Alpha, sporty design, fuel-injected engine, under-seat storage.
+
+- Model: Honda Future
+  Brand: Honda
+  Type: Future
+  Fuel: Gasoline
+  Color: Red
+  Price: $1250.0
+  Quantity in Stock: 10
+  Description: High-end manual bike, luxurious design, 125cc engine, ideal for those seeking a powerful yet fuel-efficient manual bike.
+
+- Model: Honda Vision
+  Brand: Honda
+  Type: Vision
+  Fuel: Gasoline
+  Color: Black
+  Price: $1250.0
+  Quantity in Stock: 10
+  Description: Popular scooter, elegant design, 110cc engine, available in multiple versions with different features.
+
+- Model: Honda Air Blade
+  Brand: Honda
+  Type: Air Blade
+  Fuel: Gasoline
+  Color: Blue
+  Price: $2180.0
+  Quantity in Stock: 6
+  Description: Sporty scooter, modern design, 125cc or 150cc engine, equipped with features like smart key and ABS brakes.
+
+- Model: Honda Lead
+  Brand: Honda
+  Type: Lead
+  Fuel: Gasoline
+  Color: Black
+  Price: $1560.0
+  Quantity in Stock: 10
+  Description: Scooter for women, luxurious design, large storage compartment, 125cc engine, suitable for commuting and shopping.
+
+- Model: Honda SH Mode
+  Brand: Honda
+  Type: SH Mode
+  Fuel: Gasoline
+  Color: Red
+  Price: $2340.0
+  Quantity in Stock: 8
+  Description: Premium scooter, stylish design, 125cc engine, equipped with various convenient and safety features.
+
+- Model: Honda PCX
+  Brand: Honda
+  Type: PCX
+  Fuel: Gasoline
+  Color: PCX
+  Price: $2750.0
+  Quantity in Stock: 10
+  Description: Luxury scooter, classy design, 150cc engine, features modern technologies like smart key and idling stop system.
+
+- Model: Honda Winner X
+  Brand: Honda
+  Type: Winner X
+  Fuel: Gasoline
+  Color: Red
+  Price: $1950.0
+  Quantity in Stock: 10
+  Description: Sporty clutch bike, bold design, 150cc engine, ideal for speed enthusiasts and sporty style lovers.
+
+
+- Model: Honda CBR150R
+  Brand: Honda
+  Type: CBR150R
+  Fuel: Gasoline
+  Color: 
+  Price: $2730.0
+  Quantity in Stock: 10
+  Description: Sports bike with a racing-inspired design, 150cc engine, powerful performance, suitable for highways and racetracks.
+
+
+## JSON DATA:
+{"motors":[{"id":5,"name":"Honda Wave Alpha","brand":"Honda","model":"Wave Alpha","fuel":"Gasoline","color":"Red","price":700.0,"quantity":8,"description":"Description: Popular manual bike, simple design, fuel-efficient, ideal for daily commuting."},{"id":6,"name":"Honda Blade","brand":"Honda","model":"Blade","fuel":"Gasoline","color":"Red","price":820.0,"quantity":10,"description":"Description: Sporty manual bike, youthful design, 110cc engine, available in various styles."},{"id":7,"name":"Honda Wave RSX","brand":"Honda","model":"Wave RSX","fuel":"Gasoline","color":"Red","price":980.0,"quantity":10,"description":"Premium manual bike compared to Wave Alpha, sporty design, fuel-injected engine, under-seat storage."},{"id":8,"name":"Honda Future","brand":"Honda","model":"Future","fuel":"Gasoline","color":"Red","price":1250.0,"quantity":10,"description":"High-end manual bike, luxurious design, 125cc engine, ideal for those seeking a powerful yet fuel-efficient manual bike."},{"id":9,"name":"Honda Vision","brand":"Honda","model":"Vision","fuel":"Gasoline","color":"Black","price":1250.0,"quantity":10,"description":"Popular scooter, elegant design, 110cc engine, available in multiple versions with different features."},{"id":10,"name":"Honda Air Blade","brand":"Honda","model":"Air Blade","fuel":"Gasoline","color":"Blue","price":2180.0,"quantity":6,"description":"Sporty scooter, modern design, 125cc or 150cc engine, equipped with features like smart key and ABS brakes."},{"id":11,"name":"Honda Lead","brand":"Honda","model":"Lead","fuel":"Gasoline","color":"Black","price":1560.0,"quantity":10,"description":"Scooter for women, luxurious design, large storage compartment, 125cc engine, suitable for commuting and shopping."},{"id":12,"name":"Honda SH Mode","brand":"Honda","model":"SH Mode","fuel":"Gasoline","color":"Red","price":2340.0,"quantity":8,"description":"Premium scooter, stylish design, 125cc engine, equipped with various convenient and safety features."},{"id":13,"name":"Honda PCX","brand":"Honda","model":"PCX","fuel":"Gasoline","color":"PCX","price":2750.0,"quantity":10,"description":"Luxury scooter, classy design, 150cc engine, features modern technologies like smart key and idling stop system."},{"id":14,"name":"Honda Winner X","brand":"Honda","model":"Winner X","fuel":"Gasoline","color":"Red","price":1950.0,"quantity":10,"description":"Sporty clutch bike, bold design, 150cc engine, ideal for speed enthusiasts and sporty style lovers.\r\n"},{"id":15,"name":"Honda CBR150R","brand":"Honda","model":"CBR150R","fuel":"Gasoline","color":"","price":2730.0,"quantity":10,"description":"Sports bike with a racing-inspired design, 150cc engine, powerful performance, suitable for highways and racetracks."}]}

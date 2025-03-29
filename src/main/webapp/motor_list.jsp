@@ -224,6 +224,9 @@
                             <a href="adminOrders" class="btn btn-warning ms-2">
                                 <i class="fas fa-shopping-cart me-2"></i>Order
                             </a>
+                            <a href="exportMotorData" class="btn btn-success ms-2">
+                                <i class="fas fa-file-export me-2"></i>Export AI Data
+                            </a>
                         </c:if>
                     </div>
                     <form action="searchMotors" method="get" class="d-flex">
